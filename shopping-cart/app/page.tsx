@@ -1,11 +1,12 @@
 'use client'
 import { useProductStore } from "./store/useProductStore"
-// import { products } from "@/app/data/db-dumy"
+
 import Drawer from "./components/ui/drawer"
 import { useState ,useEffect} from "react"
 import Heder from "@/app/components/ui/header"
 import Cart from "@/app/components/minicard/cart"
 import ProductList from '@/app/components/products/productList'
+import Footer from "./components/ui/footer"
 
 
 export default function Home () {
@@ -27,6 +28,7 @@ export default function Home () {
       : <ProductList products={products} />
     }
    </main>
+   <Footer />
 
     </>)
 
