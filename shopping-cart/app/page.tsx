@@ -1,12 +1,13 @@
 'use client'
 import { useProductStore } from "./store/useProductStore"
-
+import banner from '@/public/m5.jpg'
 import Drawer from "./components/ui/drawer"
 import { useState ,useEffect} from "react"
 import Heder from "@/app/components/ui/header"
 import Cart from "@/app/components/minicard/cart"
 import ProductList from '@/app/components/products/productList'
 import Footer from "./components/ui/footer"
+import Image from "next/image"
 
 
 export default function Home () {
@@ -22,11 +23,12 @@ export default function Home () {
       <Cart />
    </Drawer>
         
-   <main className='container mx-auto md:w-10/12 py-8 px-4'>
-    {isLoading 
+   <main className='container flex flex-col items-center mx-auto md:w-10/12 py-8 px-4'>
+   <Image src={banner} alt ={'banner'} className="w-full h-[20rem] object-cover " />
+    {/* {isLoading 
       ? <div className='text-center text-lg'>Loading...</div> 
       : <ProductList products={products} />
-    }
+    } */}
    </main>
    <Footer />
 

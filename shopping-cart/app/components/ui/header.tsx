@@ -11,7 +11,7 @@ export interface Props {
 export default function Heder ({onCartOnClick}: Props){
   const cart = useFromStore(useCartStore, state => state.cart)
     return (
-      <header className='bg-gray-900 text-white py-4 flex items-center justify-between h-14 sticky top-0 z-10'>
+      <header className='bg-[#ff7900] text-white py-4 flex items-center justify-between h-14 sticky top-0 z-10'>
 			<nav className='container mx-auto md:w-10/12 px-4 flex justify-between'>
 			<div className="flex justify-between items-center gap-5">
 				<span className='text-lg font-semibold'>
