@@ -23,7 +23,7 @@ export default function Home () {
       <Cart />
    </Drawer>
         
-   <main className='container flex flex-col items-center mx-auto md:w-10/12 py-8 px-4'>
+   <main className='[Home] container flex flex-col items-center mx-auto md:w-10/12 py-8 px-4'>
     <Image src={banner} alt ={'banner'} className="md:h-[18rem] h-full w-full object-cover " />
     <section className="p-2 m-2">
       <Skeleton  className="flex rounded-full w-12 h-12" />

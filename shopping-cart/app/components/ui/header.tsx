@@ -5,7 +5,7 @@ import { IoPerson } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
+import {Button,Drawer,DrawerContent,DrawerHeader,DrawerBody,DrawerFooter,useDisclosure, } from "@nextui-org/react";
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownItem} from "@nextui-org/dropdown";
 export interface Props {
   onCartOnClick: () => void
@@ -14,9 +14,10 @@ export interface Props {
    
 export default function Heder ({onCartOnClick}: Props){
   const cart = useFromStore(useCartStore, state => state.cart)
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
     return (
       <header className='bg-white pt-7 flex  items-center justify-center h-[7rem] sticky top-0 z-10'>
-		
+
 			<nav className='container text-[#ff7900] md:w-11/12 px-4 flex flex-col justify-end'>
 			<div className="flex justify-center md:justify-between items-center">
 				<div className="flex gap-5">
@@ -54,6 +55,43 @@ export default function Heder ({onCartOnClick}: Props){
 						rounded-md p-2 border-2  font-semibold'>
 							Shop Cart
 					</Link>
+					<Button onPress={onOpen}>Open Drawer</Button>
+      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
+        <DrawerContent>
+          {(onClose:any) => (
+            <>
+              <DrawerHeader className="flex flex-col gap-1">Drawer Title</DrawerHeader>
+              <DrawerBody>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
+                  risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
+                  quam.
+                </p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
+                  risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
+                  quam.
+                </p>
+                <p>
+                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor
+                  adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
+                  officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt
+                  nisi consectetur esse laborum eiusmod pariatur proident Lorem eiusmod et. Culpa
+                  deserunt nostrud ad veniam.
+                </p>
+              </DrawerBody>
+              <DrawerFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Action
+                </Button>
+              </DrawerFooter>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
 					<Button
 						type='button'
 						title='Mini Cart'
