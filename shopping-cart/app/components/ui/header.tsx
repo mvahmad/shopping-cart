@@ -1,11 +1,14 @@
+'use client'
 import { useCartStore} from "@/app/store/useCartStore";
 import useFromStore from "@/app/hooks/useFromStore"
 import { FiShoppingCart } from "react-icons/fi"
 import { IoPerson } from "react-icons/io5";
-import { IoSearchOutline } from "react-icons/io5";
+import { IoSearchOutline ,IoMenuSharp} from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
 import Link from "next/link";
-import {Button,Drawer,DrawerContent,DrawerHeader,DrawerBody,DrawerFooter,useDisclosure, } from "@nextui-org/react";
+import { useState } from "react";
+import Drawer from "@/app/components/ui/drawer"
+import {Button } from "@nextui-org/react";
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownItem} from "@nextui-org/dropdown";
 export interface Props {
   onCartOnClick: () => void
@@ -14,15 +17,15 @@ export interface Props {
    
 export default function Heder ({onCartOnClick}: Props){
   const cart = useFromStore(useCartStore, state => state.cart)
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+const [isDerawOpen , setIsDrawOpen]  = useState<boolean>(false)
     return (
-      <header className='bg-white pt-7 flex  items-center justify-center h-[7rem] sticky top-0 z-10'>
+      <header className='bg-white pt-5 pb-4 flex  items-center justify-center md:h-[7rem] sticky top-0 z-10'>
 
 			<nav className='container text-[#ff7900] md:w-11/12 px-4 flex flex-col justify-end'>
 			<div className="flex justify-center md:justify-between items-center">
-				<div className="flex gap-5">
+				<div className="flex gap-3">
 					<div className="flex md:justify-between justify-center items-center gap-5">
-						<Link href={'/'} className='md:text-3xl md:flex hidden text-2xl font-semibold'>
+						<Link href={'/'} className='md:block hidden text-2xl lg:text-3xl font-semibold'>
 							Shop Cart
 						</Link>
 
@@ -42,11 +45,11 @@ export default function Heder ({onCartOnClick}: Props){
 				<div className='flex justify-between gap-4 text-black'>
 					<Button
 						type='button'
-						className='bg-slate-100 text-black rounded-md text-xl md:block hidden'
+						className='bg-slate-100 text-black rounded-md text-xl  md:block hidden'
 					>
 						<Link className="flex items-center justify-between gap-3" href={'./login'} >
 							<IoPerson />
-						<span className="text-lg">Login / Sign up</span>
+						<span className="text-lg lg:block hidden">Login / Sign up</span>
 						</Link>
 					</Button>
 					<Link 
@@ -55,43 +58,7 @@ export default function Heder ({onCartOnClick}: Props){
 						rounded-md p-2 border-2  font-semibold'>
 							Shop Cart
 					</Link>
-					<Button onPress={onOpen}>Open Drawer</Button>
-      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent>
-          {(onClose:any) => (
-            <>
-              <DrawerHeader className="flex flex-col gap-1">Drawer Title</DrawerHeader>
-              <DrawerBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                  risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                  quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                  risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                  quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor
-                  adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                  officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem eiusmod et. Culpa
-                  deserunt nostrud ad veniam.
-                </p>
-              </DrawerBody>
-              <DrawerFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </DrawerFooter>
-            </>
-          )}
-        </DrawerContent>
-      </Drawer>
+					
 					<Button
 						type='button'
 						title='Mini Cart'
@@ -139,6 +106,13 @@ export default function Heder ({onCartOnClick}: Props){
 			</div>
 
 			</nav>
+			<button className="block md:hidden text-2xl pr-10" onClick={()=> setIsDrawOpen(!isDerawOpen)}><IoMenuSharp /></button>
+					 <Drawer isOpen={isDerawOpen} onCartIconClick={()=> setIsDrawOpen(!isDerawOpen)}>
+							<ul>
+								<li><Link href='#'>Category</Link></li>
+								<li><Link href={'./login'}>Login / Sign up</Link></li>
+							</ul>
+   					</Drawer>
 		</header>
         )
 
