@@ -1,6 +1,6 @@
 'use client'
 import { useProductStore } from "./store/useProductStore"
-import banner from '@/public/m5.jpg'
+import banner from '@/public/banner3.jpg'
 import Drawer from "./components/ui/drawer"
 import { useState ,useEffect} from "react"
 import Heder from "@/app/components/ui/header"
