@@ -15,6 +15,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import HomePageAccordion from "./components/ui/homePageAccordion"
 
 
 
@@ -35,7 +36,7 @@ export default function Home () {
     <Image src={banner} alt ={'banner'} className="md:h-[18rem] h-full w-full object-cover " />
 
     <div className="md:text-2xl text-large font-bold pt-7">Easy shopping in different categories</div>
-    <section className=" flex items-center justify-center w-[10rem] lg:w-[70rem]  md:w-[50rem] h-[12rem] px-[10px] tablet:px-[50px]">
+    <section className="[swiper] flex items-center justify-center w-[10rem] lg:w-[70rem]  md:w-[50rem] h-[12rem] px-[10px] tablet:px-[50px]">
     <Swiper
      modules={[Navigation, Pagination, A11y, Autoplay]}
      slidesPerView={3}
@@ -68,7 +69,7 @@ export default function Home () {
     </Swiper>
     </section>
 
-   
+  
 
     <section className="p-2 m-2">
       <Skeleton  className="flex rounded-full w-12 h-12" />
@@ -77,6 +78,8 @@ export default function Home () {
           : <ProductList products={products} />
         }
     </section>
+    <HomePageAccordion />
+   
    </main>
    <Footer />
 
