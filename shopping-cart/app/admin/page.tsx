@@ -35,14 +35,14 @@ function AdminHome() {
     return ( 
     <>
     <AdminHeader />
-    <div className="LayoutContainer  md:px-16 cursor-default">
+    <div className="container md:px-16 cursor-default">
       <h2 className="text-2xl text-value-gray font-semibold py-6">
         Product Management
       </h2>
       <DropDown onOpen={onOpen} setModalType={setModalType} />
       <Table
-        aria-label="Example static collection table"
-        className="py-3 cursor-default"
+
+        className="cursor-default"
       >
         <TableHeader>
           <TableColumn key="thumbnail">Image</TableColumn>
@@ -166,14 +166,14 @@ function AdminHome() {
         </TableBody>
       </Table>
   
-      <NextUiModal
+      {/* <NextUiModal
         isOpen={isOpenDeleteModal}
         onOpenChange={onOpenChangeModal}
         onAction={handleActionModal}
         modalTitle={'حذف'}
         modalBody="این عملیات حذف دائمی داده‌ها را به همراه دارد و قابل برگشت نیست. همچنین تمامی اطلاعات مرتبط با این آیتم نیز از دست خواهند رفت."
         buttonContent={["انصراف", "حذف کتاب"]}
-      />
+      /> */}
     </div>
     </> );
 }
