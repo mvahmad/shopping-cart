@@ -1,11 +1,11 @@
 import {
-  Button,
+
     Dropdown,
     DropdownItem,
     DropdownMenu,
     DropdownTrigger,
-  } from "@nextui-org/react";
-import {  } from "@nextui-org/react";  
+  } from "@nextui-org/dropdown";
+import {Button } from "@nextui-org/button";  
 import { Key } from "react";
 import { GoPlusCircle } from "react-icons/go";
 import { HiOutlineFolderPlus, HiOutlineDocumentPlus } from "react-icons/hi2";
