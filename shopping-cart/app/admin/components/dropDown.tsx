@@ -1,5 +1,5 @@
 import {
-
+  // 
     Dropdown,
     DropdownItem,
     DropdownMenu,
@@ -24,7 +24,7 @@ export default function DropDown({ onOpen, setModalType }: props) {
         <DropdownTrigger className="flex justify-between ">
           <Button
             variant="bordered"
-            className="bg-slate-50 w-[10rem] border-slate-400 border-1.5 rounded-lg  p-3"
+            className=""
             endContent={<GoPlusCircle  />}
           >
             Add
@@ -32,7 +32,7 @@ export default function DropDown({ onOpen, setModalType }: props) {
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Static Actions"
-          className="z-10 bg-slate-50 border-1.5 w-[10rem] rounded-md p-3 flex flex-col gap-3 "
+          className=""
           // onAction={(key: Key) => handleDropDownItem(key)}
         >
           <DropdownItem

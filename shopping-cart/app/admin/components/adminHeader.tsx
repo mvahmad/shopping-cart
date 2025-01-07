@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+// import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import { IoSearchOutline } from "react-icons/io5";
 const AdminHeader = () => {
@@ -24,10 +24,10 @@ const AdminHeader = () => {
                                 />
                         </div>
                     </div>
-                    <div className="flex">
-                        <Button><Link href='/admin'>Products</Link></Button>
-                        <Button><Link href='/admin/orders'>Orders</Link></Button>
-                        <Button><Link href='/admin/inventory'>Inventory</Link></Button>
+                    <div className="flex gap-3">
+                        <button><Link href='/admin'>Products</Link></button>
+                        <button><Link href='/admin/orders'>Orders</Link></button>
+                        <button><Link href='/admin/inventory'>Inventory</Link></button>
                     </div>
                 
                 </div>
