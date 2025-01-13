@@ -14,16 +14,17 @@ import {
     Tooltip,
     useDisclosure,
   } from "@nextui-org/react";
+import FormModal from "./components/formModal";
 import DropDown from "./components/dropDown";
 import { useState } from "react";
 function AdminHome() {
     const [modalType, setModalType] = useState("");
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    const {
-        isOpen: isOpenDeleteModal,
-        onOpen: onOpenDeleteModal,
-        onOpenChange: onOpenChangeModal,
-      } = useDisclosure();
+    // const {
+    //     isOpen: isOpenDeleteModal,
+    //     onOpen: onOpenDeleteModal,
+    //     onOpenChange: onOpenChangeModal,
+    //   } = useDisclosure();
 
       function handleActionModal() {
        console.log("test");
@@ -41,8 +42,8 @@ function AdminHome() {
       </h2>
       <DropDown onOpen={onOpen} setModalType={setModalType} />
       <Table
-
-        className="cursor-default"
+      // 
+        className="cursor-default mt-2"
       >
         <TableHeader>
           <TableColumn key="thumbnail">Image</TableColumn>
@@ -165,14 +166,19 @@ function AdminHome() {
             </TableRow>
         </TableBody>
       </Table>
-  
+      <FormModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        type={modalType}
+      />
       {/* <NextUiModal
         isOpen={isOpenDeleteModal}
-        onOpenChange={onOpenChangeModal}
+        onOpenChange={onOpenDeleteModal}
         onAction={handleActionModal}
-        modalTitle={'حذف'}
-        modalBody="این عملیات حذف دائمی داده‌ها را به همراه دارد و قابل برگشت نیست. همچنین تمامی اطلاعات مرتبط با این آیتم نیز از دست خواهند رفت."
-        buttonContent={["انصراف", "حذف کتاب"]}
+        modalTitle={'Start'}
+        modalBody="test"
+        buttonContent={["Cancel", " Delete"]}
       /> */}
     </div>
     </> );

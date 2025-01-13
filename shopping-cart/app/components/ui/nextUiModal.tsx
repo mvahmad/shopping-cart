@@ -7,7 +7,7 @@ import {
     ModalHeader,
   } from "@nextui-org/react";
   
-  interface props {
+interface props {
     isOpen: boolean;
     onOpenChange: () => void;
     onAction: () => void;
@@ -16,7 +16,7 @@ import {
     buttonContent: string[];
   }
   
-  export default function NextUiModal({
+export default function NextUiModal({
     isOpen,
     onOpenChange,
     modalBody,

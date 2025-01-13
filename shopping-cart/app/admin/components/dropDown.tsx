@@ -1,5 +1,5 @@
 import {
-  // 
+
     Dropdown,
     DropdownItem,
     DropdownMenu,
@@ -33,7 +33,7 @@ export default function DropDown({ onOpen, setModalType }: props) {
         <DropdownMenu
           aria-label="Static Actions"
           className=""
-          // onAction={(key: Key) => handleDropDownItem(key)}
+          onAction={(key: Key) => handleDropDownItem(key)}
         >
           <DropdownItem
             key="product"
