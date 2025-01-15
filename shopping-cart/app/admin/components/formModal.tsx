@@ -1,4 +1,5 @@
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+import AddCategoryForm from "./addCategoryform";
 interface props{
     isOpen: boolean;
     onOpenChange: () => void;
@@ -21,7 +22,7 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange}:props) => {
             case "category":
               return {
                 modalTitle: " Add Category ",
-                // modalBody: <AddCategoryForm onClose={onClose} />,
+                modalBody: <AddCategoryForm onClose={onClose} />,
               };
             case "sub-category":
               return {
@@ -47,8 +48,8 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange}:props) => {
                   {handleFormModalType(type)?.modalTitle}
                 </ModalHeader>
                 <ModalBody>
-                    {/* {handleFormModalType(type)?.modalBody} */}
-                    haagh dash defo
+                    {handleFormModalType(type)?.modalBody}
+
                 </ModalBody> 
               </>
             </ModalContent>
