@@ -5,7 +5,8 @@ import { Button, Input, Spinner ,Select, SelectItem, } from "@nextui-org/react";
 import { usePostServices } from "@/app/hooks/usePostServices";
 import PostSubCategory from "@/app/hooks/queryHooks/subCategoris";
 import { CategoriesResponse } from "@/app/types";
-
+import { useGetServices } from "@/app/hooks/useGetServices";
+import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }){
     const {
         handleSubmit,
@@ -32,10 +33,10 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
         },
       });
 
-    //   const { data: categoryData } = useGetServices<CategoriesResponse>({
-    //     queryKey: ["GetCategories"],
-    //     queryFn: getCategories,
-    //   });
+      const { data: categoryData } = useGetServices<CategoriesResponse>({
+        queryKey: ["GetCategories"],
+        queryFn: getCategories,
+      });
     
 
     const handleSubmitSubcategoryForm: SubmitHandler<AddSubCategorySchema> = (
