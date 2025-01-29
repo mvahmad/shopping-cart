@@ -65,7 +65,7 @@ const AddCategoryForm = ({ onClose }: { onClose: () => void }) => {
             className="text-base sm:text-lg w-full"
             variant="bordered"
             color="danger"
-            onClick={() => {
+            onPress={() => {
               reset();
               onClose();
             }}
@@ -73,13 +73,12 @@ const AddCategoryForm = ({ onClose }: { onClose: () => void }) => {
             Cancele
           </Button>
           <Button
-            className="bg-persian-green text-white text-base sm:text-lg w-full"
+            className="bg-green-400 text-white text-base sm:text-lg w-full"
             type="submit"
             isLoading={isPending}
             spinner={<Spinner color="default" size="sm" />}
           >
             {!isPending && "Add"}
-            Add
           </Button>
         </div>
       </form>
