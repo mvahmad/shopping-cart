@@ -7,6 +7,7 @@ import PostSubCategory from "@/app/hooks/queryHooks/subCategoris";
 import { CategoriesResponse } from "@/app/types";
 import { useGetServices } from "@/app/hooks/useGetServices";
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
+import {toast ,ToastContainer} from 'react-toastify'
 export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }){
     const {
         handleSubmit,
@@ -15,19 +16,19 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
         reset,
       } = useForm<AddSubCategorySchema>({ resolver: zodResolver(addSubCategorySchema) });
 
-      const { mutate, isPending } = usePostServices({
+    const { mutate, isPending } = usePostServices({
         mutationKey: ["PostSubcategories"],
         mutationFn: PostSubCategory,
         options: {
           onSuccess() {
             onClose();
             reset();
-            // toast.success(`زیر مجموعه با موفقیت اضافه شد.`);
+            toast.success(`successfully add subcategory`);
             console.log("successfully add subcategory");
-            
+
           },
           onError(error) {
-            // toast.error(error.message, { rtl: false });
+            toast.error(error.message, { rtl: false });
             console.log(error);
           },
         },
@@ -37,6 +38,12 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
         queryKey: ["GetCategories"],
         queryFn: getCategories,
       });
+
+      const categoriesItem =
+        categoryData?.data.categories?.map((category) => ({
+            label: category.name,
+            value: category._id,
+        })) || [];
     
 
     const handleSubmitSubcategoryForm: SubmitHandler<AddSubCategorySchema> = (
@@ -61,7 +68,7 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
         variant="bordered"
         {...register("name")}
       />
-      {/* <Select
+      <Select
         label="category"
         size="sm"
         isInvalid={!!errors["category"]}
@@ -79,7 +86,7 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
             {item.label}
           </SelectItem>
         ))}
-      </Select> */}
+      </Select>
 
       <div className="flex gap-3 mt-6 w-full">
         <Button
@@ -103,6 +110,7 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
         </Button>
       </div>
     </form>
+    <ToastContainer />
     </> );
 }
  
