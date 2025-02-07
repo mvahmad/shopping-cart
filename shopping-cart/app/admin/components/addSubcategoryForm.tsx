@@ -7,7 +7,7 @@ import PostSubCategory from "@/app/hooks/queryHooks/subCategoris";
 import { CategoriesResponse } from "@/app/types";
 import { useGetServices } from "@/app/hooks/useGetServices";
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
-import {toast ,ToastContainer} from 'react-toastify'
+import {toast} from 'react-toastify'
 export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }){
     const {
         handleSubmit,
@@ -110,7 +110,7 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
         </Button>
       </div>
     </form>
-    <ToastContainer />
+    {/*  */}
     </> );
 }
  
