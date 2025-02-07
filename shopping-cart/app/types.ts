@@ -20,6 +20,15 @@ export interface CategoriesResponse {
     total_pages: number;
     data: Data;
   }
+  export interface SubcategoriesResponse {
+    status: string;
+    page: number;
+    per_page: number;
+    total: number;
+    total_pages: number;
+    data: Data;
+  } 
+  
   export interface Data {
     categories?: CategoriesEntity[] | null;
   }
