@@ -12,7 +12,7 @@ export const addSubCategorySchema = z.object({
   category: z.string().min(1, "Please add category name"),
 })
 
-export const schema = z.object({
+export const addProductschema = z.object({
   name: z.string().min(1, "نام کتاب را وارد کنید."),
   category:  z.string().min(1, "Please add category name"),
   subcategory: z.string().min(1, "Please add subCategory name"),
@@ -30,7 +30,6 @@ export const schema = z.object({
   description: z.string().min(1, "Please add discription"),
 });
 
-export type AddProduct = z.infer<typeof schema>;
-
+export type AddProductschema = z.infer<typeof addProductschema>;
 export type AddCategorySchema = z.infer<typeof addCategorySchema>;
 export type AddSubCategorySchema = z.infer<typeof addSubCategorySchema>
