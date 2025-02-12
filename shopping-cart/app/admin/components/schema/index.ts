@@ -13,7 +13,7 @@ export const addSubCategorySchema = z.object({
 })
 
 export const addProductschema = z.object({
-  name: z.string().min(1, "نام کتاب را وارد کنید."),
+  name: z.string().min(1, "Please add Product Name"),
   category:  z.string().min(1, "Please add category name"),
   subcategory: z.string().min(1, "Please add subCategory name"),
   brand: z.string().min(1, "Please add brand name"),
