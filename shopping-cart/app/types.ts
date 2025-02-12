@@ -26,8 +26,12 @@ export interface CategoriesResponse {
     per_page: number;
     total: number;
     total_pages: number;
-    data: Data;
+    data: SubData;
   } 
+
+  export interface SubData {
+    subcategories?: SubcategoriesEntity[] | null;
+  }
   
   export interface Data {
     categories?: CategoriesEntity[] | null;
@@ -36,6 +40,15 @@ export interface CategoriesResponse {
     _id: string;
     name: string;
     icon: string;
+    createdAt: string;
+    updatedAt: string;
+    slugname: string;
+  }
+
+  export interface SubcategoriesEntity {
+    _id: string;
+    category: string;
+    name: string;
     createdAt: string;
     updatedAt: string;
     slugname: string;

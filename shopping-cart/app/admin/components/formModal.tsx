@@ -1,6 +1,7 @@
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import AddCategoryForm from "./addCategoryform";
 import AddSubcategoryForm from "./addSubcategoryForm";
+import AddProductForm from "./addProductForm";
 interface props{
     isOpen: boolean;
     onOpenChange: () => void;
@@ -13,7 +14,7 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange}:props) => {
             case "product":
               return {
                 modalTitle: " Add Product ",
-                // modalBody: <AddProductForm onClose={onClose} />,
+                modalBody: <AddProductForm onClose={onClose} />,
               };
             case "edit":
               return {
