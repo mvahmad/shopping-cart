@@ -17,20 +17,37 @@ import {
 import FormModal from "./components/formModal";
 import DropDown from "./components/dropDown";
 import { useState } from "react";
+import { useSearchParams } from 'next/navigation'
+import { getProductsResponse ,ProductsEntity } from "../types";
+import { getProducts } from "../hooks/queryHooks/products";
+import { useGetServices } from "../hooks/useGetServices";
 function AdminHome() {
     const [modalType, setModalType] = useState("");
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    // const {
-    //     isOpen: isOpenDeleteModal,
-    //     onOpen: onOpenDeleteModal,
-    //     onOpenChange: onOpenChangeModal,
-    //   } = useDisclosure();
+    const searchParams = useSearchParams();
+ 
 
-      function handleActionModal() {
-       console.log("test");
-        }
+    const limit = searchParams.get("limit") || "5";
+    const sort = searchParams.get("sort") || "-createdAt";
 
+    const params: {
+      page: number;
+      limit: string;
+      sort: string | null;
+    } = {
+      page: Number(searchParams.get("page")) || 1,
+      limit,
+      sort,
+    };
 
+    const {data , refetch ,isLoading} = useGetServices<getProductsResponse>({
+      queryKey:["GetProducts",params] ,
+      queryFn:()=>getProducts(params)
+    })
+    let items: ProductsEntity[] = [];
+    if (data?.data.products?.length) {
+      items = data.data.products;
+    }
 
 
     return ( 
@@ -46,6 +63,7 @@ function AdminHome() {
         className="cursor-default mt-2"
       >
         <TableHeader>
+          
           <TableColumn key="thumbnail">Image</TableColumn>
           <TableColumn key="name" allowsSorting >
             Product Name
@@ -55,25 +73,26 @@ function AdminHome() {
           
             allowsSorting
           >
-            Category
+            Category / SubCatagory
           </TableColumn>
           <TableColumn key="action">Actions</TableColumn>
         </TableHeader>
         <TableBody loadingContent={<Spinner />} >
 
-            <TableRow className="border-b-1">
+        {items.map((item:ProductsEntity)=>{
+            return(
+              <TableRow  key={item._id} className="border-b-1">
               <TableCell>
-                {/* <img
-                  src={``}
-                  
+                <img
+                  src={`http://localhost:8000/images/products/thumbnails/${item?.thumbnail}`}
+                  alt={item.name}
                   className="w-16"
-                /> */}
-                image
+                />
               </TableCell>
               <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">
-                <Link href={'#'}>Link</Link>
+                <Link href={'#'}>{item.name}</Link>
               </TableCell>
-              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">{`category name / subcategory name`}</TableCell>
+              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">{`${item.category.name} / ${item.subcategory.name}`}</TableCell>
               <TableCell>
                 <div className="relative flex items-center gap-4 flex-col sm:flex-row">
                   <Tooltip
@@ -111,59 +130,9 @@ function AdminHome() {
                   </Tooltip>
                 </div>
               </TableCell>
-            </TableRow>
-          <TableRow  className="border-b-1">
-              <TableCell>
-                <img
-                  src={`#`}
-                //   alt={item.name}
-                  className="w-16"
-                />
-              </TableCell>
-              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">
-                <Link href={`#`}>#</Link>
-              </TableCell>
-              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">
-                {`category.name /subcategory.name}`}
-                </TableCell>
-              <TableCell> 
-                <div className="relative flex items-center gap-4 flex-col sm:flex-row">
-                  <Tooltip
-                    content="Detail"
-                    className="font-yekan cursor-default"
-                  >
-                    {/* <Link to={`/book/${item._id}`}>
-                      <span className="text-lg text-default-900 cursor-pointer active:opacity-50">
-                        <EyeIcon className="size-3 mobile:size-auto" />
-                      </span>
-                    </Link> */}
-                  </Tooltip>
-                  <Tooltip
-                    content="Edit"
-                    className="font-yekan cursor-default"
-                  >
-                    <span
-                      className="text-lg text-default-900 cursor-pointer active:opacity-50"
-                    //   onClick={() => handleEditButton(item)}
-                    >
-                      {/* <EditIcon className="size-3 mobile:size-auto" /> */}
-                    </span>
-                  </Tooltip>
-                  <Tooltip
-                    color="danger"
-                    content="Delete"
-                    className="font-yekan cursor-default"
-                  >
-                    <span
-                      className="text-lg text-danger cursor-pointer active:opacity-50"
-                    //   onClick={() => handleDeleteButton(item._id, item.name)}
-                    >
-                      {/* <DeleteIcon className="size-3 mobile:size-auto" /> */}
-                    </span>
-                  </Tooltip>
-                </div>
-              </TableCell>
-            </TableRow>
+            </TableRow>        
+          )
+          })}
         </TableBody>
       </Table>
       <FormModal
