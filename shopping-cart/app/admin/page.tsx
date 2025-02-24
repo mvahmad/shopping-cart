@@ -1,7 +1,7 @@
 'use client'
 import AdminHeader from "./components/adminHeader";
 import Link from "next/link";
-import NextUiModal from "../components/ui/nextUiModal";
+// import NextUiModal from "../components/ui/nextUiModal";
 import {
     Pagination,
     Spinner,
@@ -16,16 +16,19 @@ import {
   } from "@nextui-org/react";
 import FormModal from "./components/formModal";
 import DropDown from "./components/dropDown";
-import { useState } from "react";
+import { useState ,useMemo } from "react";
 import { useSearchParams } from 'next/navigation'
 import { getProductsResponse ,ProductsEntity } from "../types";
 import { getProducts } from "../hooks/queryHooks/products";
 import { useGetServices } from "../hooks/useGetServices";
+import { renderItem } from "@/utils/paginationRenderItem";
+import  {useTableSort} from "@/app/hooks/useTabelSort"
 function AdminHome() {
     const [modalType, setModalType] = useState("");
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const searchParams = useSearchParams();
- 
+    const {  handleNameOrderColumn ,handlePageChange ,handlePriceOrderColumn,handleCategoryOrderColumn } =
+    useTableSort();
 
     const limit = searchParams.get("limit") || "5";
     const sort = searchParams.get("sort") || "-createdAt";
@@ -50,6 +53,14 @@ function AdminHome() {
     }
 
 
+    const rowsPerPage = data?.per_page ? data?.per_page : 5;
+    const pages = useMemo(()=>{
+      return data?.total ? Math.ceil(data.total / rowsPerPage) : 0;
+    },[data?.total,rowsPerPage])
+    const loadingState =
+    isLoading || data?.data.products?.length === 0 ? "loading" : "idle";
+
+
     return ( 
     <>
     <AdminHeader />
@@ -59,21 +70,42 @@ function AdminHome() {
       </h2>
       <DropDown onOpen={onOpen} setModalType={setModalType} />
       <Table
-      // 
+       bottomContent={
+        pages > 0 ? (
+          <div className="flex w-full justify-center">
+            <Pagination
+              dir="rtl"
+              renderItem={renderItem}
+              showControls
+              size="sm"
+              showShadow
+              radius="md"
+              color="primary"
+              page={Number(searchParams.get("page")) || 1}
+              total={pages}
+              onChange={(page) => handlePageChange(page)}
+            />
+          </div>
+        ) : null
+      }
         className="cursor-default mt-2"
       >
         <TableHeader>
-          
+
           <TableColumn key="thumbnail">Image</TableColumn>
-          <TableColumn key="name" allowsSorting >
+          <TableColumn key="name" onClick={handleNameOrderColumn}>
+          <Tooltip content="Sort by Product name" placement={"top-start"} showArrow={true}>
             Product Name
+          </Tooltip>
           </TableColumn>
+         
           <TableColumn
             key="category"
-          
-            allowsSorting
+            onClick={handleCategoryOrderColumn}
           >
+            <Tooltip content="Sort by Category name" placement={"top-start"} showArrow={true}>
             Category / SubCatagory
+            </Tooltip>
           </TableColumn>
           <TableColumn key="action">Actions</TableColumn>
         </TableHeader>
