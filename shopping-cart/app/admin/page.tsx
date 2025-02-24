@@ -23,6 +23,8 @@ import { getProducts } from "../hooks/queryHooks/products";
 import { useGetServices } from "../hooks/useGetServices";
 import { renderItem } from "@/utils/paginationRenderItem";
 import  {useTableSort} from "@/app/hooks/useTabelSort"
+import { MdOutlineDelete ,MdOutlineEdit } from "react-icons/md";
+import { BiShow } from "react-icons/bi";
 function AdminHome() {
     const [modalType, setModalType] = useState("");
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -133,7 +135,7 @@ function AdminHome() {
                   >
                     <Link href={`#`}>
                       <span className="text-lg text-default-900 cursor-pointer active:opacity-50">
-                        {/* <EyeIcon className="size-3 mobile:size-auto" /> */}
+                         <BiShow /> 
                       </span>
                     </Link>
                   </Tooltip>
@@ -145,7 +147,7 @@ function AdminHome() {
                       className="text-lg text-default-900 cursor-pointer active:opacity-50"
                       // onClick={() => handleEditButton(item)}
                     >
-                      {/* <EditIcon className="size-3 mobile:size-auto" /> */}
+                      <MdOutlineEdit />
                     </span>
                   </Tooltip>
                   <Tooltip
@@ -157,7 +159,7 @@ function AdminHome() {
                       className="text-lg text-danger cursor-pointer active:opacity-50"
                       // onClick={() => handleDeleteButton(item._id, item.name)}
                     >
-                      {/* <DeleteIcon className="size-3 mobile:size-auto" /> */}
+                       <MdOutlineDelete />
                     </span>
                   </Tooltip>
                 </div>
