@@ -2,7 +2,7 @@ import { url } from "inspector";
 import { useSearchParams,useRouter,usePathname } from "next/navigation";
 export function useTableSort() {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const  router = useRouter();
   const currentParams = new URLSearchParams(searchParams.toString());
  

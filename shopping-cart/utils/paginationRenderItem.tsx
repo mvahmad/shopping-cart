@@ -3,7 +3,7 @@ import {
   PaginationItemRenderProps,
   PaginationItemType,
 } from "@nextui-org/react";
-
+import { IoIosArrowBack ,IoIosArrowForward } from "react-icons/io";
 
 export const renderItem = ({
   ref,
@@ -22,7 +22,7 @@ export const renderItem = ({
         className={cn(className, "bg-default-200/50 min-w-8 w-8 h-8")}
         onClick={onNext}
       >
-        {">"}
+        <IoIosArrowBack />
       </button>
     );
   }
@@ -34,7 +34,7 @@ export const renderItem = ({
         className={cn(className, "bg-default-200/50 min-w-8 w-8 h-8")}
         onClick={onPrevious}
       >
-       {">"}
+       <IoIosArrowForward />
       </button>
     );
   }
