@@ -36,6 +36,12 @@ export const PostProduct =async (data:AddProductschema) => {
     });
     return response.data;
 }
+export const DeleteProduct = async(id:string)=>{
+  const url = `${ENDPOINTS.PRODUCTS}/${id}`
+  const response = await httpRequest.delete(url)
+  return response.data
+}
+
 export const getProducts =async (searchParams ?:ParamsType )=>{
   const url = ENDPOINTS.PRODUCTS
   const response = await httpRequest.get(url ,{params:searchParams})
