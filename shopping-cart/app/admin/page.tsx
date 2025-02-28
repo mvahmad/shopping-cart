@@ -1,7 +1,7 @@
 'use client'
 import AdminHeader from "./components/adminHeader";
 import Link from "next/link";
-// import NextUiModal from "../components/ui/nextUiModal";
+import NextUiModal from "../components/ui/nextUiModal";
 import {
     Pagination,
     Spinner,
@@ -21,15 +21,27 @@ import { useSearchParams } from 'next/navigation'
 import { getProductsResponse ,ProductsEntity } from "../types";
 import { getProducts } from "../hooks/queryHooks/products";
 import { useGetServices } from "../hooks/useGetServices";
+import { useDeleteServices } from "../hooks/useDeleteService";
+import { DeleteProduct } from "../hooks/queryHooks/products";
 import { renderItem } from "@/utils/paginationRenderItem";
 import  {useTableSort} from "@/app/hooks/useTabelSort"
+import { toast } from "react-toastify";
 import { MdOutlineDelete ,MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 function AdminHome() {
     const [modalType, setModalType] = useState("");
+    const [product , setProduct] = useState({
+      id:"",
+      name:""
+    })
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+    const {
+      isOpen: isOpenDeleteModal,
+      onOpen: onOpenDeleteModal,
+      onOpenChange: onOpenChangeModal,
+    } = useDisclosure();
     const searchParams = useSearchParams();
-    const {  handleNameOrderColumn ,handlePageChange ,handlePriceOrderColumn,handleCategoryOrderColumn } =
+    const {  handleNameOrderColumn ,handlePageChange ,handleCategoryOrderColumn } =
     useTableSort();
 
     const limit = searchParams.get("limit") || "5";
@@ -49,6 +61,25 @@ function AdminHome() {
       queryKey:["GetProducts",params] ,
       queryFn:()=>getProducts(params)
     })
+
+    const { mutate } = useDeleteServices({
+      mutationKey: ["DeleteProducts"],
+      mutationFn: DeleteProduct,
+      invalidate: ["GetProducts"],
+      options: {
+        onSuccess() {
+          toast.success(`Product delete sucssesfully`);
+          refetch();
+        },
+        onError(error) {
+          toast.error(error.message, { rtl: false });
+        },
+      },
+    });
+
+
+
+
     let items: ProductsEntity[] = [];
     if (data?.data.products?.length) {
       items = data.data.products;
@@ -62,12 +93,26 @@ function AdminHome() {
     const loadingState =
     isLoading || data?.data.products?.length === 0 ? "loading" : "idle";
 
+    function handleDeleteButton(id:string , name:string){
+      onOpenDeleteModal();
+      setProduct({id ,name})
+    }
+
+    function handelActionModal(){
+      if(product){
+        mutate(product.id , {
+          onError:()=>{
+            refetch()
+          }
+        })
+      }
+    }
 
     return ( 
     <>
     <AdminHeader />
     <div className="container md:px-16 cursor-default">
-      <h2 className="text-2xl text-value-gray font-semibold py-6">
+      <h2 className="text-2xl text-gray-600 font-semibold py-6">
         Product Management
       </h2>
       <DropDown onOpen={onOpen} setModalType={setModalType} />
@@ -111,7 +156,7 @@ function AdminHome() {
           </TableColumn>
           <TableColumn key="action">Actions</TableColumn>
         </TableHeader>
-        <TableBody loadingContent={<Spinner />} >
+        <TableBody loadingContent={<Spinner />} loadingState={loadingState} >
 
         {items.map((item:ProductsEntity)=>{
             return(
@@ -157,7 +202,7 @@ function AdminHome() {
                   >
                     <span
                       className="text-lg text-danger cursor-pointer active:opacity-50"
-                      // onClick={() => handleDeleteButton(item._id, item.name)}
+                      onClick={() => handleDeleteButton(item._id, item.name)}
                     >
                        <MdOutlineDelete />
                     </span>
@@ -175,14 +220,14 @@ function AdminHome() {
         onOpenChange={onOpenChange}
         type={modalType}
       />
-      {/* <NextUiModal
+      <NextUiModal
         isOpen={isOpenDeleteModal}
-        onOpenChange={onOpenDeleteModal}
-        onAction={handleActionModal}
-        modalTitle={'Start'}
-        modalBody="test"
+        onOpenChange={onOpenChangeModal}
+        onAction={handelActionModal}
+        modalTitle={'Delete Product'}
+        modalBody={"Are you sure you want to delete this product?"}
         buttonContent={["Cancel", " Delete"]}
-      /> */}
+      />
     </div>
     </> );
 }
