@@ -434,7 +434,7 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
           name="description"
           defaultValue=""
           render={({ field }) =>(
-            <Textarea placeholder="discription" value={field.value} onChange={field.onChange} />
+            <Textarea aria-label="add product" placeholder="discription" value={field.value} onChange={field.onChange} />
           )}
         />
       </div>
