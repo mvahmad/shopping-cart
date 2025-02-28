@@ -41,7 +41,7 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange}:props) => {
             placement="top-center"
             isDismissable={false}
             isKeyboardDismissDisabled={true}
-            className="font-yekan cursor-default"
+            className="cursor-default"
             scrollBehavior="inside"
           >
             <ModalContent>
