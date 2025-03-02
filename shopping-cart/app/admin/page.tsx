@@ -111,7 +111,7 @@ function AdminHome() {
     return ( 
     <>
     <AdminHeader />
-    <div className="container md:px-16 cursor-default">
+    <div className="container mx-auto md:w-10/12  px-4  cursor-default">
       <h2 className="text-2xl text-gray-600 font-semibold py-6">
         Product Management
       </h2>
