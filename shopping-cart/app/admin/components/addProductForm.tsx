@@ -10,7 +10,13 @@ import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import {CategoriesResponse , SubcategoriesResponse} from '@/app/types'
 import { AddProductschema , addProductschema } from "./schema";
-const AddProductForm = ({ onClose }: { onClose: () => void }) => {
+
+interface props{
+  onClose:() => void ,
+  refetch?:()=>void
+}
+
+const AddProductForm = ({ onClose , refetch }:props) => {
     const [subCategoriesItem, setSubCategoriesItem] = useState<
     { label: string; value: string }[]
   >([]);
@@ -72,6 +78,7 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
       options : {
         onSuccess() {
           onClose();
+          refetch && refetch()
           reset();
           toast.success(`Add Product Successful`);
         },
