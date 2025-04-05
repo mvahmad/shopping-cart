@@ -31,8 +31,8 @@ import { BiShow } from "react-icons/bi";
 function AdminHome() {
     const [modalType, setModalType] = useState("");
     const [product , setProduct] = useState({
-      id:"",
-      name:""
+      id:'0',
+      name:'test'
     })
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const {
@@ -57,11 +57,13 @@ function AdminHome() {
       sort,
     };
 
+    //get products
     const {data , refetch ,isLoading} = useGetServices<getProductsResponse>({
       queryKey:["GetProducts",params] ,
       queryFn:()=>getProducts(params)
     })
 
+    //delete product
     const { mutate } = useDeleteServices({
       mutationKey: ["DeleteProducts"],
       mutationFn: DeleteProduct,
@@ -94,8 +96,15 @@ function AdminHome() {
     isLoading || data?.data.products?.length === 0 ? "loading" : "idle";
 
     function handleDeleteButton(id:string , name:string){
-      onOpenDeleteModal();
+      
       setProduct({id ,name})
+      onOpenDeleteModal();
+    }
+
+    function handleEditButton(item: ProductsEntity) {
+      onOpen();
+      setModalType("edit");
+      // if (item) setSelectedItemEditForm((prev) => ({ ...prev, item }));
     }
 
     function handelActionModal(){
@@ -115,7 +124,7 @@ function AdminHome() {
       <h2 className="text-2xl text-gray-600 font-semibold py-6">
         Product Management
       </h2>
-      <DropDown onOpen={onOpen} setModalType={setModalType} />
+      <DropDown onOpen={onOpen}  setModalType={setModalType} />
       <Table
        bottomContent={
         pages > 0 ? (
@@ -190,7 +199,7 @@ function AdminHome() {
                   >
                     <span
                       className="text-lg text-default-900 cursor-pointer active:opacity-50"
-                      // onClick={() => handleEditButton(item)}
+                      onClick={() => handleEditButton(item)}
                     >
                       <MdOutlineEdit />
                     </span>
@@ -219,6 +228,7 @@ function AdminHome() {
         onClose={onClose}
         onOpenChange={onOpenChange}
         type={modalType}
+        refetch={refetch}
       />
       <NextUiModal
         isOpen={isOpenDeleteModal}
