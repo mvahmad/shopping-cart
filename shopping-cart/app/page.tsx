@@ -21,7 +21,7 @@ import HomePageAccordion from "./components/ui/homePageAccordion"
 
 export default function Home () {
     const [isDerawOpen , setIsDrawOpen]  = useState<boolean>(false)
-    const { products, isLoading, error, fetchData } = useProductStore()
+    const { products, isLoading, fetchData } = useProductStore()
 
     useEffect(() => { fetchData() }, [fetchData])
 
