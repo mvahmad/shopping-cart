@@ -29,7 +29,8 @@ export default function NextUiModal({
         <Modal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          className="font-yekan cursor-default"
+          isKeyboardDismissDisabled={true}
+          className= "cursor-default"
         >
           <ModalContent>
             {(onClose : any) => (
@@ -41,12 +42,12 @@ export default function NextUiModal({
                   <p>{modalBody}</p>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
+                  <Button color="primary"  onPress={onClose}>
                     {buttonContent[0]}
                   </Button>
                   <Button
                     color="primary"
-                    className="bg-persian-green"
+                    className="bg-red-500"
                     onPress={() => {
                       onAction();
                       onClose();
