@@ -28,12 +28,14 @@ import  {useTableSort} from "@/app/hooks/useTabelSort"
 import { toast } from "react-toastify";
 import { MdOutlineDelete ,MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
+import useAdminStore from "@/app/store/admin/useAdminStore"
 function AdminHome() {
     const [modalType, setModalType] = useState("");
     const [product , setProduct] = useState({
       id:'0',
       name:'test'
     })
+    const setSelectedItem = useAdminStore(state=>state.setSelectedItem)
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const {
       isOpen: isOpenDeleteModal,
@@ -104,7 +106,7 @@ function AdminHome() {
     function handleEditButton(item: ProductsEntity) {
       onOpen();
       setModalType("edit");
-      // if (item) setSelectedItemEditForm((prev) => ({ ...prev, item }));
+      setSelectedItem({ id: item._id, name: item.name, items: item })
     }
 
     function handelActionModal(){
