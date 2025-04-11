@@ -30,12 +30,13 @@ import { MdOutlineDelete ,MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import useAdminStore from "@/app/store/admin/useAdminStore"
 function AdminHome() {
-    const [modalType, setModalType] = useState("");
+    const [modalType, setModalType] = useState<string>("");
     const [product , setProduct] = useState({
       id:'0',
       name:'test'
     })
     const setSelectedItem = useAdminStore(state=>state.setSelectedItem)
+    const getSelectedItem = useAdminStore(state=>state.getSelectedItem)
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const {
       isOpen: isOpenDeleteModal,
@@ -83,7 +84,7 @@ function AdminHome() {
 
 
 
-
+    
     let items: ProductsEntity[] = [];
     if (data?.data.products?.length) {
       items = data.data.products;
@@ -98,15 +99,16 @@ function AdminHome() {
     isLoading || data?.data.products?.length === 0 ? "loading" : "idle";
 
     function handleDeleteButton(id:string , name:string){
-      
+      // 
       setProduct({id ,name})
       onOpenDeleteModal();
     }
 
     function handleEditButton(item: ProductsEntity) {
+      setSelectedItem({ id: item._id, name: item.name, items: item })
       onOpen();
       setModalType("edit");
-      setSelectedItem({ id: item._id, name: item.name, items: item })
+
     }
 
     function handelActionModal(){
@@ -231,6 +233,7 @@ function AdminHome() {
         onOpenChange={onOpenChange}
         type={modalType}
         refetch={refetch}
+        // onEdit={getSelectedItem}
       />
       <NextUiModal
         isOpen={isOpenDeleteModal}

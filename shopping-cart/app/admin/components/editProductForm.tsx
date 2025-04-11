@@ -8,18 +8,19 @@ import { CategoriesResponse, SubcategoriesResponse } from "@/app/types";
 import { ChangeEvent, useRef } from "react";
 import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import { useState } from "react";
+import useAdminStore from "@/app/store/admin/useAdminStore"
 interface props{
   onClose:() => void ,
   refetch?:()=>void
 }
-function EditProductForm({ onClose , refetch }:props) {
+function EditProductForm({ onClose  }:props) {
     const [subCategoriesItem, setSubCategoriesItem] = useState<
       { label: string; value: string }[]
     >([]);
     const [selectedThumbnail, setSelectedThumbnail] = useState<string>("");
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
      const fileInputThumbnailRef = useRef<HTMLInputElement>(null);
-  
+     const getSelectedItem = useAdminStore(state=>state.getSelectedItem)
   const { data: categoryData } = useGetServices<CategoriesResponse>({
     queryKey: ["GetCategories"],
     queryFn: getCategories,
@@ -61,13 +62,15 @@ function EditProductForm({ onClose , refetch }:props) {
         clearErrors,
       } = useForm<EditProduct>({resolver:zodResolver(editProductSchema),
         defaultValues: {
-          name: "name",
-          brand: "brand",
-          quantity: 0,
-          price: 1,
-          discount: 1,
+          name: getSelectedItem().name,
+          brand: getSelectedItem().items?.brand,
+          quantity:getSelectedItem().items?.quantity,
+          price: getSelectedItem().items?.price,
+          discount: getSelectedItem().items?.discount,
+          description:getSelectedItem().items?.description
         },
       })
+// console.log('waaaatch',watch("price"));
 
     return(
       <form 
@@ -105,7 +108,7 @@ function EditProductForm({ onClose , refetch }:props) {
             <SelectItem
               key={item.value}
               value={item.value}
-              className="font-yekan"
+              className=""
             >
               {item.label}
             </SelectItem>
@@ -167,6 +170,7 @@ function EditProductForm({ onClose , refetch }:props) {
         isInvalid={!!errors["quantity"]}
         errorMessage={`${errors["quantity"]?.message}`}
         variant="bordered"
+        value={watch("quantity").toString()}
         {...field}
         onChange={(value) =>
           field.field.onChange(value.target.valueAsNumber)}
@@ -188,6 +192,7 @@ function EditProductForm({ onClose , refetch }:props) {
         isInvalid={!!errors["price"]}
         errorMessage={`${errors["price"]?.message}`}
         variant="bordered"
+        value={watch("price").toString()}
         {...field}
         onChange={(value) =>
           field.field.onChange(value.target.valueAsNumber)}
@@ -209,6 +214,7 @@ function EditProductForm({ onClose , refetch }:props) {
         isInvalid={!!errors["discount"]}
         errorMessage={`${errors["discount"]?.message}`}
         variant="bordered"
+        value={watch("discount").toString()}
         {...field}
         onChange={(value) =>
           field.field.onChange(value.target.valueAsNumber)}
@@ -390,9 +396,10 @@ function EditProductForm({ onClose , refetch }:props) {
         <Controller
           control={control}
           name="description"
-          defaultValue=""
+          //
           render={({ field }) =>(
-            <Textarea aria-label="add product" placeholder="discription" value={field.value} onChange={field.onChange} />
+            <Textarea  placeholder="discription" 
+            value={field.value} onChange={field.onChange} />
           )}
         />
       </div>

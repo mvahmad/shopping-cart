@@ -9,6 +9,7 @@ interface State{
 
 interface Action{
     setSelectedItem: (item: State) => void;
+    getSelectedItem: () => State;
     clearSelectedItem: () => void;
 }
 
@@ -19,7 +20,7 @@ const INITIAL_STATE : State = {
 }
 
 const useAdminStore = create<State & Action>()(
-    (set) =>({
+    (set ,get) =>({
         id: INITIAL_STATE.id,
         name: INITIAL_STATE.name,
         items: INITIAL_STATE.items,
@@ -29,6 +30,14 @@ const useAdminStore = create<State & Action>()(
                 name: item.name,
                 items: item.items
             }))
+        },
+        getSelectedItem: () => {
+            const { id, name, items } = get();
+            return {
+                id,
+                name,
+                items
+            }
         },
         clearSelectedItem: () => {
             set(() => ({
