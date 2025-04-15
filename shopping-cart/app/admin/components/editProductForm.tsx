@@ -7,7 +7,7 @@ import { useGetServices } from "@/app/hooks/useGetServices";
 import { CategoriesResponse, SubcategoriesResponse } from "@/app/types";
 import { ChangeEvent, useRef } from "react";
 import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import useAdminStore from "@/app/store/admin/useAdminStore"
 interface props{
   onClose:() => void ,
@@ -20,12 +20,13 @@ function EditProductForm({ onClose  }:props) {
     const [selectedThumbnail, setSelectedThumbnail] = useState<string>("");
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
      const fileInputThumbnailRef = useRef<HTMLInputElement>(null);
-     const getSelectedItem = useAdminStore(state=>state.getSelectedItem)
+     const getSelectedItem = useAdminStore((state)=>state.getSelectedItem)
+  //get category   
   const { data: categoryData } = useGetServices<CategoriesResponse>({
     queryKey: ["GetCategories"],
     queryFn: getCategories,
   });
-
+  //get subcategory
   const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
     queryKey: ["GetSubCategories"],
     queryFn:()=> getSubcategories({limit :0}),
@@ -67,10 +68,25 @@ function EditProductForm({ onClose  }:props) {
           quantity:getSelectedItem().items?.quantity,
           price: getSelectedItem().items?.price,
           discount: getSelectedItem().items?.discount,
-          description:getSelectedItem().items?.description
+          description:getSelectedItem().items?.description,
+          category: getSelectedItem().items?.category.name,
+          subcategory:getSelectedItem().items?.subcategory.name
         },
       })
-// console.log('waaaatch',watch("price"));
+
+      useEffect(() => {
+        if (categoryData && subCategoryData && getSelectedItem()) {
+          setValue("category", getSelectedItem().items?.category._id || "");
+          setValue("subcategory", getSelectedItem().items?.subcategory._id || "");
+          const filteredSubcategories = subCategoryData?.data.subcategories
+            ?.filter((categoryItem) => categoryItem.category === getSelectedItem().items?.category._id)
+            .map((item) => ({ label: item.name, value: item._id }));
+          setSubCategoriesItem(filteredSubcategories || []);
+        }
+      }, [getSelectedItem, categoryData, subCategoryData]);
+
+
+console.log('waaaatch', watch('subcategory'));
 
     return(
       <form 
@@ -95,18 +111,20 @@ function EditProductForm({ onClose  }:props) {
         control={control}
         render={({ field }) => (
           <Select
+          defaultSelectedKeys={[watch("category")]}
           label="Category"
           size="sm"
           isInvalid={!!errors["category"]}
           errorMessage={`${errors["category"]?.message}`}
           variant="bordered"
           className="max-w-xs"
-          {...field}  
-          onChange={(e)=>field.onChange(handleSubCategories(e))}
+          {...field}
+          onChange={(e)=>{
+            field.onChange(handleSubCategories(e))}}
         >
           {categoriesItem?.map((item) => (
             <SelectItem
-              key={item.value}
+              key={item.label}
               value={item.value}
               className=""
             >
@@ -128,12 +146,13 @@ function EditProductForm({ onClose  }:props) {
           errorMessage={`${errors["subcategory"]?.message}`}
           variant="bordered"
           className="max-w-xs"
+          defaultSelectedKeys={[watch("subcategory")]}
           {...field}
           onChange={(e)=>field.onChange(e.target.value)}
         >
           {subCategoriesItem?.map((item) => (
             <SelectItem
-              key={item.value}
+              key={item.label}
               value={item.value}
               className="font-yekan"
             >
