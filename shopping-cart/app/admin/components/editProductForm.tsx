@@ -242,61 +242,7 @@ console.log('waaaatch', watch('subcategory'));
      }}
      />
 
-<div className="flex flex-col w-full mb-4">
-        <div className="w-44 xs:w-64 sm:w-full flex items-center relative h-12">
-              <Input
-              label={"Thumbnail"}
-              size="sm"
-              type="file"
-              className="opacity-0 w-full h-full z-10"
-              isInvalid={!!errors["thumbnail"]}
-              errorMessage={`${errors["thumbnail"]?.message}`}
-              variant="bordered"
-              {...register("thumbnail", {
-                onChange: (e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    setSelectedThumbnail(URL.createObjectURL(file));
-                    setValue("thumbnail", file);
-                  }
-                },
-              })}
-              ref={fileInputThumbnailRef}
-            />
-         
-          <Button
-            variant="bordered"
-            radius="sm"
-            className="absolute top-3 left-0 w-full h-8 z-20"
-            onPress={() => {
-              fileInputThumbnailRef.current?.click();
-            }}
-          >
-            Choice Thumbnail
-          </Button>
-        </div>
-        {selectedThumbnail && (
-          <div className="flex border-2 border-[#e0e0e0] rounded-md w-full flex-col justify-center items-center gap-1 py-1">
-            <span className="text-[10px]">Image has been uploaded</span>
-            <div className="relative">
-              <button
-                className="size-6 cursor-pointer text-[#f31260] absolute top-0 left-0"
-                // onClick={handleDeleteThumbnail}
-              >delete</button>
-              <img
-                src={selectedThumbnail}
-                alt="thumbnail-preview"
-                className="rounded-md w-32"
-              />
-            </div>
-          </div>
-        )}
-        {errors.images?.message && (
-          <p className="text-[#f31260] text-[12px]">
-            {errors.images?.message as string}
-          </p>
-        )}
-      </div>
+
       <div className="flex flex-col w-full mb-4">
         <div className="w-44 xs:w-64 sm:w-full flex items-center relative h-12">
               <Input
@@ -318,7 +264,7 @@ console.log('waaaatch', watch('subcategory'));
               })}
               ref={fileInputThumbnailRef}
             />
-         
+
           <Button
             variant="bordered"
             radius="sm"
@@ -330,22 +276,16 @@ console.log('waaaatch', watch('subcategory'));
             Choice Thumbnail
           </Button>
         </div>
-        {selectedThumbnail && (
+
           <div className="flex border-2 border-[#e0e0e0] rounded-md w-full flex-col justify-center items-center gap-1 py-1">
             <span className="text-[10px]">Image has been uploaded</span>
-            <div className="relative">
-              <button
-                className="size-6 cursor-pointer text-[#f31260] absolute top-0 left-0"
-                // onClick={handleDeleteThumbnail}
-              >delete</button>
-              <img
-                src={selectedThumbnail}
-                alt="thumbnail-preview"
-                className="rounded-md w-32"
-              />
-            </div>
+        <img 
+         src={`http://localhost:8000/images/products/thumbnails/${getSelectedItem().items?.thumbnail || ""}`}
+         alt="product-thumbnail"
+         className="rounded-md w-32" 
+        />
           </div>
-        )}
+        
         {errors.images?.message && (
           <p className="text-[#f31260] text-[12px]">
             {errors.images?.message as string}
@@ -385,26 +325,23 @@ console.log('waaaatch', watch('subcategory'));
             Choice Images
           </Button>
         </div>
-        {selectedImages.length > 0 && (
+        
           <div className="flex border-2 border-[#e0e0e0] rounded-md w-full flex-col justify-center items-center gap-1 py-1">
             <span className="text-[10px]"> image uploaded</span>
             <div className="flex items-center justify-between gap-2 overflow-x-auto">
-              {selectedImages.map((image, index) => (
-                <div className="relative flex-shrink-0" key={index}>
-                  <button
-                    className="size-6 cursor-pointer text-[#f31260] absolute top-0 left-0"
-                    // onClick={() => handleDeleteImages(image)}
-                  >delete</button>
-                  <img
-                    src={image}
-                    alt="image-preview"
-                    className="rounded-md w-32"
-                  />
-                </div>
-              ))}
+            {getSelectedItem().items?.images?.map((image) => {
+              return (
+                <img
+                  key={image}
+                  src={`http://${image}`}
+                  alt="thumbnail-preview"
+                  className="rounded-md w-20"
+                />
+              );
+            })}
             </div>
           </div>
-        )}
+       
         {errors.images?.message && (
           <p className="text-[#f31260] text-[12px]">
             {errors.images?.message as string}
@@ -418,7 +355,8 @@ console.log('waaaatch', watch('subcategory'));
           //
           render={({ field }) =>(
             <Textarea  placeholder="discription" 
-            value={field.value} onChange={field.onChange} />
+            value={field.value} onChange={field.onChange}
+             />
           )}
         />
       </div>
