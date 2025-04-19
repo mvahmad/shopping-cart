@@ -9,6 +9,9 @@ import { ChangeEvent, useRef } from "react";
 import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import { useState ,useEffect } from "react";
 import useAdminStore from "@/app/store/admin/useAdminStore"
+import { usePatchServices } from "@/app/hooks/usePatchService";
+import { patchProducts } from "@/app/hooks/queryHooks/products";
+import { toast } from "react-toastify";
 interface props{
   onClose:() => void ,
   refetch?:()=>void
@@ -56,11 +59,11 @@ function EditProductForm({ onClose  }:props) {
         register,
         control,
         reset,
-        resetField,
+        // 
         watch,
         setValue,
-        setError,
-        clearErrors,
+        // setError,
+        // clearErrors,
       } = useForm<EditProduct>({resolver:zodResolver(editProductSchema),
         defaultValues: {
           name: getSelectedItem().name,
@@ -85,13 +88,34 @@ function EditProductForm({ onClose  }:props) {
         }
       }, [getSelectedItem, categoryData, subCategoryData]);
 
+      const {mutate , isPending}  = usePatchServices({
+        mutationKey:["patchProducts"],
+        mutationFn:patchProducts,
+        invalidate:["GetProducts"],
+        options:{
+          onSuccess:()=>{
+            toast.success("The edit was successful.")
+            reset();
+            onClose();
+          },
+          onError:(error)=>{
+            toast.error(error.message)
+          }
+        }
+      })
 
-console.log('waaaatch', watch('subcategory'));
+      const handleSubmitProductForm: SubmitHandler<EditProduct> = (value:EditProduct) => {
+        if(getSelectedItem()){
+          mutate({data: value, id: getSelectedItem().id})
+        }
+      }
 
     return(
       <form 
       action='submit'
-      className="sm:w-80 mx-auto flex justify-center items-center flex-col gap-2 py-8">
+      onSubmit={handleSubmit(handleSubmitProductForm)}
+      className="sm:w-80 mx-auto flex justify-center items-center flex-col gap-2 py-8"
+      >
         <Controller
         name="name"
         control={control}
@@ -249,32 +273,14 @@ console.log('waaaatch', watch('subcategory'));
               label={"Thumbnail"}
               size="sm"
               type="file"
-              className="opacity-0 w-full h-full z-10"
+              className="w-44 xs:w-64 sm:w-full"
               isInvalid={!!errors["thumbnail"]}
               errorMessage={`${errors["thumbnail"]?.message}`}
               variant="bordered"
-              {...register("thumbnail", {
-                onChange: (e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    setSelectedThumbnail(URL.createObjectURL(file));
-                    setValue("thumbnail", file);
-                  }
-                },
-              })}
-              ref={fileInputThumbnailRef}
+              {...register("thumbnail")}
             />
 
-          <Button
-            variant="bordered"
-            radius="sm"
-            className="absolute top-3 left-0 w-full h-8 z-20"
-            onPress={() => {
-              fileInputThumbnailRef.current?.click();
-            }}
-          >
-            Choice Thumbnail
-          </Button>
+{/*  */}
         </div>
 
           <div className="flex border-2 border-[#e0e0e0] rounded-md w-full flex-col justify-center items-center gap-1 py-1">
@@ -301,29 +307,14 @@ console.log('waaaatch', watch('subcategory'));
               multiple
               id="imagesInp"
               type="file"
-              className="opacity-0 w-full h-full z-10"
+              className="w-44 xs:w-64 sm:w-full"
               isInvalid={!!errors["images"]}
               errorMessage={`${errors["images"]?.message}`}
               variant="bordered"
               {...register("images")}
-              onChange={(e) => {
-                register("images").onChange(e);
-                // handleFileChange(e);
-              }}
+              // 
             />
-          <Button
-            variant="bordered"
-            radius="sm"
-            className="absolute top-3 left-0 w-full h-8 z-20"
-            onPress={() => {
-              const fileInput = document.querySelector(
-                "#imagesInp"
-              ) as HTMLInputElement;
-              fileInput?.click();
-            }}
-          >
-            Choice Images
-          </Button>
+         {/*  */}
         </div>
         
           <div className="flex border-2 border-[#e0e0e0] rounded-md w-full flex-col justify-center items-center gap-1 py-1">
@@ -378,28 +369,11 @@ console.log('waaaatch', watch('subcategory'));
         <Button
           className="bg-green-400 text-white text-base sm:text-lg w-full"
           type="submit"
-          // isLoading={isPending}
+          isLoading={isPending}
           spinner={<Spinner color="default" size="sm" />}
-          // onPress={()=>
-          //   handleSubmit(handleSubmitProductForm, () => {
-          //     if (!errors.images?.message) {
-          //       clearErrors("images");
-          //       clearErrors("thumbnail");
-          //     }
-          //     if (!watch("images") || !watch("images").length) {
-          //       setError("images", {
-          //         type: "required",
-          //         message: "choice file",
-          //       });
-          //       setError("thumbnail", {
-          //         type: "required",
-          //         message: "choice file",
-          //       });
-          //     }
-          //   })
-          // }
+          // 
         >
-          patch
+        {!isPending &&  "Patch"}
         </Button>
       </div>
 
