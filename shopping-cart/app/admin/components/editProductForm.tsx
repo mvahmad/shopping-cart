@@ -5,7 +5,7 @@ import { EditProduct ,editProductSchema } from "./schema";
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import { useGetServices } from "@/app/hooks/useGetServices";
 import { CategoriesResponse, SubcategoriesResponse } from "@/app/types";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent } from "react";
 import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import { useState ,useEffect } from "react";
 import useAdminStore from "@/app/store/admin/useAdminStore"
@@ -20,36 +20,56 @@ function EditProductForm({ onClose  }:props) {
     const [subCategoriesItem, setSubCategoriesItem] = useState<
       { label: string; value: string }[]
     >([]);
-    const [selectedThumbnail, setSelectedThumbnail] = useState<string>("");
-    const [selectedImages, setSelectedImages] = useState<string[]>([]);
-     const fileInputThumbnailRef = useRef<HTMLInputElement>(null);
+    //get selected item
      const getSelectedItem = useAdminStore((state)=>state.getSelectedItem)
-  //get category   
-  const { data: categoryData } = useGetServices<CategoriesResponse>({
-    queryKey: ["GetCategories"],
-    queryFn: getCategories,
-  });
-  //get subcategory
-  const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
-    queryKey: ["GetSubCategories"],
-    queryFn:()=> getSubcategories({limit :0}),
-  });
+    //get category   
+    const { data: categoryData } = useGetServices<CategoriesResponse>({
+      queryKey: ["GetCategories"],
+      queryFn: getCategories,
+    });
+    //get subcategory
+    const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
+      queryKey: ["GetSubCategories"],
+      queryFn:()=> getSubcategories({limit :0}),
+    });
+    //category item
+    const categoriesItem =
+    categoryData?.data.categories?.map((category) => ({
+      label: category.name,
+      value: category._id,
+    })) || [];
 
-
-  const categoriesItem =
-  categoryData?.data.categories?.map((category) => ({
-    label: category.name,
-    value: category._id,
-  })) || [];
+    useEffect(()=>{
+      const categoryId = getSelectedItem().items?.category._id || "";
+      const selectedCategory = categoriesItem.find(
+        (category) => category.value === categoryId)
+        console.log("selectedCategory", selectedCategory);
+      const subcategories = subCategoryData?.data.subcategories
+      ?.filter((item)=>item.category === selectedCategory?.value )
+      console.log("Subcategories", subcategories);
+      const filterSubCategory = subcategories?.map((item) => ({ label: item.name, value: item._id })) 
+        setSubCategoriesItem(filterSubCategory || []);
+        console.log('filllter',filterSubCategory);
+        
+    },[getSelectedItem().id])
+    
+ 
 
    const handleSubCategories = (e: ChangeEvent<HTMLSelectElement>) => {
       const categoryId = e.target.value;
-      const filteredSubcategories = subCategoryData?.data.subcategories
-        ?.filter((item) => item.category === categoryId)
-        .map((item) => ({ label: item.name, value: item._id }));
-      setSubCategoriesItem(filteredSubcategories || []);
-      return categoryId;
+      // console.log(categoryId);
+      // console.log("categoryITEM",categoriesItem );
+      const selectedCategory = categoriesItem.find(
+        (category) => category.value === categoryId)
+        console.log("selectedCategory", selectedCategory);
+      const subcategories = subCategoryData?.data.subcategories
+      ?.filter((item)=>item.category === selectedCategory?.value )
+      console.log("Subcategories", subcategories);
+      const filterSubCategory = subcategories?.map((item) => ({ label: item.name, value: item._id })) 
+        setSubCategoriesItem(filterSubCategory || []);
+      return categoryId
     };
+
 
 
 
@@ -61,7 +81,7 @@ function EditProductForm({ onClose  }:props) {
         reset,
         // 
         watch,
-        setValue,
+        // setValue,
         // setError,
         // clearErrors,
       } = useForm<EditProduct>({resolver:zodResolver(editProductSchema),
@@ -72,21 +92,15 @@ function EditProductForm({ onClose  }:props) {
           price: getSelectedItem().items?.price,
           discount: getSelectedItem().items?.discount,
           description:getSelectedItem().items?.description,
-          category: getSelectedItem().items?.category.name,
-          subcategory:getSelectedItem().items?.subcategory.name
+          category: getSelectedItem().items?.category._id,
+          subcategory:getSelectedItem().items?.subcategory._id,
         },
       })
 
       useEffect(() => {
-        if (categoryData && subCategoryData && getSelectedItem()) {
-          setValue("category", getSelectedItem().items?.category._id || "");
-          setValue("subcategory", getSelectedItem().items?.subcategory._id || "");
-          const filteredSubcategories = subCategoryData?.data.subcategories
-            ?.filter((categoryItem) => categoryItem.category === getSelectedItem().items?.category._id)
-            .map((item) => ({ label: item.name, value: item._id }));
-          setSubCategoriesItem(filteredSubcategories || []);
-        }
-      }, [getSelectedItem, categoryData, subCategoryData]);
+            const categoryName = getSelectedItem().items?.category._id || "";
+            handleSubCategories({ target: { value: categoryName } } as ChangeEvent<HTMLSelectElement>);
+            }, [getSelectedItem, categoryData, subCategoryData]);
 
       const {mutate , isPending}  = usePatchServices({
         mutationKey:["patchProducts"],
@@ -100,6 +114,8 @@ function EditProductForm({ onClose  }:props) {
           },
           onError:(error)=>{
             toast.error(error.message)
+            console.log("error", error.message);
+            
           }
         }
       })
@@ -110,6 +126,8 @@ function EditProductForm({ onClose  }:props) {
         }
       }
 
+      console.log('category', watch("category"));
+      
     return(
       <form 
       action='submit'
@@ -142,15 +160,16 @@ function EditProductForm({ onClose  }:props) {
           errorMessage={`${errors["category"]?.message}`}
           variant="bordered"
           className="max-w-xs"
-          {...field}
+          value={watch("category")}
+          // {...field}
           onChange={(e)=>{
             field.onChange(handleSubCategories(e))}}
         >
           {categoriesItem?.map((item) => (
             <SelectItem
-              key={item.label}
+              key={item.value}
               value={item.value}
-              className=""
+              id={item.value}
             >
               {item.label}
             </SelectItem>
@@ -172,13 +191,13 @@ function EditProductForm({ onClose  }:props) {
           className="max-w-xs"
           defaultSelectedKeys={[watch("subcategory")]}
           {...field}
-          onChange={(e)=>field.onChange(e.target.value)}
+          value={watch("subcategory")}
         >
           {subCategoriesItem?.map((item) => (
             <SelectItem
-              key={item.label}
+              key={item.value}
               value={item.value}
-              className="font-yekan"
+              // className="font-yekan"
             >
               {item.label}
             </SelectItem>
