@@ -9,8 +9,9 @@ interface props{
     onClose: () => void;
     type: string
     refetch?:()=>void
-}
-const FormModal = ({isOpen ,type, onClose , onOpenChange , refetch}:props) => {
+    // onEdit?:()=>void
+} 
+const FormModal = ({isOpen ,type, onClose , onOpenChange , refetch ,}:props) => {
     const handleFormModalType =(type:string) =>{
         switch (type) {
             case "product":
@@ -21,7 +22,7 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange , refetch}:props) => {
             case "edit":
               return {
                 modalTitle: "Edit Product ",
-                modalBody: <EditProductForm onClose={onClose} refetch={refetch} />,
+                modalBody: <EditProductForm onClose={onClose} refetch={refetch}  />,
               };
             case "category":
               return {
