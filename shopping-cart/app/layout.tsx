@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-// 
+import localFont from "next/font/local"; 
 import "./globals.css";
-import { Roboto } from 'next/font/google'
+// import { Roboto } from 'next/font/google'
 import {Providers} from "./providers";
-const roboto = Roboto({ weight: '400',subsets: ['latin'] })
+const iranSans = localFont({ src: '../public/fonts/irsans.ttf' }); 
 
 export const metadata: Metadata = {
   title: "Shoping Cart",
@@ -16,9 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" dir="rtl">
       <body
-        className={roboto.className}
+        className={iranSans.className} 
       >
          <Providers>
           {children}
