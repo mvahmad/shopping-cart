@@ -1,118 +1,53 @@
 'use client'
-import { useCartStore} from "@/app/store/useCartStore";
-import useFromStore from "@/app/hooks/useFromStore"
-import { FiShoppingCart } from "react-icons/fi"
-import { IoPerson } from "react-icons/io5";
-import { IoSearchOutline ,IoMenuSharp} from "react-icons/io5";
-import { BiCategoryAlt } from "react-icons/bi";
+import { BsBasket3 } from "react-icons/bs";
+import logo from "@/public/logo.png"
 import Link from "next/link";
-import { useState } from "react";
-import Drawer from "@/app/components/ui/drawer"
-import {Button } from "@nextui-org/react";
-import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownItem} from "@nextui-org/dropdown";
+import { GoSearch } from "react-icons/go";
+import { IoPersonOutline } from "react-icons/io5";
+import Image from "next/image"
 export interface Props {
   onCartOnClick: () => void
    }
- 
-   
+
 export default function Heder ({onCartOnClick}: Props){
-  const cart = useFromStore(useCartStore, state => state.cart)
-const [isDerawOpen , setIsDrawOpen]  = useState<boolean>(false)
+
     return (
-      <header className='bg-white pt-5 pb-4 flex  items-center justify-center md:h-[7rem] sticky top-0 z-10'>
-
-			<nav className='container text-[#ff7900] md:w-11/12 px-4 flex flex-col justify-end'>
-			<div className="flex justify-center md:justify-between items-center">
-				<div className="flex gap-3">
-					<div className="flex md:justify-between justify-center items-center gap-5">
-						<Link href={'/'} className='md:block hidden text-2xl lg:text-3xl font-semibold'>
-							Shop Cart
-						</Link>
-
-					</div>
-					<div className="px-3 rounded-2xl md:flex hidden  items-center w-[25rem]  text-black shadow-lg gap-2">
-							<span className="md:text-2xl text-lg">
-								<IoSearchOutline />
-							</span>
-							<input
-								className="focus:outline-none"
-								placeholder="Search..."
-							
-							/>
-					</div>
-				</div>
-
-				<div className='flex justify-between gap-4 text-black'>
-					<Button
-						type='button'
-						className='bg-slate-100 text-black rounded-md text-xl  md:block hidden'
-					>
-						<Link className="flex items-center justify-between gap-3" href={'./login'} >
-							<IoPerson />
-						<span className="text-lg lg:block hidden">Login / Sign up</span>
-						</Link>
-					</Button>
-					<Link 
-						href={'/'} 
-						className='flex md:hidden text-3xl text-[#ff7900] border-slate-200
-						rounded-md p-2 border-2  font-semibold'>
-							Shop Cart
-					</Link>
-					
-					<Button
-						type='button'
-						title='Mini Cart'
-						className='text-xl md:flex hidden items-center'
-						onClick={onCartOnClick}
-					>
-							<FiShoppingCart />
-						<div className=' rounded-full bg-[#ff7900] w-5 h-5 text-sm -ml-1'>{cart?.length}</div>
-					</Button>
-				</div>
+      	<header className='[Elite-Sport-Header] flex items-center justify-between
+		 bg-white shadow-md py-4 px-4 md:px-10 lg:px-20'>
+			<div className="[icone]">
+			<Image src={logo} alt="logo" className="w-[4.68rem] h-[4.68rem]" />
 			</div>
-			
-			<div className="md:flex hidden gap-3 pt-3 pb-2 ">
-			<Dropdown>
-				<DropdownTrigger>
-					<Button className="text-lg text-black flex gap-1 rounded-sm px-1">
-						<BiCategoryAlt />
-						<span>Categories</span>
-					</Button>
-				</DropdownTrigger>
-				<DropdownMenu className="rounded-md bg-slate-50 p-4 active:shadow-xl" aria-label="Static Actions">
-					<DropdownItem key="new">New 1</DropdownItem>
-					<DropdownItem key="copy">new 2</DropdownItem>
-					<DropdownItem key="edit">new 3</DropdownItem>
-					<DropdownItem key="delete" className="text-danger" color="danger">
-					Delete file 
-					</DropdownItem>
-				</DropdownMenu>
-    		</Dropdown>
-			<Dropdown>
-				<DropdownTrigger>
-					<Button className="text-lg text-black flex gap-1 rounded-sm px-1">
-						<span>New Products</span>
-					</Button>
-				</DropdownTrigger>
-				<DropdownMenu className="rounded-md bg-slate-50 p-4 active:shadow-xl" aria-label="Static Actions">
-					<DropdownItem key="new">New 1</DropdownItem>
-					<DropdownItem key="copy">new 2</DropdownItem>
-					<DropdownItem key="edit">new 3</DropdownItem>
-					<DropdownItem key="delete" className="text-danger" color="danger">
-					Delete file 
-					</DropdownItem>
-				</DropdownMenu>
-    		</Dropdown>
+				<nav className="flex items-center gap-6">
+					<Link href={'#'}className="hover:font-bold hover:text-blue-600 
+					hover:underline text-[#1E293B99] font-normal text-xl" >صفحه اصلی</Link>
+					<Link href={'#'} className="hover:font-bold hover:text-blue-600 
+					hover:underline text-[#1E293B99] font-normal text-xl">محصولات</Link>
+					<Link href={'#'} className="hover:font-bold hover:text-blue-600 
+					hover:underline text-[#1E293B99] font-normal text-xl">تماس با ما</Link>
+					<Link href={'#'} className="hover:font-bold hover:text-blue-600 
+					hover:underline text-[#1E293B99] font-normal text-xl">درباره ما</Link>
+				</nav>
+			<div className="flex justify-between gap-3 items-center">
+				<Link href={"#"}
+				className="relative flex items-center justify-center
+				 w-[2.5rem] h-[2.5rem] bg-blue-200
+				 rounded-md text-blue-600 transition-all text-[24px] font-bold ">
+				<GoSearch />
+				</Link>
+				<Link href={'#'}
+				className="relative flex items-center justify-center
+				 w-[2.5rem] h-[2.5rem] bg-blue-200
+				 rounded-md text-blue-600 transition-all text-[24px] font-bold">
+				<BsBasket3 />
+				</Link>
+				<Link href={'#'} 
+				className="relative flex items-center justify-center
+				 w-[2.5rem] h-[2.5rem] bg-blue-200
+				 rounded-md text-blue-600 text-[24px] font-bold ">
+				<IoPersonOutline />
+				</Link>
 			</div>
-
-			</nav>
-			<button className="block md:hidden text-2xl pr-10" onClick={()=> setIsDrawOpen(!isDerawOpen)}><IoMenuSharp /></button>
-					 <Drawer isOpen={isDerawOpen} onCartIconClick={()=> setIsDrawOpen(!isDerawOpen)}>
-							<ul>
-								<li><Link href='#'>Category</Link></li>
-								<li><Link href={'./login'}>Login / Sign up</Link></li>
-							</ul>
-   					</Drawer>
+	
 		</header>
         )
 
