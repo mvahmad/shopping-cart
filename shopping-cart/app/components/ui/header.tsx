@@ -12,7 +12,7 @@ export interface Props {
 export default function Heder (){
 
     return (
-      	<header className='[Elite-Sport-Header] flex sm:flex-row flex-col items-center justify-between
+      	<header className='[Elite-Sport-Header] sticky top-0 flex sm:flex-row flex-col items-center justify-between
 		 bg-white shadow-md py-4 px-4 md:px-10 lg:px-20 gap-2'>
 			<div className="[icone]">
 			<Image src={logo} alt="logo" className="sm:w-[4.68rem] sm:h-[4.68rem] w-[4rem] h-[4rem]" />
