@@ -2,6 +2,9 @@ import Link from "next/link";
 import logo from "@/public/logo.png";
 import Image from "next/image";
 import FooterButton from "./footerButton";
+import { FaInstagram } from "react-icons/fa";
+import { FaTelegramPlane } from "react-icons/fa";
+import { IoAlertCircleOutline } from "react-icons/io5";
 function Footer() {
     return ( 
     <footer className='flex flex-col'>
@@ -41,17 +44,59 @@ function Footer() {
                     
                     <div className="flex flex-col justify-end ">
                         <h1 className="text-[1.5rem] font-bold text-blue-600">نمادها</h1>
-                        <div className="flex flex-col gap-2  h-[11.187rem]">
-                          
+                        <div className="flex flex-col gap-2 items-center ">
+                        <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                        text-gray-600 bg-[#E2E8F099] 
+                        flex justify-between items-center" ></Link>
+                          <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                        text-gray-600 bg-[#E2E8F099] 
+                        flex justify-between items-center" ></Link>
+                          <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                        text-gray-600 bg-[#E2E8F099] 
+                        flex justify-between items-center" ></Link>
                         </div>
                     </div>
 
                 </div>
 
-                <div></div>
+                <div className="flex items-center justify-between py-4 px-[10px] tablet:px-[50px]">
+                    <div className="flex items-center gap-2 w-full h-full text-center">
+                        <div className="rounded-lg border-none p-2  h-[3.06rem]
+                        text-gray-600 bg-[#E2E8F099] 
+                        flex justify-between items-center">
+                            <span>پست الکترونیک:</span>
+                            Elite.Sport2024@gmail.com
+                        </div>
+                        <span className="rounded-lg border-none p-2  h-[3.06rem]
+                        text-gray-600 bg-[#E2E8F099] 
+                        flex justify-between items-center">
+                            <span>شماره تماس:</span>
+                            021-12345678
+                        </span>
+                    </div>
+                    <div className="flex items-center justify-end gap-2 w-full h-full text-center">
+                        <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                        text-gray-600 text-2xl bg-[#E2E8F099] 
+                        flex justify-center items-center" >
+                            <FaInstagram />
+                        </Link>
+                         <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                        text-gray-600 bg-[#E2E8F099] 
+                        flex justify-center text-2xl items-center" >
+                            <FaTelegramPlane />
+                        </Link>
+                    </div>
+                </div>
           </section>
 
-          <section>lisence</section>
+          <section className="bg-blue-800 flex items-center justify-center p-4">
+            <div className="text-gray-100 rounded-md bg-blue-600 p-2 flex ">
+                <span className="p-1"> 
+                    <IoAlertCircleOutline />
+                </span>
+            کلیه حقوق این وب سایت متعلق به تیم الیت اسپورت می‌باشد.
+            </div>
+          </section>
     </footer> );
 }
 
