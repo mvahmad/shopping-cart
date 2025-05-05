@@ -8,73 +8,81 @@ import { IoAlertCircleOutline } from "react-icons/io5";
 function Footer() {
     return ( 
     <footer className='flex flex-col'>
-          <section className="bg-[#F1F5F9D9]" >
-                <div className="flex items-center justify-between pt-4 w-full px-[10px] tablet:px-[50px]">
-                    <div className="flex flex-col">
+          <section className="bg-[#F1F5F9D9] " >
+                <div className="flex flex-row items-center justify-between pt-4 max-[765px]:flex-col  w-auto px-[10px]">
+                    <div className="flex flex-col w-[21.03rem] max-[765px]:w-auto">
                     <div className="flex  items-center gap-3 w-full h-full px-2 py-2 text-center">
                         <Link href="/"><Image src={logo} alt="logo" 
                         className="w-16 h-16" /></Link>
                         <h1 className="text-[1.5rem] font-bold text-blue-600">الیت اسپورت</h1>
                     </div>
-                        <div className="rounded-lg border-none m-auto p-3 h-[11.187rem] w-[21.87rem]
+                        <div className="rounded-lg border-none m-auto p-3 h-auto 
                          text-gray-600 bg-[#E2E8F099] ">
                         لورم ایپسوم متن ساختگی
-                         با تولید سادگی نامفهوماز صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بل 
-                         روزنامه و مجله در ستون و سطرآنچنان که لازم است و براشرایطلورم ایپسوم متن ساختگی با تولید    
+                         با تولید سادگی نامفهوماز صنعت چاپ 
+                         و با استفاده از طراحان گرافیک است. چاپگرها و متون بل 
+                         روزنامه و مجله در ستون و
+                          سطرآنچنان که لازم است و براشرایطلورم ایپسوم متن ساختگی با تولید    
                         </div>
                     </div>
                    
+                   <div className="flex flex-row max-[765px]:flex-col gap-4 max-[765px]:w-full w-auto">
                     <div className="flex flex-col justify-end ">
-                        <h1 className="text-[1.5rem] font-bold text-blue-600"> دسترسی سریع</h1>
-                        <div className="flex flex-col gap-2 pt-6 h-[11.187rem]">
-                            <FooterButton href="/" >خانه</FooterButton>
-                            <FooterButton href="#" >محصولات جدید</FooterButton>
-                            <FooterButton href="#" >حراج ویژه</FooterButton>
-                        </div>  
-                    </div>
-                    
-                    <div className="flex flex-col justify-end ">
-                        <h1 className="text-[1.5rem] font-bold text-blue-600">راهنما</h1>
-                        <div className="flex flex-col gap-2 pt-6 h-[11.187rem]">
-                            <FooterButton href="/" >شرایط بازگشت</FooterButton>
-                            <FooterButton href="#" >راهنمای سایز</FooterButton>
-                            <FooterButton href="/contact-us" > تماس با ما</FooterButton>
+                            <h1 className="text-[1.5rem] font-bold text-blue-600 "> دسترسی سریع</h1>
+                            <div className="flex flex-col gap-2  h-[11.187rem] pt-6">
+                                <FooterButton href="/" >خانه</FooterButton>
+                                <FooterButton href="#" >محصولات جدید</FooterButton>
+                                <FooterButton href="#" >حراج ویژه</FooterButton>
+                            </div>  
                         </div>
-                    </div>
-                    
-                    <div className="flex flex-col justify-end ">
-                        <h1 className="text-[1.5rem] font-bold text-blue-600">نمادها</h1>
-                        <div className="flex flex-col gap-2 items-center ">
-                        <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
-                        text-gray-600 bg-[#E2E8F099] 
-                        flex justify-between items-center" ></Link>
-                          <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
-                        text-gray-600 bg-[#E2E8F099] 
-                        flex justify-between items-center" ></Link>
-                          <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
-                        text-gray-600 bg-[#E2E8F099] 
-                        flex justify-between items-center" ></Link>
+                        
+                        <div className="flex flex-col justify-end ">
+                            <h1 className="text-[1.5rem] font-bold text-blue-600">راهنما</h1>
+                            <div className="flex flex-col gap-2 pt-6 h-[11.187rem]">
+                                <FooterButton href="/" >شرایط بازگشت</FooterButton>
+                                <FooterButton href="#" >راهنمای سایز</FooterButton>
+                                <FooterButton href="/contact-us" > تماس با ما</FooterButton>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div className="flex  flex-col justify-end ">
+                            <h1 className="text-[1.5rem] font-bold text-blue-600">نمادها</h1>
+                            <div className="flex flex-col max-[765px]:flex-row gap-2 items-center justify-center pt-6 ">
+                            <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                            text-gray-600 bg-[#E2E8F099] 
+                            flex justify-between items-center" ></Link>
+                            <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                            text-gray-600 bg-[#E2E8F099] 
+                            flex justify-between items-center" ></Link>
+                            <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
+                            text-gray-600 bg-[#E2E8F099] 
+                            flex justify-between items-center" ></Link>
+                            </div>
+                        </div>
+
+                   </div>
+                    
 
                 </div>
 
-                <div className="flex items-center justify-between py-4 px-[10px] tablet:px-[50px]">
-                    <div className="flex items-center gap-2 w-full h-full text-center">
-                        <div className="rounded-lg border-none p-2  h-[3.06rem]
+                <div className="flex max-[713px]:flex-col flex-row gap-2 items-center justify-between py-4 px-[10px] ">
+                    <div className="flex items-center gap-2 max-[713px]:flex-col flex-row text-center">
+                        <div className="rounded-lg border-none p-2
                         text-gray-600 bg-[#E2E8F099] 
-                        flex justify-between items-center">
-                            <span>پست الکترونیک:</span>
+                        flex justify-between gap-2 items-center">
+                            <span className="w-[8rem]">پست الکترونیک:</span>
+                            <span className="">
                             Elite.Sport2024@gmail.com
+                            </span>
                         </div>
-                        <span className="rounded-lg border-none p-2  h-[3.06rem]
+                        <span className="rounded-lg border-none p-2 w-full
                         text-gray-600 bg-[#E2E8F099] 
                         flex justify-between items-center">
-                            <span>شماره تماس:</span>
-                            021-12345678
+                            <span >شماره تماس:</span>
+                            <span className="">021-12345678</span>
                         </span>
                     </div>
-                    <div className="flex items-center justify-end gap-2 w-full h-full text-center">
+                    <div className="flex items-center justify-end gap-2 text-center">
                         <Link href={'#'} className="rounded-lg border-none p-2  h-12 w-12
                         text-gray-600 text-2xl bg-[#E2E8F099] 
                         flex justify-center items-center" >
@@ -89,7 +97,7 @@ function Footer() {
                 </div>
           </section>
 
-          <section className="bg-blue-800 flex items-center justify-center p-4">
+          <section className="bg-blue-800 flex items-center min-w-fit justify-center p-4">
             <div className="text-gray-100 rounded-md bg-blue-600 p-2 flex ">
                 <span className="p-1"> 
                     <IoAlertCircleOutline />
