@@ -6,7 +6,7 @@ interface Props {
 }
 function FooterButton ( {children  , href}: Props) {
     return ( 
-    <Link href={href} className="rounded-lg border-none p-2 w-[15.12rem] h-[3.06rem]
+    <Link href={href} className="rounded-lg border-none p-2 w-full h-[3.06rem]
      text-gray-600 bg-[#E2E8F099] 
     flex justify-between items-center ">
        <span>{children}</span>
