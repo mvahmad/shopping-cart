@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+.w-fill {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: fill-available;
+}

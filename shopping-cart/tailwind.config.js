@@ -11,7 +11,13 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
  ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        'fill': 'fill-available',
+        'webkit-fill': '-webkit-fill-available',
+        'moz-fill': '-moz-available',
+      }
+    },
   },
   plugins: [nextui()],
 }
