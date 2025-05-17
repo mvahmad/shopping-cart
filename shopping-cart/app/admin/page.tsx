@@ -1,5 +1,5 @@
 'use client'
-import AdminHeader from "./components/adminHeader";
+import AdminNav from "./components/adminNav";
 import Link from "next/link";
 import NextUiModal from "../components/ui/nextUiModal";
 import {
@@ -122,9 +122,9 @@ function AdminHome() {
     }
 
     return ( 
-    <>
-    <AdminHeader />
-    <div className="container mx-auto md:w-10/12  px-4  cursor-default">
+    <div className="flex flex-row w-full h-screen">
+    <AdminNav />
+    <div className="container bg-gray-100 mx-auto md:w-10/12  px-4  cursor-default">
       <h2 className="text-2xl text-gray-600 font-semibold py-6">
         Product Management
       </h2>
@@ -244,7 +244,7 @@ function AdminHome() {
         buttonContent={["Cancel", " Delete"]}
       />
     </div>
-    </> );
+    </div> );
 }
 
 export default AdminHome;

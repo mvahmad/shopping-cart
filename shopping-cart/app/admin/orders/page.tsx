@@ -1,4 +1,4 @@
-import AdminHeader from "../components/adminHeader";
+import AdminHeader from "../components/adminNav";
 
 const Orders = () => {
     return ( <>

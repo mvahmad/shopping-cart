@@ -1,4 +1,4 @@
-import AdminHeader from "@/app/admin/components/adminHeader";
+import AdminHeader from "@/app/admin/components/adminNav";
 
 const Inventory = () => {
     return ( <>
