@@ -35,6 +35,7 @@ function AdminHome() {
       id:'0',
       name:'test'
     })
+    const [isDrawerOpen, setIsDrawerOpen] = useState(true)
     const setSelectedItem = useAdminStore(state=>state.setSelectedItem)
     const getSelectedItem = useAdminStore(state=>state.getSelectedItem)
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -121,13 +122,18 @@ function AdminHome() {
       }
     }
 
+  const handleCartIconClick = () => {
+  setIsDrawerOpen(!isDrawerOpen)
+ }
+
     return ( 
     <div className="flex flex-row w-full h-screen">
-    <AdminNav />
-    <div className="container bg-gray-100 mx-auto md:w-10/12  px-4  cursor-default">
+    <AdminNav isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}/>
+    <div className="container bg-gray-100  px-8  cursor-default">
       <h2 className="text-2xl text-gray-600 font-semibold py-6">
         Product Management
       </h2>
+       <button onClick={handleCartIconClick}>oppen</button>
       <DropDown onOpen={onOpen}  setModalType={setModalType} />
       <Table
        bottomContent={
