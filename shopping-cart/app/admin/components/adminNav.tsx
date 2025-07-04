@@ -6,6 +6,7 @@ import { FiClipboard } from "react-icons/fi";
 import { FiInbox } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import { FiMessageSquare } from "react-icons/fi";
+import { FaSignOutAlt } from "react-icons/fa"
 
 interface Props {
 	isOpen: boolean
@@ -14,10 +15,17 @@ interface Props {
 
 const AdminNav = ({isOpen, onCartIconClick}:Props) => {
     return (  
-          <aside className={`bg-white py-4 w-1/5 flex-col items-center overflow-y-auto shadow-lg 
+          <aside className={`bg-white py-4 w-1/5 flex-col items-center justify-between overflow-y-auto shadow-lg 
       ${isOpen ? "hidden" : "flex"}
     `}>
-            <nav className='flex flex-col space-y-4'>
+            <div className="flex flex-col items-center gap-2 p-2 justify-center">
+               <img alt="admin" className="w-[5rem] h-[5rem]"
+                src={"https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"}
+                 />
+                 <span className="text-slate-800 font-normal text-[1rem] ">علی عطاری</span>
+                 <span className="font-semibold text-red-500 text-[0.875rem]">مدیریت سایت</span>
+            </div>
+            <nav className='flex flex-col space-y-1 w-webkit-fill'>
                <Link href="/admin/dashboard" className="text-gray-700 flex gap-2 items-center text-lg
                   hover:text-blue-500 hover:border-r-4 border-blue-700 px-3 py-2
                   bg-gradient-to-r hover:from-slate-50 hover:to-blue-200
@@ -50,8 +58,16 @@ const AdminNav = ({isOpen, onCartIconClick}:Props) => {
                      <span>پیام ها</span>
                   </Link>
 
-                  <Button onPress={onCartIconClick}>بستن</Button>
+                  
             </nav>
+            <div className="flex items-end h-full justify-start w-webkit-fill p-2 m-1">
+               <button className="flex items-center hover:text-red-300 text-red-500">
+               <FaSignOutAlt />
+               <span>خروج</span>
+            </button>
+            </div>
+         
+            
             <div>
                   
             </div>
