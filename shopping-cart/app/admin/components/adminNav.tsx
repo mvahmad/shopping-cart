@@ -1,5 +1,6 @@
+// "use server"
 // shopping-cart/app/admin/components/adminNav.tsx
-import { Button } from "@nextui-org/react";
+
 import Link from "next/link";
 import { FiSquare } from "react-icons/fi";
 import { FiClipboard } from "react-icons/fi";
@@ -7,22 +8,27 @@ import { FiInbox } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import { FiMessageSquare } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa"
+import { auth } from "@/auth"
 
 interface Props {
 	isOpen: boolean
 	onCartIconClick: () => void
 }
 
-const AdminNav = ({isOpen, onCartIconClick}:Props) => {
+export default  function AdminNav ({isOpen, onCartIconClick}:Props)  {
+   // const session =await auth()
     return (  
-          <aside className={`bg-white py-4 w-1/5 h-screen flex-col items-center justify-between overflow-y-auto shadow-lg 
+          <aside className={`bg-white py-4 w-1/5 h-screen flex-col items-center 
+            justify-between overflow-y-auto shadow-lg 
       ${isOpen ? "hidden" : "flex"}
     `}>
             <div className="flex flex-col items-center gap-2 p-2 justify-center">
-               <img alt="admin" className="w-[5rem] h-[5rem]"
-                src={"https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"}
-                 />
-                 <span className="text-slate-800 font-normal text-[1rem] ">علی عطاری</span>
+                   {/* {session?.user?.image && 
+                  <img src={session?.user?.image}
+                     alt={session?.user?.name || "Avatar"} className="w-10 h-10"
+            />
+            } */}
+                 {/* <span className="text-slate-800 font-normal text-[1rem] ">{session?.user?.name}</span> */}
                  <span className="font-semibold text-red-500 text-[0.875rem]">مدیریت سایت</span>
             </div>
             <nav className='flex flex-col space-y-1 w-webkit-fill'>
@@ -67,10 +73,9 @@ const AdminNav = ({isOpen, onCartIconClick}:Props) => {
             </button>
             </div>
          
-            
-            <div>
-                  
-            </div>
+         
+
+
     </aside>
 
          
@@ -79,4 +84,3 @@ const AdminNav = ({isOpen, onCartIconClick}:Props) => {
     );
 }
  
-export default AdminNav;
