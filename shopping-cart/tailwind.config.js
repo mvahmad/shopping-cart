@@ -13,7 +13,7 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        'fill': 'fill-available',
+        'fill-available': 'fill-available',
         'webkit-fill': '-webkit-fill-available',
         'moz-fill': '-moz-available',
       }

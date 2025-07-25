@@ -9,6 +9,7 @@ import { FiUser } from "react-icons/fi";
 import { FiMessageSquare } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa"
 import { auth } from "@/auth"
+import { logout } from "@/app/lib/actions/action";
 
 interface Props {
 	isOpen: boolean
@@ -67,7 +68,7 @@ export default  function AdminNav ({isOpen, onCartIconClick}:Props)  {
                   
             </nav>
             <div className="flex items-end h-full justify-start w-webkit-fill p-2 m-1">
-               <button className="flex items-center hover:text-red-300 text-red-500">
+               <button onClick={logout} className="flex items-center hover:text-red-300 text-red-500">
                <FaSignOutAlt />
                <span>خروج</span>
             </button>
