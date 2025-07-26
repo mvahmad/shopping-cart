@@ -1,18 +1,19 @@
 "use server"
-import { auth } from "@/auth"
-// import SignInButton from "../admin/components/signInButton"
-import Link from "next/link"
-import SignOutButton from "../admin/components/signOutButtn"
+import { decrypt } from "@/app/lib/actions/session";
 import LoginForm from "../components/loginForm/page"
+import AdminHome from "../admin/page"
+import { JWTPayload } from "jose";
+import { cookies } from "next/headers";
 export default async function AdminLogin (){
-    const session =await auth()
-    if(session?.user){
+    const cookie = (await cookies()).get('session')?.value
+    const session :JWTPayload | undefined = await decrypt(cookie)
+    
+    if(session?.userId){
         return(
             <>
-             <Link href={"/admin"}>Admin Dashboard</Link>
-             <SignOutButton />
+             <AdminHome />
             </>
-           
+
         )
     }
     return(
