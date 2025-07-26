@@ -1,4 +1,4 @@
-// "use server"
+
 // shopping-cart/app/admin/components/adminNav.tsx
 
 import Link from "next/link";
@@ -8,28 +8,26 @@ import { FiInbox } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import { FiMessageSquare } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa"
-import { auth } from "@/auth"
+//
 import { logout } from "@/app/lib/actions/action";
+
 
 interface Props {
 	isOpen: boolean
-	onCartIconClick: () => void
+   info:any
+
 }
 
-export default  function AdminNav ({isOpen, onCartIconClick}:Props)  {
-   // const session =await auth()
+export default  function AdminNav ({isOpen,info }:Props)  {
     return (  
           <aside className={`bg-white py-4 w-1/5 h-screen flex-col items-center 
             justify-between overflow-y-auto shadow-lg 
       ${isOpen ? "hidden" : "flex"}
     `}>
             <div className="flex flex-col items-center gap-2 p-2 justify-center">
-                   {/* {session?.user?.image && 
-                  <img src={session?.user?.image}
-                     alt={session?.user?.name || "Avatar"} className="w-10 h-10"
-            />
-            } */}
-                 {/* <span className="text-slate-800 font-normal text-[1rem] ">{session?.user?.name}</span> */}
+
+               {info}
+
                  <span className="font-semibold text-red-500 text-[0.875rem]">مدیریت سایت</span>
             </div>
             <nav className='flex flex-col space-y-1 w-webkit-fill'>
@@ -73,15 +71,9 @@ export default  function AdminNav ({isOpen, onCartIconClick}:Props)  {
                <span>خروج</span>
             </button>
             </div>
-         
-         
-
+            {/*  */}
 
     </aside>
-
-         
-   
-  
-    );
+    )
 }
  

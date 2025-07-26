@@ -1,7 +1,7 @@
 "use server"
 import { decrypt } from "@/app/lib/actions/session";
 // import { auth } from "@/auth"
-// import { Image } from "@nextui-org/react";
+import { redirect } from "next/navigation";
 import { JWTPayload } from "jose";
 import { cookies } from "next/headers";
 export default async function UserInfo(){
@@ -14,11 +14,13 @@ export default async function UserInfo(){
         <div>:user id</div>
         {session?.userId} 
         </>
-           
         
 
+
         
-    )
+    )    
+     }else{
+        redirect('/login')
      }
    
 

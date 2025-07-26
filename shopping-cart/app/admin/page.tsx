@@ -1,11 +1,12 @@
 import AdminDashboard from "./components/adminDashboard";
+import AdminDashboardPage from "./components/adminDashboardPage";
 import UserInfo from "./components/userInfo";
 
 function AdminHome() {
  return(
-  <AdminDashboard>
+  <AdminDashboardPage>
     <UserInfo />
-  </AdminDashboard>
+  </AdminDashboardPage>
  )
 }
 export default AdminHome ;
