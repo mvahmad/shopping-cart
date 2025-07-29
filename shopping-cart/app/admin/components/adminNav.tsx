@@ -15,10 +15,11 @@ import { logout } from "@/app/lib/actions/action";
 interface Props {
 	isOpen: boolean
    info:any
+   onCartIconClick:()=>void
 
 }
 
-export default  function AdminNav ({isOpen,info }:Props)  {
+export default  function AdminNav ({isOpen,info,onCartIconClick }:Props)  {
     return (  
           <aside className={`bg-white py-4 w-1/5 h-screen flex-col items-center 
             justify-between overflow-y-auto shadow-lg 

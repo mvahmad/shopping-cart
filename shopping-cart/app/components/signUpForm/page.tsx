@@ -1,50 +1,96 @@
-import { Button, Input } from "@nextui-org/react"
+"use client";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { RegisterFormData, schema } from "./schema";
-import { useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePostServices } from "@/app/hooks/usePostServices";
 import { postRegisterData } from "@/auth";
-const formInputs=[
-    {"name":"firstname" , "type":"text" , "className":"" , "placeHolder":"First Name" ,"vlaue":""},
-    {"name":"username" , "type":"text" , "className":"" , "placeHolder":"User Name","vlaue":""},
-    {"name":"lastname" , "type":"text" , "className":"" , "placeHolder":"Last Name","vlaue":""},
-    {"name":"pssword" , "type":"text" , "className":"" , "placeHolder":"Password","vlaue":""},
-    {"name":"addres" , "type":"text" , "className":"" , "placeHolder":"Addres","vlaue":""},
-    {"name":"phonenumber" , "type":"number" , "className":"" , "placeHolder":"Phon Number","vlaue":""},
-]
-export default function SignUpForm(){
+import { authResponse } from "@/app/types";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import Cookies from 'js-cookie';
+interface ResponseMessage {
+  status: string;
+  message: string;
+}
 
-    const {
-        handleSubmit,
-        formState: { errors },
-        register,
-        reset,
-    } = useForm<RegisterFormData>({ resolver: zodResolver(schema) });
+export default function SignUpForm() {
+  const router = useRouter();
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset,
+  } = useForm<RegisterFormData>({ resolver: zodResolver(schema) });
 
-    const { mutate, isPending } = usePostServices({
+  const { mutate, isPending } = usePostServices({
     mutationFn: postRegisterData,
     mutationKey: ["Register"],
   });
 
+  const handleSubmitSignUp: SubmitHandler<RegisterFormData> = (value) => {
+    mutate(value, {
+      onSuccess: async (response) => {
+        const res = response as authResponse;
+        Cookies.set("accessToken", res.token.accessToken);
+        Cookies.set("refreshToken", res.token.refreshToken);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        router.replace("/");
+        toast.success(`${res.data.user.firstname} ${res.data.user.lastname} Welcome`);
+      },
+      onError: (error) => {
+        const e = error as AxiosError<ResponseMessage>;
+        console.log(e?.response?.data?.message);
+      },
+      onSettled: () => {
+        reset();
+      },
+    });
+  };
 
+  const formInputs = [
+    { name: "firstname", type: "text", className: "", placeHolder: "First Name" },
+    { name: "username", type: "text", className: "", placeHolder: "User Name" },
+    { name: "lastname", type: "text", className: "", placeHolder: "Last Name" },
+    { name: "password", type: "password", className: "", placeHolder: "Password" },
+    { name: "address", type: "text", className: "", placeHolder: "Address" },
+    { name: "phoneNumber", type: "number", className: "", placeHolder: "Phone Number" },
+  ] as const;
 
-    return(
-        <form className="flex w-[25rem] h-full my-2 p-5 flex-col gap-2 border-1 rounded-md bg-white ">
-            <h1 className="text-2xl font-bold">Sign UP</h1>
-            {formInputs.map((input,index)=>{
-                return(
-                    <Input key={index} name={input.name} 
-                    placeholder={input.placeHolder} 
-                    className={input.className}
-                    value={input.vlaue}
-                    type={input.type} 
-                    />
-                )
-            })
-            }
-            <Button>Sign Up</Button>
-        </form>
-    )
+  return (
+    <form
+      onSubmit={handleSubmit(handleSubmitSignUp)}
+      className="flex w-[25rem] h-full my-2 p-5 flex-col gap-2 border-1 rounded-md bg-white "
+    >
+      <h1 className="text-2xl font-bold">Sign UP</h1>
+      {formInputs.map((input, index) => (
+        <Controller
+          key={index}
+          name={input.name}
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              placeholder={input.placeHolder}
+              className={input.className}
+              type={input.type}
+              isInvalid={!!errors[input.name]}
+              errorMessage={errors[input.name]?.message as string | undefined}
+            />
+          )}
+        />
+      ))}
+      <Button
+        className="bg-gray-500 text-white text-base sm:text-lg w-44 xs:w-64 sm:w-full"
+        type="submit"
+        isLoading={isPending}
+        spinner={<Spinner color="default" size="sm" />}
+      >
+        {!isPending && "Sign Up"}
+      </Button>
+    </form>
+  );
 }
-
+//
 

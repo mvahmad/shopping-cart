@@ -129,7 +129,7 @@ function AdminHome() {
 
     return ( 
     <div className="flex flex-row w-full h-screen">
-    <AdminNav isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}/>
+    {/* <AdminNav isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}/> */}
     <div className="container bg-gray-100  px-8  cursor-default">
       <h2 className="text-2xl text-gray-600 font-semibold py-6">
         Product Management
