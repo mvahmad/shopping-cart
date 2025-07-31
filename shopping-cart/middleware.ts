@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "./auth";
+import { auth } from "./app/lib/actions/auth";
 import { cookies } from "next/headers";
 import { decrypt } from "./app/lib/actions/session";
 

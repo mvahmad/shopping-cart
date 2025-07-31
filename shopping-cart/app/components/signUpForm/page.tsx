@@ -4,12 +4,13 @@ import { RegisterFormData, schema } from "./schema";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePostServices } from "@/app/hooks/usePostServices";
-import { postRegisterData } from "@/auth";
+import { postRegisterData } from "@/app/lib/actions/auth";
 import { authResponse } from "@/app/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import Cookies from 'js-cookie';
+import Link from "next/link";
 interface ResponseMessage {
   status: string;
   message: string;
@@ -40,8 +41,18 @@ export default function SignUpForm() {
         toast.success(`${res.data.user.firstname} ${res.data.user.lastname} Welcome`);
       },
       onError: (error) => {
-        const e = error as AxiosError<ResponseMessage>;
-        console.log(e?.response?.data?.message);
+           const axiosError = error as AxiosError<ResponseMessage>;
+                  if (axiosError.response) {
+                  console.log("Error response data:", axiosError.response.data);
+                  toast.error(axiosError.response.data.message, {
+                    rtl: false,
+                  });
+                } else {
+                  console.error("Error:", axiosError);
+                  toast.error("An unexpected error occurred", {
+                    rtl: false,
+                  });
+                }
       },
       onSettled: () => {
         reset();
@@ -89,6 +100,7 @@ export default function SignUpForm() {
       >
         {!isPending && "Sign Up"}
       </Button>
+      <p className="text-slate-400">Already have an account?<Link className="text-slate-500 underline" href='/login'>Login</Link></p>
     </form>
   );
 }

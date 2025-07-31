@@ -1,48 +1,129 @@
 "use client"
-import  Login from "@/app/lib/actions/action"
-import SignInButton from "@/app/admin/components/signInButton"
-import { Button, Input } from "@nextui-org/react"
-import { useActionState } from "react"
-import { useFormStatus } from "react-dom"
+import { useRouter } from "next/navigation";
+import { Button, Input, Spinner } from "@nextui-org/react"
+import Link from "next/link"
+import { Controller, SubmitHandler, useForm } from "react-hook-form"
+import {schema , FormData} from "./schema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { usePostServices } from "@/app/hooks/usePostServices"
+import { postLoginData } from "@/app/lib/actions/auth"
+import { authResponse } from "@/app/types"
+import { AxiosError } from "axios"
+import { toast } from "react-toastify"
+import Cookies from 'js-cookie';
 
-const initialValue:any = {password:"" , email:""}
-
+interface ResponseMessage {
+  status: string;
+  message: string;
+}
 
 export default function LoginForm (){
+  const router = useRouter()
 
-    const [state , loginAction] = useActionState(Login ,initialValue,"my-action")
+  const {
+    handleSubmit,
+    formState:{errors},
+    control,
+    reset
+  } = useForm<FormData>({resolver:zodResolver(schema)})
 
+  const {mutate,isPending} = usePostServices({
+    mutationFn:postLoginData,
+    mutationKey:["Login"]
+  })
+
+  const handleSubmitLogin :SubmitHandler<FormData>=(value)=>{
+     mutate(value, {
+      onSuccess: async (response) => {
+        const res = response as authResponse;
+        Cookies.set("accessToken", res.token.accessToken);
+        Cookies.set("refreshToken", res.token.refreshToken);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        if (res.data.user.role === "ADMIN") {
+          router.replace("/admin");
+        } else {
+         router.replace("/");;
+        }
+        toast.success(
+          `${res.data.user.firstname} ${res.data.user.lastname} Welcome !`
+        );
+      },
+      onError: (error) => {
+        const axiosError = error as AxiosError<ResponseMessage>;
+            if (axiosError.response) {
+          console.log("Error response data:", axiosError.response.data);
+          toast.error(axiosError.response.data.message, {
+            rtl: false,
+          });
+        } else {
+          console.error("Error:", axiosError.message);
+          toast.error("An unexpected error occurred", {
+            rtl: false,
+          });
+        }
+      },
+      onSettled: () => {
+        reset();
+      },
+    });
+  }
     return(
-   
-    <form action={loginAction} className="flex w-[25rem] h-full  p-5 flex-col gap-2 border-1 rounded-md bg-white ">
+    <form onSubmit={handleSubmit(handleSubmitLogin)} 
+    className="flex w-[25rem] h-full p-5 flex-col gap-2 border-1 rounded-md bg-white ">
           <h1 className="text-2xl font-bold ">Login</h1>
         <div className="flex flex-col gap-2">
-            <Input id="email" name="email" placeholder="Email" />
-        {state?.errors?.email && <p className="text-red-500">{state.errors.email}</p>}
+          <Controller name="username" 
+          control={control}
+          render={({field})=>{
+            return <Input {...field}
+              id="username"
+              name="username"
+              placeholder="username" 
+              isInvalid={!!errors.username}
+              errorMessage={errors.username?.message as string | undefined}
+              />
+          }
+          } />
         </div>
     
 
       <div className="flex flex-col gap-2">
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Password"
+        <Controller
+         name="password"
+         control={control}
+          render={({field})=>{
+          return(
+            <Input
+            {...field}
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Password"
+            isInvalid={!!errors.username}
+            errorMessage={errors.username?.message as string | undefined}
         />
-        {state?.errors?.password && <p className="text-red-500">{state.errors.password}</p>}
+          )
+        }} />
       </div>
-      <SubmitButton />
-      <SignInButton />
+
+        <Button
+          className="bg-gray-500 text-white text-base sm:text-lg  xs:w-64 sm:w-full"
+          type="submit"
+          isLoading={isPending}
+          spinner={<Spinner color="default" size="sm" />}
+        >
+          {!isPending && "Log In"}
+        </Button>
+
+       <p className="text-slate-400">Dont have an account?
+        <Link className="text-slate-500 underline" href='/signup'>Sign in</Link></p>
     </form>
         
     )
 }
 
-function SubmitButton (){
-    const {pending} = useFormStatus()
 
-    return(
-    <Button disabled={pending} type="submit"> 
-       Login
-    </Button>)
-}
+
+
+
+
