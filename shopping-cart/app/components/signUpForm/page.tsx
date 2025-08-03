@@ -44,9 +44,7 @@ export default function SignUpForm() {
            const axiosError = error as AxiosError<ResponseMessage>;
                   if (axiosError.response) {
                   console.log("Error response data:", axiosError.response.data);
-                  toast.error(axiosError.response.data.message, {
-                    rtl: false,
-                  });
+                  toast.error(axiosError.response.data.message);
                 } else {
                   console.error("Error:", axiosError);
                   toast.error("An unexpected error occurred", {
@@ -72,7 +70,7 @@ export default function SignUpForm() {
   return (
     <form
       onSubmit={handleSubmit(handleSubmitSignUp)}
-      className="flex w-[25rem] h-full my-2 p-5 flex-col gap-2 border-1 rounded-md bg-white "
+      className="flex w-auto md:w-[25rem] h-fit my-2 p-5 flex-col gap-2 border-1 rounded-md bg-white "
     >
       <h1 className="text-2xl font-bold">Sign UP</h1>
       {formInputs.map((input, index) => (

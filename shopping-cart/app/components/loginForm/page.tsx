@@ -69,7 +69,7 @@ export default function LoginForm (){
   }
     return(
     <form onSubmit={handleSubmit(handleSubmitLogin)} 
-    className="flex w-[25rem] h-full p-5 flex-col gap-2 border-1 rounded-md bg-white ">
+    className="flex w-auto md:w-[25rem] h-fit p-5 flex-col gap-2 border-1 rounded-md bg-white ">
           <h1 className="text-2xl font-bold ">Login</h1>
         <div className="flex flex-col gap-2">
           <Controller name="username" 
@@ -85,7 +85,7 @@ export default function LoginForm (){
           }
           } />
         </div>
-    
+        
 
       <div className="flex flex-col gap-2">
         <Controller
