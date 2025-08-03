@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { createSession, deleteSession } from "./session";
+import { createSession } from "./session";
 import { redirect } from "next/navigation";
 
 interface user{
@@ -57,7 +57,3 @@ export default async function Login(prevState: any, formData: any) {
  
 }
 
-export async function logout() {
-  await deleteSession();
-  redirect("/");
-}

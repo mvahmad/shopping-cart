@@ -11,18 +11,17 @@ const items = [{name:"فروش روزانه",price:"123"},{name:"سود روزا
   
 export default function AdminDashboard (
   {children , Id}:
-  {children:ReactNode,Id?: string;})
+  {children:ReactNode,Id?: string})
   {
     const [isDrawerOpen, setIsDrawerOpen] = useState(true)
     const handleCartIconClick = () => {
       setIsDrawerOpen(!isDrawerOpen)
+      
     }
     
   return ( 
   <div className=" bg-gray-100 flex flex-row items-start  w-full h-screen  cursor-default">
-      {Id && <AdminNav isOpen={isDrawerOpen} info={Id} onCartIconClick={function (): void {
-        throw new Error("Function not implemented.");
-      } } />}
+      {Id && <AdminNav isOpen={isDrawerOpen} info={Id} onCartIconClick={handleCartIconClick} />}
    
     <div className="container p-2 flex flex-col gap-2">
        <h2 className="text-2xl flex flex-col  text-gray-600 font-semibold py-6">

@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 export default async function AdminDashboardPage({ children }:{children:ReactNode}) {
 
-  const cookie = (await cookies()).get('session')?.value
+  const cookie = (await cookies()).get('accessToken')?.value
   const maybeAccessToken = await parseJwt(cookie as string);
   const accessToken: JWTPayload | undefined =
     maybeAccessToken && typeof maybeAccessToken === "object" && "id" in maybeAccessToken
@@ -15,7 +15,7 @@ export default async function AdminDashboardPage({ children }:{children:ReactNod
       : undefined;
 
   return (
-    <AdminDashboard Id={accessToken?.id as string | undefined}>
+    <AdminDashboard Id={accessToken?.id as string }>
       {children}
     </AdminDashboard>
   );
