@@ -3,15 +3,15 @@ import type { ReactNode } from "react"
 import { Button, Card, CardBody } from "@nextui-org/react";
 import AdminNav from "../components/adminNav";
 import { useState } from "react";
-import { JWTPayload } from "jose";
+// 
 
 
 const items = [{name:"فروش روزانه",price:"123"},{name:"سود روزانه",price:"2234"},
   {name:"فروش ماهانه",price:"223"},{name:"تعداد کاربران",price:"300"}]
   
 export default function AdminDashboard (
-  {children , userId}:
-  {children:ReactNode,userId?: string;})
+  {children , Id}:
+  {children:ReactNode,Id?: string;})
   {
     const [isDrawerOpen, setIsDrawerOpen] = useState(true)
     const handleCartIconClick = () => {
@@ -20,7 +20,9 @@ export default function AdminDashboard (
     
   return ( 
   <div className=" bg-gray-100 flex flex-row items-start  w-full h-screen  cursor-default">
-      {userId && <AdminNav isOpen={isDrawerOpen} info={userId} />}
+      {Id && <AdminNav isOpen={isDrawerOpen} info={Id} onCartIconClick={function (): void {
+        throw new Error("Function not implemented.");
+      } } />}
    
     <div className="container p-2 flex flex-col gap-2">
        <h2 className="text-2xl flex flex-col  text-gray-600 font-semibold py-6">

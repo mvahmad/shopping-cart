@@ -1,14 +1,14 @@
 "use server"
-import { decrypt } from "@/app/lib/actions/session";
+import { parseJwt } from "@/app/lib/actions/session";
 import LoginForm from "../components/loginForm/page"
 import AdminHome from "../admin/page"
-import { JWTPayload } from "jose";
+// 
 import { cookies } from "next/headers";
 export default async function AdminLogin (){
-    const cookie = (await cookies()).get('session')?.value
-    const session :JWTPayload | undefined = await decrypt(cookie)
+    const cookie = (await cookies()).get('accessToken')?.value
+    const accessToken  =  parseJwt(cookie as string)
     
-    if(session?.userId){
+    if(accessToken?.id){
         return(
             <>
              <AdminHome />

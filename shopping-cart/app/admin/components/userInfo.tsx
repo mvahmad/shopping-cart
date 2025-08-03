@@ -1,27 +1,35 @@
 "use server"
-import { decrypt } from "@/app/lib/actions/session";
+import { parseJwt } from "@/app/lib/actions/session";
 // import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 import { JWTPayload } from "jose";
 import { cookies } from "next/headers";
 export default async function UserInfo(){
-    const cookie = (await cookies()).get('session')?.value
-    const session :JWTPayload | undefined = await decrypt(cookie)
+    const cookie = (await cookies()).get('accessToken')?.value
 
-     if (session?.userId ){
-         return(
-        <>
-        <div>:user id</div>
-        {session?.userId} 
-        </>
-        
+    // If there's no session cookie, redirect
+    if (!cookie) {
+        redirect('/login');
+    }
 
+    let accessToken: JWTPayload | undefined;
+    try {
+        accessToken = await parseJwt(cookie as string);
+    } catch {
+        // If parsing fails, redirect
+        redirect('/login');
+    }
 
-        
-    )    
-     }else{
-        redirect('/login')
-     }
+    if (accessToken?.id) {
+        return (
+            <>
+                <div>:user id</div>
+                {accessToken.id}
+            </>
+        );
+    } else {
+        redirect('/login');
+    }
    
 
 
