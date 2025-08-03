@@ -1,9 +1,9 @@
 import "server-only";
-import { SignJWT, jwtVerify,JWTPayload } from "jose";
+import { SignJWT,JWTPayload } from "jose";
 import { cookies } from "next/headers";
-const secretKey = process.env.SESSION_SECRET;
 
-const encodedKey = new TextEncoder().encode(secretKey);
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
 
 interface MyJWTPayload extends JWTPayload {
   userId: string;
@@ -34,16 +34,23 @@ export async function encrypt(payload: SessionPayload) {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(encodedKey);
+    .sign(secret);
 }
 
-export async function decrypt(session: string | undefined = ""): Promise<MyJWTPayload | undefined> {
-  try {
-    const { payload } = await jwtVerify<MyJWTPayload>(session, encodedKey, {
-      algorithms: ["HS256"],
-    });
-    return payload;
-  } catch (error) {
-    console.log("Failed to verify session");
+export const parseJwt = (token: string) => {
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
+        })
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
   }
-}
+  return null;
+};
+
