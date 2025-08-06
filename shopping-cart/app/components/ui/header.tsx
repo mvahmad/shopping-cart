@@ -5,11 +5,22 @@ import Link from "next/link";
 import { GoSearch } from "react-icons/go";
 import { IoPersonOutline } from "react-icons/io5";
 import Image from "next/image"
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 export interface Props {
   onCartOnClick: () => void
    }
 
+
 export default function Heder (){
+
+	const accessToken = Cookies.get('accessToken');
+	const [adminHref ,setAdminHref] = useState<string>('/login') 
+	useEffect(()=>{
+		if (accessToken){
+			setAdminHref('/admin')
+		} 
+	},[accessToken])
 
     return (
       	<header className='[Elite-Sport-Header] sticky top-0 flex sm:flex-row flex-col items-center justify-between
@@ -40,7 +51,7 @@ export default function Heder (){
 				 rounded-md text-blue-600 transition-all text-[20px] md:text-[24px] font-bold">
 				<BsBasket3 />
 				</Link>
-				<Link href={'/login'} 
+				<Link href={adminHref} 
 				className="relative flex items-center justify-center
 				 w-[2.5rem] h-[2.5rem] bg-blue-200
 				 rounded-md text-blue-600 text-[20px] md:text-[24px] font-bold ">
