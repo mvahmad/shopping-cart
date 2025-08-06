@@ -1,6 +1,7 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import Cookies from "js-cookie";
+
 
 const protectedRouts = ["/admin"]
 
@@ -18,7 +19,7 @@ export default async function middleware(request: NextRequest) {
     }
 
     // const gitSession = await auth()
-    const accessToken = Cookies.get("accessToken")
+    const accessToken =(await cookies()).get("accessToken")
 
     // check protected route
     const isProtected = protectedRouts.some(protectedPath =>
@@ -30,6 +31,10 @@ export default async function middleware(request: NextRequest) {
     if (!accessToken && isProtected ) {
         return NextResponse.redirect(new URL("/login", request.nextUrl));
     }
+    
+    if (pathname.includes('/login') && accessToken) {
+        return NextResponse.redirect(new URL('/admin', request.url));
+  }
     
     return NextResponse.next()
 

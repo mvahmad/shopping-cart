@@ -51,12 +51,12 @@ export default function LoginForm (){
       onError: (error) => {
         const axiosError = error as AxiosError<ResponseMessage>;
             if (axiosError.response) {
-          console.log("Error response data:", axiosError.response.data);
+              // 
           toast.error(axiosError.response.data.message, {
             rtl: false,
           });
         } else {
-          console.error("Error:", axiosError.message);
+      // 
           toast.error("An unexpected error occurred", {
             rtl: false,
           });
