@@ -38,6 +38,7 @@ export default function LoginForm (){
         const res = response as authResponse;
         Cookies.set("accessToken", res.token.accessToken);
         Cookies.set("refreshToken", res.token.refreshToken);
+        Cookies.set("userInfo",JSON.stringify(res.data.user))
         localStorage.setItem("user", JSON.stringify(res.data.user));
         if (res.data.user.role === "ADMIN") {
           router.replace("/admin");
