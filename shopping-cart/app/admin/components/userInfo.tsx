@@ -15,6 +15,7 @@ export default async function UserInfo(){
     let accessToken: JWTPayload | undefined;
     try {
         accessToken = await parseJwt(cookie as string);
+        
     } catch {
         // If parsing fails, redirect
         redirect('/login');

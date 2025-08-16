@@ -28,6 +28,7 @@ export default  function AdminNav ({isOpen,info}:Props)  {
   const handleLogout = () => {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
+    Cookies.remove("userInfo")
     router.push("/"); // Client-side navigation
   };
 
