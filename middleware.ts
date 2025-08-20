@@ -41,7 +41,7 @@ export default async function middleware(request: NextRequest) {
     if (accessToken &&  role !== "ADMIN" && pathname.startsWith('/login')){
          return NextResponse.redirect(new URL("/", request.nextUrl))
     }
-
+    // 
     // Redirect non-admin users from /admin to home
     if (
         accessToken &&
