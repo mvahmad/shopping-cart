@@ -59,47 +59,70 @@ export default function SignUpForm() {
   };
 
   const formInputs = [
-    { name: "firstname", type: "text", className: "", placeHolder: "First Name" },
-    { name: "username", type: "text", className: "", placeHolder: "User Name" },
-    { name: "lastname", type: "text", className: "", placeHolder: "Last Name" },
-    { name: "password", type: "password", className: "", placeHolder: "Password" },
-    { name: "address", type: "text", className: "", placeHolder: "Address" },
-    { name: "phoneNumber", type: "number", className: "", placeHolder: "Phone Number" },
+    { name: "firstname", type: "text", className: "", placeHolder: " علی" ,label:"نام"},
+    { name: "lastname", type: "text", className: "", placeHolder: "زکی پور",label:"نام خوانوادگی" },
+    { name: "username", type: "text", className: "", placeHolder: "بتمن",label:"نام کاربری" },
+    { name: "password", type: "password", className: "", placeHolder: "******",label:"رمز عبور" },
+    { name: "address", type: "text", className: "", placeHolder: "بندر",label:"آدرس" },
+    { name: "phoneNumber", type: "number", className: "", placeHolder: "09129994567",label:"تلفن همراه" },
   ] as const;
 
   return (
-    <form
+    <div className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-8 animate-fadeIn">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">
+                    ساخت حساب جدید ✨
+                </h1>
+                <p className="text-sm text-gray-600 mb-6 text-center">
+                    لطفا اطلاعات خود را وارد کنید
+                </p>
+      <form
       onSubmit={handleSubmit(handleSubmitSignUp)}
-      className="flex w-auto md:w-[25rem] h-fit my-2 p-5 flex-col gap-2 border-1 rounded-md bg-white "
+      className="space-y-5"
     >
-      <h1 className="text-2xl font-bold">Sign UP</h1>
+      {/*  */}
       {formInputs.map((input, index) => (
+        <div key={index}>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {input.label}
+          </label>
         <Controller
-          key={index}
+        // 
           name={input.name}
           control={control}
           render={({ field }) => (
             <Input
               {...field}
               placeholder={input.placeHolder}
-              className={input.className}
+              className="[all:unset] text-slate-800 w-full rounded-xl border border-gray-200 px-3 py-2.5 
+                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                         transition shadow-sm"
               type={input.type}
               isInvalid={!!errors[input.name]}
               errorMessage={errors[input.name]?.message as string | undefined}
             />
           )}
         />
+        </div>
       ))}
       <Button
-        className="bg-gray-500 text-white text-base sm:text-lg w-44 xs:w-64 sm:w-full"
+          className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white 
+                       py-2.5 font-semibold shadow hover:scale-[1.02] hover:shadow-lg 
+                       active:scale-95 transition-all duration-200"
         type="submit"
         isLoading={isPending}
         spinner={<Spinner color="default" size="sm" />}
       >
-        {!isPending && "Sign Up"}
+        {!isPending && "ثبت‌نام"}
       </Button>
-      <p className="text-slate-400">Already have an account?<Link className="text-slate-500 underline" href='/login'>Login</Link></p>
+         <p className="mt-6 text-sm text-gray-600 text-center">
+                    قبلاً ثبت‌نام کرده‌اید؟{" "}
+                    <Link href="/login" className="text-blue-600 hover:underline font-medium">
+                        وارد شوید
+                    </Link>
+        </p>
     </form>
+    </div>
+ 
   );
 }
 //
