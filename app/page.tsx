@@ -16,7 +16,7 @@ export default function Home () {
     <Header    />
    
         
-   <main className='[Elite-Sport-Home] w-full flex flex-col items-center  py-8 '>
+   <main className='[Elite-Sport-Home] w-full flex flex-col items-center '>
     
 
     <AboutSection />

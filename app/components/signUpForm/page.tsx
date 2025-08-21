@@ -59,14 +59,14 @@ export default function SignUpForm() {
   };
 
   const formInputs = [
-    { name: "firstname", type: "text", className: "", placeHolder: " علی" ,label:"نام"},
-    { name: "lastname", type: "text", className: "", placeHolder: "زکی پور",label:"نام خوانوادگی" },
-    { name: "username", type: "text", className: "", placeHolder: "بتمن",label:"نام کاربری" },
-    { name: "password", type: "password", className: "", placeHolder: "******",label:"رمز عبور" },
-    { name: "address", type: "text", className: "", placeHolder: "بندر",label:"آدرس" },
-    { name: "phoneNumber", type: "number", className: "", placeHolder: "09129994567",label:"تلفن همراه" },
+    { name: "firstname", type: "text", placeHolder: " علی" ,label:"نام"},
+    { name: "lastname", type: "text", placeHolder: "زکی پور",label:"نام خوانوادگی" },
+    { name: "username", type: "text", placeHolder: "بتمن",label:"نام کاربری" },
+    { name: "password", type: "password",  placeHolder: "******",label:"رمز عبور" },
+    { name: "address", type: "text",  placeHolder: "بندر",label:"آدرس" },
+    { name: "phoneNumber", type: "number", placeHolder: "09129994567",label:"تلفن همراه" },
   ] as const;
-
+  
   return (
     <div className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-8 animate-fadeIn">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">
