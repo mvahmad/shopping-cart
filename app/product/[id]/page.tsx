@@ -12,6 +12,7 @@ import { GetProductsByIdResponse } from "../type";
 import { useParams } from "next/navigation";
 import { getProductsById } from "@/app/hooks/queryHooks/products";
 import { ProductsEntity } from "@/app/types";
+import ProductInfo from "@/app/components/productInfo/page";
 const ProductPage = () => {
   const {id} = useParams()
  const { data } = useGetServices<GetProductsByIdResponse>({
@@ -42,10 +43,11 @@ const ProductPage = () => {
 
     return ( <>
     <Header />
-        <section className="[Product Page] p-3 flex flex-col gap-1 col">
+    <section className="[Product Page] py-3 px-5 flex justify-between ">
+        <div className=" flex flex-col gap-1">
             <Breadcrumb />
-             <div className="sm:w-[380px] w-[220px] ">
-           <Swiper
+          <div className="sm:w-[380px] w-[220px] ">
+            <Swiper
               modules={[Navigation, Pagination, A11y, Autoplay]}
               slidesPerView={1}
               pagination={{ clickable: true }}
@@ -65,7 +67,13 @@ const ProductPage = () => {
               ))}
             </Swiper>
           </div>
-        </section>
+        </div>
+
+
+       <ProductInfo product={product} />
+
+    </section>
+      
     <Footer />
     </> );
 }
