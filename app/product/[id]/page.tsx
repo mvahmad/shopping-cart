@@ -43,9 +43,10 @@ const ProductPage = () => {
 
     return ( <>
     <Header />
-    <section className="[Product Page] py-3 px-5 flex justify-between ">
-        <div className=" flex flex-col gap-1">
+    <section className="[Product Page] py-3 px-5 flex  flex-col  ">
             <Breadcrumb />
+        <div className=" flex md:flex-row flex-col justify-evenly md:items-start items-center gap-1">
+
           <div className="sm:w-[380px] w-[220px] ">
             <Swiper
               modules={[Navigation, Pagination, A11y, Autoplay]}
@@ -67,10 +68,11 @@ const ProductPage = () => {
               ))}
             </Swiper>
           </div>
+          <ProductInfo product={product} />
         </div>
 
 
-       <ProductInfo product={product} />
+
 
     </section>
       
