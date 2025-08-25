@@ -4,20 +4,21 @@ import LoginForm from "../components/loginForm/page"
 import AdminHome from "../admin/page"
 // 
 import { cookies } from "next/headers";
-export default async function AdminLogin (){
+export default async function AdminLogin() {
     const cookie = (await cookies()).get('accessToken')?.value
-    const accessToken  =  parseJwt(cookie as string)
-    
-    if(accessToken?.id){
-        return(
+    const accessToken = parseJwt(cookie as string)
+
+    if (accessToken?.id) {
+        return (
             <>
-             <AdminHome />
+                <AdminHome />
             </>
 
         )
     }
-    return(
-        <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white px-4">
+    return (
+        <section className="flex flex-col gap-3 
+         items-center justify-center w-full h-screen bg-gray-100">
             <LoginForm />
         </section>
     )
