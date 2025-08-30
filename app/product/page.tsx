@@ -3,14 +3,14 @@ import Footer from "../components/ui/footer";
 import Header from "../components/ui/header";
 
 const ProductPage = () => {
-    return ( <>
-    <Header />
-        <section className="[Product Page] flex flex col">
+    return (<>
+        <Header />
+        <section className="[Product Page] flex flex-col">
             <Breadcrumb />
             <div>imags</div>
         </section>
-    <Footer />
-    </> );
+        <Footer />
+    </>);
 }
- 
+
 export default ProductPage;
