@@ -18,8 +18,8 @@ export default function ProductInfo ({product}:{product:ProductsEntity}){
     }
     return(
     <section 
-        className=" md:w-[500px] w-[300px] md:h-[350px] h-[400px] 
-        border-2 border-gray-500 rounded-md flex flex-col px-[8px] py-[6px] justify-between">
+        className=" md:w-[400px] w-[300px] min-h-[470px] 
+        border-[1.4px] border-gray-500 rounded-md flex flex-col px-[8px] py-[6px] justify-between">
             <div className="flex flex-col gap-2">
                   <h1 className="font-bold text-[24px] text-slate-700 gap-3 flex ">
                 {product?.name} / <span>{product?.brand}</span>
@@ -36,8 +36,8 @@ export default function ProductInfo ({product}:{product:ProductsEntity}){
                 <span className="w-[28px] h-[27px] text-white bg-red-500 rounded-md flex items-center">{product?.discount}%</span>
             </div>
             <div className="w-full flex gap-3 justify-end">
-                  <div className="rounded-md bg-slate-300 flex items-center justify-between w-[100px] font-bold p-2">
-                    <button onClick={incrise}>+</button>
+                  <div className="rounded-md bg-slate-200 flex items-center justify-between w-[100px] font-bold p-2">
+                    <button  onClick={incrise}>+</button>
                     {count}
                     <button onClick={decrise}>-</button>
                 </div>
