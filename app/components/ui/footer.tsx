@@ -9,7 +9,7 @@ function Footer() {
     return ( 
     <footer className='flex flex-col'>
           <section className="bg-[#F1F5F9D9] " >
-                <div className="flex flex-row items-center  justify-between gap-8 px-8 max-[765px]:flex-col w-auto">
+                <div className="flex flex-row items-center  justify-between gap-8 p-[2rem] max-[765px]:flex-col w-auto">
 
                     <div className="flex flex-col w-[21.03rem] max-[765px]:w-auto">
                         <div className="flex  items-center gap-3 w-full h-full px-2 py-2 text-center">
