@@ -8,6 +8,7 @@ import CategoryCard from "./components/ui/categoryCard"
 import PopularProductsSlider from "./components/ui/PopularProductsSlider"
 import type { Product } from "./components/ui/ProductCard"
 import SpecialOffersSlider from "./components/ui/SpecialOffersSlider"
+import HeroCarousel, { HeroSlide } from "./components/ui/HeroCarousel"
 
 const sampleProducts: Product[] = [
     {
@@ -77,7 +78,11 @@ const sampleProducts: Product[] = [
     },
 ];
 
-
+const heroSlides: HeroSlide[] = [
+    { id: 1, image: "/Carousel1.png", title: "فروش ویژه پاییز", subtitle: "تخفیف تا ۴۰٪", ctaText: "مشاهده", ctaHref: "/products" },
+    { id: 2, image: "/Carousel2.png", title: "محصولات جدید", subtitle: "۱۲ کیت کلاسیک جدید اضافه شد" },
+    { id: 3, image: "/Carousel3.png", title: "پشتیبانی سریع", subtitle: "۷ روز هفته کنار شما هستیم" },
+];
 
 export default function Home() {
 
@@ -86,6 +91,7 @@ export default function Home() {
         <>
             <Header />
             <main className='[Elite-Sport-Home] w-full bg-white'>
+                <HeroCarousel slides={heroSlides} autoPlayMs={5000} />
                 <CategoryCard />
                 <AboutSection />
                 <SpecialOffersSlider products={sampleProducts} />

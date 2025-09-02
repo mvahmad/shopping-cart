@@ -92,7 +92,7 @@ export default function ProductCard({ p, showRating = true }: { p: Product; show
                                     </svg>
                                 </div>
                                 <span className="text-md font-medium text-slate-700">{clamped.toFixed(1)}</span>
-                                <span className="text-xs text-slate-500">( {p.reviewsCount ?? 0} امتیاز )</span>
+                                <span className="text-xs text-slate-500 xl:block hidden">( {p.reviewsCount ?? 0} امتیاز )</span>
                             </div>
                         )}
                         <div className="flex items-center">
@@ -111,10 +111,14 @@ export default function ProductCard({ p, showRating = true }: { p: Product; show
                     </div>
                     <div className="flex items-center gap-3 pt-2">
                         <button className="flex items-center justify-center flex-1 rounded-md border bg-blue-700  px-4 py-2 text-sm font-semibold text-white shadow-sm">
-                            <div className="w-1/6 border-l-2 border-l-white">
+                            <div className="w-1/6 border-l-2 border-l-white hidden xl:block">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shopping-bag-icon lucide-shopping-bag"><path d="M16 10a4 4 0 0 1-8 0" /><path d="M3.103 6.034h17.794" /><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" /></svg>
                             </div>
-                            <div className="w-5/6"> افزودن به سبد خرید </div>
+                            <div className="w-5/6 sm:text-sm">
+                                <p className="lg:text-base text-xs">
+                                    افزودن به سبد خرید
+                                </p>
+                            </div>
                         </button>
                     </div>
                 </div>
