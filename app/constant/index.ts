@@ -12,3 +12,4 @@ export const ENDPOINTS = {
   ORDERS: "/api/orders",
   USERS: "/api/users",
 };
+export const API_KEY="kxtfss3z9dyd5by4dv4ni5dx3a6b6ke7mmqu1kxbp3j2wp56"
