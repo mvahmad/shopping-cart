@@ -16,17 +16,20 @@ export default function ProductInfo ({product}:{product:ProductsEntity}){
             setCount(count -=1) 
         }
     }
+    const ProductDescription = ({ description }: { description: string }) => {
+        return <div dangerouslySetInnerHTML={{ __html: description }} />;
+  };
     return(
     <section 
-        className=" md:w-[400px] w-[300px] min-h-[470px] 
+        className=" md:w-[400px] w-[300px] min-h-[430px] 
         border-[1.4px] border-gray-500 rounded-md flex flex-col px-[8px] py-[6px] justify-between">
             <div className="flex flex-col gap-2">
                   <h1 className="font-bold text-[24px] text-slate-700 gap-3 flex ">
                 {product?.name} / <span>{product?.brand}</span>
             </h1>
-            <p className="flex items-center">
-                {product?.description}
-            </p>
+            <div className="flex items-center">
+               {<ProductDescription description={product?.description} />}
+            </div>
             </div>
           
           <div  className="flex flex-col gap-2">

@@ -12,6 +12,9 @@ import useAdminStore from "@/app/store/admin/useAdminStore"
 import { usePatchServices } from "@/app/hooks/usePatchService";
 import { patchProducts } from "@/app/hooks/queryHooks/products";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
+const EditorClient = dynamic(()=>import("../../components/textEditor/page") , {"ssr":false})
+
 interface props{
   onClose:() => void ,
   refetch?:()=>void
@@ -364,9 +367,7 @@ function EditProductForm({ onClose  }:props) {
           name="description"
           //
           render={({ field }) =>(
-            <Textarea  placeholder="discription" 
-            value={field.value} onChange={field.onChange}
-             />
+              <EditorClient value={field.value} onChange={field.onChange} />
           )}
         />
       </div>
