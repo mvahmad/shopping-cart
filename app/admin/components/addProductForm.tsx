@@ -1,3 +1,4 @@
+"use client"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Select, SelectItem, Spinner ,Textarea } from "@nextui-org/react";
 import { ChangeEvent, useRef, useState } from "react";
@@ -10,6 +11,9 @@ import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import {CategoriesResponse , SubcategoriesResponse} from '@/app/types'
 import { AddProductschema , addProductschema } from "./schema";
+import dynamic from "next/dynamic";
+const EditorClient = dynamic(()=>import("../../components/textEditor/page") , {"ssr":false})
+
 
 interface props{
   onClose:() => void ,
@@ -441,7 +445,7 @@ const AddProductForm = ({ onClose , refetch }:props) => {
           name="description"
           defaultValue=""
           render={({ field }) =>(
-            <Textarea aria-label="add product" placeholder="discription" value={field.value} onChange={field.onChange} />
+            <EditorClient value={field.value} onChange={field.onChange} />
           )}
         />
       </div>
