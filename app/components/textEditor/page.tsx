@@ -1,45 +1,24 @@
-"use client";
-
-import { Editor } from "@tinymce/tinymce-react";
-import { API_KEY } from "@/app/constant";
+"use client";//
 
 interface TextEditorProps {
   value: string;
   onChange: (content: string) => void;
 }
+import React from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 
-export default function EditorClient({value,onChange}:TextEditorProps) {
+export default function EditorClient({value,onChange}:TextEditorProps)  {
   return (
     <Editor
+      apiKey='uk6dpn0k528ryu0snxv3wysx9pcqb3az0u8xsvcfpebbhgzo'
       vlaue={value}
       onEditorChange={(content: string) => onChange(content)}
-      apiKey={API_KEY }
+      
       init={{
-        height: 500,
-         plugins: [
-          "anchor",
-          "autolink",
-          "charmap",
-          "codesample",
-          "emoticons",
-          "image",
-          "link",
-          "lists",
-          "media",
-          "searchreplace",
-          "visualblocks",
-        ],
-        toolbar:
-          "undo redo | formatselect | bold italic emoticons | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
-        skin: "",
-        content_css: "white",
-         tinycomments_mode: "embedded",
-        tinycomments_author: "Author name",
-        mergetags_list: [
-          { value: "First.Name", title: "First Name" },
-          { value: "Email", title: "Email" },
-        ],
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
       }}
+      initialValue={value}
     />
   );
 }
