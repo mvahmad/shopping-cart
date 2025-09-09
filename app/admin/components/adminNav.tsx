@@ -10,7 +10,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa"
 //
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";                            
 
 
 
@@ -32,9 +32,10 @@ export default  function AdminNav ({isOpen,info}:Props)  {
     router.push("/"); // Client-side navigation
   };
 
+
     return (  
-          <aside className={`bg-white py-4 w-1/4 h-screen flex-col items-center 
-            justify-between overflow-y-auto shadow-lg 
+          <aside className={`bg-white py-4 w-1/4  flex-col items-center 
+            justify-between overflow-y-auto shadow-lg h-screen
       ${isOpen ? "hidden" : "flex"}
     `}>
             <div className="flex flex-col items-center gap-2 p-2 justify-center">
