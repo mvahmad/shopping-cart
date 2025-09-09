@@ -71,13 +71,9 @@ const ProductPage = () => {
           </div>
           <ProductInfo product={product} />
         </div>
-       
+
            <SizeTable />
-        
-             
-
-
-
+           
     </section>
       
     <Footer />

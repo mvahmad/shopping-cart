@@ -10,18 +10,19 @@ import { FiMessageSquare } from "react-icons/fi";
 import { FaSignOutAlt } from "react-icons/fa"
 //
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";                            
 
 
 
 interface Props {
 	isOpen: boolean
    info:any
+   role:any
    onCartIconClick:()=>void
 
 }
 
-export default  function AdminNav ({isOpen,info}:Props)  {
+export default  function AdminNav ({isOpen,info,role}:Props)  {
 
    const router = useRouter();
 
@@ -32,16 +33,17 @@ export default  function AdminNav ({isOpen,info}:Props)  {
     router.push("/"); // Client-side navigation
   };
 
+
     return (  
-          <aside className={`bg-white py-4 w-1/4 h-screen flex-col items-center 
-            justify-between overflow-y-auto shadow-lg 
+          <aside className={`bg-white py-4 w-1/4  flex-col items-center 
+            justify-between overflow-y-auto shadow-lg h-screen
       ${isOpen ? "hidden" : "flex"}
     `}>
             <div className="flex flex-col items-center gap-2 p-2 justify-center">
 
                <p className="p-1 text-sm">{info}</p>
 
-                 <span className="font-semibold text-red-500 text-[0.875rem]">مدیریت سایت</span>
+                 <span className="font-semibold text-red-500 text-[0.875rem]">{role}</span>
             </div>
             <nav className='flex flex-col space-y-1 w-webkit-fill'>
                <Link href="/admin" className="text-gray-700 flex gap-2 items-center text-lg
