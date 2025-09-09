@@ -5,8 +5,8 @@ import AdminNav from "../components/adminNav";
 import { useState } from "react";
 
 export default function AdminDashboard (
-  {children , Id}:
-  {children:ReactNode,Id?: string})
+  {children , username , role}:
+  {children:ReactNode,username?: string , role?:string})
   {
     const [isDrawerOpen, setIsDrawerOpen] = useState(true)
     const handleCartIconClick = () => {
@@ -16,7 +16,7 @@ export default function AdminDashboard (
     
   return ( 
   <div className=" bg-gray-100 flex flex-row items-start  w-full h-screen  cursor-default">
-      {Id && <AdminNav isOpen={isDrawerOpen} info={Id} onCartIconClick={handleCartIconClick} />}
+      {username  && <AdminNav isOpen={isDrawerOpen} role={role} info={username} onCartIconClick={handleCartIconClick} />}
    
     <div className="container max-h-full p-2 flex flex-col gap-2">
       <div className="flex flex-col p-2 gap-2">

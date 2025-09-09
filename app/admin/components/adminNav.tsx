@@ -17,11 +17,12 @@ import { useRouter } from "next/navigation";
 interface Props {
 	isOpen: boolean
    info:any
+   role:any
    onCartIconClick:()=>void
 
 }
 
-export default  function AdminNav ({isOpen,info}:Props)  {
+export default  function AdminNav ({isOpen,info,role}:Props)  {
 
    const router = useRouter();
 
@@ -42,7 +43,7 @@ export default  function AdminNav ({isOpen,info}:Props)  {
 
                <p className="p-1 text-sm">{info}</p>
 
-                 <span className="font-semibold text-red-500 text-[0.875rem]">مدیریت سایت</span>
+                 <span className="font-semibold text-red-500 text-[0.875rem]">{role}</span>
             </div>
             <nav className='flex flex-col space-y-1 w-webkit-fill'>
                <Link href="/admin" className="text-gray-700 flex gap-2 items-center text-lg

@@ -30,7 +30,8 @@ import { toast } from "react-toastify";
 import { MdOutlineDelete ,MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import useAdminStore from "@/app/store/admin/useAdminStore"
-function AdminHome() {
+import AdminDashboardPage from "../components/adminDashboardPage";
+function AdminHomePage() {
     const [modalType, setModalType] = useState<string>("");
     const [product , setProduct] = useState({
       id:'0',
@@ -123,18 +124,12 @@ function AdminHome() {
       }
     }
 
-  const handleCartIconClick = () => {
-  setIsDrawerOpen(!isDrawerOpen)
- }
+
 
     return ( 
-    <div className="flex flex-row w-full h-screen">
-    {/* <AdminNav isOpen={isDrawerOpen} onCartIconClick={handleCartIconClick}/> */}
-    <div className="container bg-gray-100  px-8  cursor-default">
-      <h2 className="text-2xl text-gray-600 font-semibold py-6">
-        Product Management
-      </h2>
-       <Button className="w-[3rem] mb-2" onPress={handleCartIconClick}>Dashboard</Button>
+
+    <div className="bg-gray-100 h-full px-8">
+
       <DropDown onOpen={onOpen}  setModalType={setModalType} />
       <Table
        bottomContent={
@@ -251,7 +246,8 @@ function AdminHome() {
         buttonContent={["Cancel", " Delete"]}
       />
     </div>
-    </div> );
+   
+  );
 }
 
-export default AdminHome;
+export default AdminHomePage;
