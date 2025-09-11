@@ -14,6 +14,8 @@ import { getProductsById } from "@/app/hooks/queryHooks/products";
 import { ProductsEntity } from "@/app/types";
 import ProductInfo from "@/app/components/productInfo/page";
 import SizeTable from "@/app/components/sizeTable/page";
+import SpecialOffersSlider from "@/app/components/ui/SpecialOffersSlider";
+import { sampleProducts } from "@/app/page";
 const ProductPage = () => {
   const {id} = useParams()
  const { data } = useGetServices<GetProductsByIdResponse>({
@@ -71,8 +73,10 @@ const ProductPage = () => {
           </div>
           <ProductInfo product={product} />
         </div>
-
+       
            <SizeTable />
+            <SpecialOffersSlider products={sampleProducts} />
+
            
     </section>
       

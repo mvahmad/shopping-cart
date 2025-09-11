@@ -12,7 +12,7 @@ import HeroCarousel, { HeroSlide } from "./components/ui/HeroCarousel"
 import ReviewCarousel, { type Review } from "./components/ui/Reviews"
 
 
-const sampleProducts: Product[] = [
+export const sampleProducts: Product[] = [
     {
         id: 1,
         title: "کیت اول بارسلونا ۲۳-۲۴ ",
