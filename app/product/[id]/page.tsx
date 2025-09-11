@@ -76,11 +76,8 @@ const ProductPage = () => {
        
            <SizeTable />
             <SpecialOffersSlider products={sampleProducts} />
-        
-             
 
-
-
+           
     </section>
       
     <Footer />

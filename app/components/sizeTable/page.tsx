@@ -1,8 +1,8 @@
 import { Table , TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 export default function SizeTable (){
 return(
-     <Table className="w-[600px]" isStriped aria-label="size table">
-      <TableHeader className="bg-blue-100">
+     <Table className="max-w-[500px]" aria-label="size table">
+      <TableHeader className="bg-white">
         <TableColumn>سایز</TableColumn>
         <TableColumn>قد</TableColumn>
         <TableColumn>وزن</TableColumn>
@@ -10,7 +10,7 @@ return(
         <TableColumn>طول</TableColumn>
       </TableHeader>
       <TableBody>
-        <TableRow key="1">
+        <TableRow className="bg-blue-200" key="1">
           <TableCell>Small</TableCell>
           <TableCell>160-170</TableCell>
           <TableCell>45-55</TableCell>
@@ -24,7 +24,7 @@ return(
           <TableCell>47-48</TableCell>
           <TableCell>70-72</TableCell>
         </TableRow>
-        <TableRow key="3">
+        <TableRow className="bg-blue-200" key="3">
           <TableCell>Large</TableCell>
           <TableCell>175-185</TableCell>
           <TableCell>65-75</TableCell>
@@ -38,7 +38,7 @@ return(
           <TableCell>51-52</TableCell>
           <TableCell>74-76</TableCell>
         </TableRow>
-         <TableRow key="5">
+         <TableRow className="bg-blue-200" key="5">
           <TableCell>2XLarge</TableCell>
           <TableCell>188به بالا</TableCell>
           <TableCell>85-100</TableCell>

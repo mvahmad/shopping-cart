@@ -1,13 +1,7 @@
-// import AdminDashboard from "./components/adminDashboard";
-import AdminDashboardPage from "./components/adminDashboardPage";
-import UserInfo from "./components/userInfo";
-
+'use client'
+import AdminHomePage from "./products/page";
 
 function AdminHome() {
- return(
-  <AdminDashboardPage>
-    <UserInfo />
-  </AdminDashboardPage>
- )
+ return <AdminHomePage />
 }
 export default AdminHome ;

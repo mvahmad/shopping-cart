@@ -5,17 +5,16 @@ import { cookies } from "next/headers";
 import { JWTPayload } from "jose";
 import { ReactNode } from "react";
 
+
 export default async function AdminDashboardPage({ children }:{children:ReactNode}) {
 
-  const cookie = (await cookies()).get('accessToken')?.value
-  const maybeAccessToken = await parseJwt(cookie as string);
-  const accessToken: JWTPayload | undefined =
-    maybeAccessToken && typeof maybeAccessToken === "object" && "id" in maybeAccessToken
-      ? (maybeAccessToken as JWTPayload)
-      : undefined;
-
+  const cookieStore =await cookies();
+  const userInfoCookie = cookieStore.get('userInfo');
+   const userInfo = userInfoCookie ? JSON.parse(userInfoCookie.value) : null;
+   let username =await userInfo?.username 
+   let role = await userInfo?.role   
   return (
-    <AdminDashboard Id={accessToken?.id as string }>
+    <AdminDashboard role={role as string} username={username as string }>
       {children}
     </AdminDashboard>
   );
