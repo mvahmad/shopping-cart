@@ -9,7 +9,7 @@ import PopularProductsSlider from "./components/ui/PopularProductsSlider"
 import type { Product } from "./components/ui/ProductCard"
 import SpecialOffersSlider from "./components/ui/SpecialOffersSlider"
 
-const sampleProducts: Product[] = [
+export const sampleProducts: Product[] = [
     {
         id: 1,
         title: "کیت اول بارسلونا ۲۳-۲۴ ",
