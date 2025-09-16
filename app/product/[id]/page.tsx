@@ -1,30 +1,25 @@
 "use client";
-import Breadcrumb from "../../components/ui/Breadcrumb";
-import Footer from "../../components/ui/footer";
-import Header from "../../components/ui/header";
+import { ProductsEntity } from "@/app/types";
+import { Breadcrumb , Footer ,Header , useGetServices ,getProductsById 
+  ,ProductInfo,SizeTable ,SpecialOffersSlider ,sampleProducts
+} from "@/app/product/import" 
+import { GetProductsByIdResponse } from "../type";
+import { useParams } from "next/navigation";
 import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { useGetServices } from "../../hooks/useGetServices";
-import { GetProductsByIdResponse } from "../type";
-import { useParams } from "next/navigation";
-import { getProductsById } from "@/app/hooks/queryHooks/products";
-import { ProductsEntity } from "@/app/types";
-import ProductInfo from "@/app/components/productInfo/page";
-import SizeTable from "@/app/components/sizeTable/page";
-import SpecialOffersSlider from "@/app/components/ui/SpecialOffersSlider";
-import { sampleProducts } from "@/app/page";
+import "swiper/css/pagination"
+
 const ProductPage = () => {
   const {id} = useParams()
- const { data } = useGetServices<GetProductsByIdResponse>({
-    queryKey: ["GetBookById", id],
-    queryFn: () => getProductsById(id!),
-    options: {
-      enabled: !!id,
-    },
-  });
+  const { data } = useGetServices<GetProductsByIdResponse>({
+      queryKey: ["GetBookById", id],
+      queryFn: () => getProductsById(id!),
+      options: {
+        enabled: !!id,
+      },
+    });
 
   let endPrice = 0;
   let totalPrice = 0;
