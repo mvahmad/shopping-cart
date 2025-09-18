@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-
+import Heder from "@/app/components/ui/header";
+import  Footer  from "@/app/components/ui/footer";
 // ----- Types -----
 export type CartItem = {
     id: string;
@@ -37,6 +38,8 @@ export default function CartPage() {
     const clearCart = () => setItems([]);
 
     return (
+        <>
+          <Heder />
         <main dir="rtl" className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
             <div className="mx-auto max-w-7xl px-4 md:px-8 py-8">
                 <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -80,6 +83,9 @@ export default function CartPage() {
                 )}
             </div>
         </main>
+        <Footer />
+        </>
+      
     );
 }
 
