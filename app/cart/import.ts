@@ -4,3 +4,6 @@ export {default as SummaryCard}  from "@/app/cart/components/SummaryCard/Summary
 export {default as CouponCard} from "@/app/cart/components/CouponCard/CouponCard"
 export {default as ShippingCard} from "@/app/cart/components/ShippingCard/ShippingCard"
 export {default as EmptyState} from "@/app/cart/components/EmptyState/EmptyState"
+export {useCartStore} from "@/app/store/useCartStore"
+export {default as Header} from "@/app/components/ui/header"
+export {default as Footer} from "@/app/components/ui/footer"

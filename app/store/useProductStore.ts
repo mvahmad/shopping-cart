@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { Product } from "../types";
-import { persist } from "zustand/middleware"
+// import { persist } from "zustand/middleware"
 interface State{
     products :Product[]
     isLoading : boolean

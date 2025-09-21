@@ -31,7 +31,7 @@ function CartItem({product}:Props) {
       <button
          title='Remove Item'
          className='text-red-500 hover:text-red-600 ml-4'
-         onClick={() => removeFromCart(product)}
+         // onClick={() => removeFromCart(product)}
       >
          <FaTrashAlt size={18} />
       </button>
