@@ -1,7 +1,7 @@
 "use client";
 import { ProductsEntity } from "@/app/types";
 import { Breadcrumb , Footer ,Header , useGetServices ,getProductsById 
-  ,ProductInfo,SizeTable ,SpecialOffersSlider ,sampleProducts
+  ,ProductInfo,SizeTable ,SpecialOffersSlider ,sampleProducts 
 } from "@/app/product/import" 
 import { GetProductsByIdResponse } from "../type";
 import { useParams } from "next/navigation";

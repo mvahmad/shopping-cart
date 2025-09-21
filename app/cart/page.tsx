@@ -1,8 +1,8 @@
 "use client";
-import { CartRow ,SummaryCard ,CouponCard , ShippingCard ,EmptyState } from "./import";
+import { CartRow ,SummaryCard ,CouponCard , ShippingCard 
+,EmptyState ,useCartStore ,Header ,Footer } from "./import";
 import { useMemo, useState } from "react";
-import Heder from "@/app/components/ui/header";
-import  Footer  from "@/app/components/ui/footer";
+
 // ----- Types -----
 export type CartItem = {
     id: string;
@@ -27,7 +27,15 @@ export default function CartPage() {
     const [items, setItems] = useState<CartItem[]>(DEMO_ITEMS);
     const [coupon, setCoupon] = useState("");
     const [shipping, setShipping] = useState<"standard" | "express">("standard");
-
+    //store state
+    const products = useCartStore((state)=> state.cart )
+    const totalItems = useCartStore((state)=> state.totalItems )
+    //store actions
+    const removeFromCart = useCartStore((state)=> state.removeFromCart )
+    console.log(products);
+    console.log(totalItems);
+    
+    
     const subtotal = useMemo(() => items.reduce((sum, it) => sum + it.price * it.qty, 0), [items]);
     const shippingCost = shipping === "express" ? 45000 : 0;
     const discount = coupon.trim().toLowerCase() === "fan10" ? Math.round(subtotal * 0.1) : 0;
@@ -35,11 +43,14 @@ export default function CartPage() {
 
     const updateQty = (id: string, nextQty: number) => setItems((prev) => prev.map((it) => (it.id === id ? { ...it, qty: clamp(nextQty, 1, it.maxQty ?? 99) } : it)));
     const removeItem = (id: string) => setItems((prev) => prev.filter((it) => it.id !== id));
-    const clearCart = () => setItems([]);
+    const clearCart = () =>{ 
+        removeFromCart
+        setItems([])
+    };
 
     return (
     <>
-        <Heder />
+        <Header />
             <main dir="rtl" className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
                     <div className="mx-auto max-w-7xl px-4 md:px-8 py-8">
                         <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

@@ -19,9 +19,9 @@ function Cart() {
     <>
         <section>
         <ul>
-        {cart?.map(product => (
+        {/* {cart?.map(product => (
             <CartItem key={product.id} product={product} />
-    ))}
+    ))} */}
    </ul>
         <div className='flex justify-between items-center mt-4'>
             <span className='text-lg font-bold'>Total:</span>
