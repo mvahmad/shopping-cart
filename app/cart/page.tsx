@@ -2,51 +2,45 @@
 import { CartRow ,SummaryCard ,CouponCard , ShippingCard 
 ,EmptyState ,useCartStore ,Header ,Footer } from "./import";
 import { useMemo, useState } from "react";
+import { ProductsEntity } from "@/app/types";
 
-// ----- Types -----
-export type CartItem = {
-    id: string;
-    title: string;
-    team?: string;
-    variant?: string;
-    price: number;
-    image: string;
-    qty: number;
-    maxQty?: number;
-};
-
-
+// Utility to clamp a number between min and max
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 
-const DEMO_ITEMS: CartItem[] = [
-    { id: "1", title: "کیت خانگی", team: "رئال مادرید 24/25", variant: "XL / بدون اسم", price: 1580000, image: "/kits/real-home.jpg", qty: 1, maxQty: 5 },
-    { id: "2", title: "کیت دوم", team: "بارسلونا 24/25", variant: "L / با اسم", price: 1460000, image: "/kits/barca-away.jpg", qty: 2, maxQty: 5 },
-];
+
 
 export default function CartPage() {
-    const [items, setItems] = useState<CartItem[]>(DEMO_ITEMS);
+
     const [coupon, setCoupon] = useState("");
     const [shipping, setShipping] = useState<"standard" | "express">("standard");
     //store state
     const products = useCartStore((state)=> state.cart )
-    const totalItems = useCartStore((state)=> state.totalItems )
+    
     //store actions
     const removeFromCart = useCartStore((state)=> state.removeFromCart )
-    console.log(products);
-    console.log(totalItems);
+    //local state
+    const [items, setItems] = useState<ProductsEntity[]>(products);
     
     
-    const subtotal = useMemo(() => items.reduce((sum, it) => sum + it.price * it.qty, 0), [items]);
+    const subtotal = useMemo(() => items.reduce((sum, it) => sum + it.price * it.quantity, 0), [items]);
     const shippingCost = shipping === "express" ? 45000 : 0;
     const discount = coupon.trim().toLowerCase() === "fan10" ? Math.round(subtotal * 0.1) : 0;
     const total = clamp(subtotal - discount + shippingCost, 0, Number.MAX_SAFE_INTEGER);
 
-    const updateQty = (id: string, nextQty: number) => setItems((prev) => prev.map((it) => (it.id === id ? { ...it, qty: clamp(nextQty, 1, it.maxQty ?? 99) } : it)));
-    const removeItem = (id: string) => setItems((prev) => prev.filter((it) => it.id !== id));
-    const clearCart = () =>{ 
-        removeFromCart
-        setItems([])
+   const updateQty = (id: string, nextQty: number) => {
+    if (nextQty < 1) return;
+    setItems((prev) =>
+        prev.map((it) => (it._id === id ? { ...it, quantity: nextQty } : it))
+  );
+}
+    const removeItem = (id: string) => {setItems((prev) => prev.filter((it) => it._id !== id))
+        removeFromCart(items.find((it) => it._id === id) as ProductsEntity)
     };
+
+    const clearCart = () =>{ 
+        items.forEach(it => removeFromCart(it)); // or use a clearAll() if available
+        setItems([]);
+};
 
     return (
     <>
@@ -75,7 +69,7 @@ export default function CartPage() {
                                 <section className="lg:col-span-8">
                                     <div className="divide-y divide-slate-100 rounded-3xl border border-slate-200 bg-white">
                                         {items.map((it) => (
-                                            <CartRow key={it.id} it={it} onQty={updateQty} onRemove={removeItem} />
+                                            <CartRow key={it._id} it={it} onQty={updateQty} onRemove={removeItem} />
                                         ))}
                                     </div>
                                 </section>
