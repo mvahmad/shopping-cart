@@ -4,11 +4,12 @@ import { ProductsEntity } from "@/app/types"
 import { Button } from "@nextui-org/react"
 import { useState } from "react"
 import { useCartStore } from "@/app/store/useCartStore"
+import Cookies from "js-cookie";
 
 export default function ProductInfo({ product }: { product: ProductsEntity }) {
   const [count, setCount] = useState<number>(0)
   const addToCart = useCartStore((state) => state.addToCart) // Access the addToCard action from the store
-
+  const accessToken = Cookies.get("accessToken")
   const maxStock = product?.quantity ?? 1 // fallback if quantity is undefined
 
   const increase = () => {
@@ -24,10 +25,12 @@ export default function ProductInfo({ product }: { product: ProductsEntity }) {
   }
 
   const handleAddToBasket = () => {
-    if (count > 0) {
-        addToCart(product,count) // Adds the product `count` times
+    if (count > 0 && accessToken) {
+        addToCart(product,count) // Adds the product `count` itimes
         toast.success("محصول به سبد خرید اضافه شد");
         setCount(0) // Reset count after adding to cart
+    }if(count>0 && !accessToken){
+      toast.warning("لطفا وارد حساب کاربری خود شوید")
     }
   }
 
