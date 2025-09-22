@@ -7,13 +7,14 @@ import { IoPersonOutline } from "react-icons/io5";
 import Image from "next/image"
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import { useCartStore } from "@/app/store/useCartStore";
 export interface Props {
 	onCartOnClick: () => void
 }
 
 
 export default function Heder() {
-
+	const totalItems = useCartStore((state)=>state.totalItems)
 	const accessToken = Cookies.get('accessToken');
 	const [adminHref, setAdminHref] = useState<string>('/login')
 	useEffect(() => {
@@ -49,7 +50,14 @@ export default function Heder() {
 					className="relative flex items-center justify-center
 				 w-[2.5rem] h-[2.5rem] bg-blue-200
 				 rounded-md text-blue-600 transition-all text-[20px] md:text-[24px] font-bold">
-					<BsBasket3 />
+					<div className="relative">
+						<BsBasket3 />
+						{/* Badge with number */}
+						<span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-[6px] py-[1px] rounded-full">
+							{totalItems}
+						</span>
+					</div>
+	
 				</Link>
 				<Link href={adminHref}
 					className="relative flex items-center justify-center
