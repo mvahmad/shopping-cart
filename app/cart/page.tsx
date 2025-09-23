@@ -76,7 +76,7 @@ export default function CartPage() {
 
                                 <aside className="lg:col-span-4">
                                     <div className="sticky top-4 space-y-4">
-                                        <SummaryCard subtotal={subtotal} discount={discount} shippingCost={shippingCost} total={total} onCheckout={() => alert("پرداخت (دمو)")} />
+                                        <SummaryCard subtotal={subtotal} discount={discount} shippingCost={shippingCost} total={total} link={"/payment"} />
                                         <CouponCard value={coupon} onChange={setCoupon} helper="کد تخفیف نمونه: FAN10" />
                                         <ShippingCard value={shipping} onChange={setShipping} />
                                         <a href="/" className="block w-full text-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100">
