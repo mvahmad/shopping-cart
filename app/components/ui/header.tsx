@@ -14,12 +14,12 @@ export interface Props {
 
 
 export default function Heder() {
-	const totalItems = useCartStore((state)=>state.totalItems)
+	const totalItems = useCartStore((state)=>state.cart.length)
 	const accessToken = Cookies.get('accessToken');
 	const [adminHref, setAdminHref] = useState<string>('/login')
 	useEffect(() => {
 		if (accessToken) {
-			setAdminHref('/admin')
+			setAdminHref('/personal-info')
 		}
 	}, [accessToken])
 
