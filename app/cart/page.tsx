@@ -1,6 +1,5 @@
 "use client";
-import { CartRow ,SummaryCard ,CouponCard , ShippingCard 
-,EmptyState ,useCartStore ,Header ,Footer } from "./import";
+import { CartRow ,SummaryCard ,EmptyState ,useCartStore ,Header ,Footer,  CouponCard } from "./import";
 import { useMemo, useState } from "react";
 import { ProductsEntity } from "@/app/types";
 
@@ -10,9 +9,10 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
 
 
 export default function CartPage() {
-
+    
     const [coupon, setCoupon] = useState("");
     const [shipping, setShipping] = useState<"standard" | "express">("standard");
+
     //store state
     const products = useCartStore((state)=> state.cart )
     
@@ -20,12 +20,13 @@ export default function CartPage() {
     const removeFromCart = useCartStore((state)=> state.removeFromCart )
     //local state
     const [items, setItems] = useState<ProductsEntity[]>(products);
-    
-    
+
+
     const subtotal = useMemo(() => items.reduce((sum, it) => sum + it.price * it.quantity, 0), [items]);
     const shippingCost = shipping === "express" ? 45000 : 0;
     const discount = coupon.trim().toLowerCase() === "fan10" ? Math.round(subtotal * 0.1) : 0;
     const total = clamp(subtotal - discount + shippingCost, 0, Number.MAX_SAFE_INTEGER);
+
 
    const updateQty = (id: string, nextQty: number) => {
     if (nextQty < 1) return;
@@ -76,13 +77,18 @@ export default function CartPage() {
 
                                 <aside className="lg:col-span-4">
                                     <div className="sticky top-4 space-y-4">
-                                        <SummaryCard subtotal={subtotal} discount={discount} shippingCost={shippingCost} total={total} link={"/payment"} />
-                                        <CouponCard value={coupon} onChange={setCoupon} helper="کد تخفیف نمونه: FAN10" />
-                                        <ShippingCard value={shipping} onChange={setShipping} />
-                                        <a href="/" className="block w-full text-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100">
-                                            بازگشت به صفحه اصلی
-                                        </a>
-                                    </div>
+                                        <SummaryCard 
+                                            subtotal={subtotal}
+                                            discount={discount} 
+                                            shippingCost={shippingCost} 
+                                            total={total} link={"/payment"} 
+                                        />
+                                        <CouponCard
+                                            value={coupon}
+                                            onChange={setCoupon}
+                                            helper="کد تخفیف نمونه: FAN10"
+                                        />
+                                        </div>
                                 </aside>
                             </div>
                         )}

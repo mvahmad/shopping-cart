@@ -1,4 +1,5 @@
 "use client"
+import { useCartStore } from "@/app/store/useCartStore";
 import { Button, Input } from "@nextui-org/react";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
@@ -12,9 +13,11 @@ const inputItems = [
 ]
 
 const PeymentForm = ()=>{
+    const cart = useCartStore((state)=>state.cart)
+
     const {
         handleSubmit,
-        formState:{errors},
+
         control,
         reset
     } = useForm({
@@ -39,11 +42,20 @@ const PeymentForm = ()=>{
     }
   }, []);
 
+  function handleSubmitBill(value:{
+          firstName: string,
+          lastName: string,
+          phoneNumber: string,
+          address: string,}
+  ){
+      
+  }
+
 
     return(
     <form
-      className="grid grid-cols-2 [640pxpx]:grid-cols-4 gap-3 px-8"
-    //   onSubmit={handleSubmit(handleSubmitBill)}
+      className="grid grid-cols-1 min-[490px]:grid-cols-2 gap-3 px-8"
+// 
     >
         {inputItems.map((item)=>{
             return(
@@ -56,7 +68,7 @@ const PeymentForm = ()=>{
                           <Input
                             {...field}
                             label={item.label}
-                            className={`w-44 sm:w-56 [640px]:w-full ${item.className}`}
+                            className={`w-full ${item.className}`}
                             isReadOnly
                             variant="bordered"
                             labelPlacement={"outside"}
@@ -66,10 +78,7 @@ const PeymentForm = ()=>{
                 />
             )
         })}
-
-      <Button className="bg-blue-200 text-blue-600" type="submit">
-        تایید اطلاعات
-      </Button>
+        {/*  */}
     </form>
     )
 }
