@@ -1,3 +1,5 @@
+import { ProductsEntity } from "../types";
+
 export interface GetProductsByIdResponse {
   status: string;
   data: Data;
@@ -44,4 +46,9 @@ export interface Subcategory {
   updatedAt: string;
   slugname: string;
   __v: number;
+}
+
+export interface Icart{
+  user: string;
+  products: { product:string; count: number  }[];
 }

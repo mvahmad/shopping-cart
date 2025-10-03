@@ -1,14 +1,15 @@
 "use client";
-
-import Link from "next/link";
+import Cookies from "js-cookie";
 import Row from "../Row/Row";
+import { Button } from "@nextui-org/react";
 
 interface Props {
   subtotal: number;
   discount: number;
   shippingCost: number;
   total: number;
-  link: string;
+  linkDiscription:string
+  handelClick:()=>void
 }
 
 const toman = (v: number) =>
@@ -19,8 +20,10 @@ export default function SummaryCard({
   discount,
   shippingCost,
   total,
-  link,
+  linkDiscription,
+  handelClick
 }: Props) {
+  const token = Cookies.get("accessToken")
   const handleSubmit = () => {
     // Store the values as an array of key-value objects
     const summary = [
@@ -57,14 +60,14 @@ export default function SummaryCard({
         label={<span className="font-extrabold">مبلغ قابل پرداخت</span>}
         value={<span className="font-extrabold">{toman(total)}</span>}
       />
-      <Link href={link}>
-        <button
-          onClick={handleSubmit}
-          className="mt-4 w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-extrabold text-white shadow hover:bg-blue-700"
+        <Button
+          onPress={handelClick}
+          className="mt-4 w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm 
+          font-extrabold text-white shadow hover:bg-blue-700"
+          isDisabled={token ? false : true }
         >
-          ادامه
-        </button>
-      </Link>
+          {token ? linkDiscription : "برای ادامه فرآیند خرید وارد شوید"}
+        </Button>
       <p className="mt-2 text-center text-xs text-slate-500">
         پرداخت امن • بازگشت وجه تا ۷ روز
       </p>
