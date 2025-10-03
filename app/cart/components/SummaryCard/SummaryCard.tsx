@@ -24,19 +24,19 @@ export default function SummaryCard({
   handelClick
 }: Props) {
   const token = Cookies.get("accessToken")
-  const handleSubmit = () => {
-    // Store the values as an array of key-value objects
-    const summary = [
-      { key: "subtotal", value: subtotal },
-      { key: "discount", value: discount },
-      { key: "shippingCost", value: shippingCost },
-      { key: "total", value: total },
-    ];
+  // const handleSubmit = () => {
+  //   // Store the values as an array of key-value objects
+  //   const summary = [
+  //     { key: "subtotal", value: subtotal },
+  //     { key: "discount", value: discount },
+  //     { key: "shippingCost", value: shippingCost },
+  //     { key: "total", value: total },
+  //   ];
 
-    if (typeof window !== "undefined") {
-      localStorage.setItem("orderSummary", JSON.stringify(summary));
-    }
-  };
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("orderSummary", JSON.stringify(summary));
+  //   }
+  // };
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
