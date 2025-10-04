@@ -1,8 +1,8 @@
 'use client'
-import AdminNav from "@/app/admin/components/adminNav";
+// import AdminNav from "@/app/admin/components/adminNav";
 import Link from "next/link";
 import NextUiModal from "@/app/components/ui/nextUiModal";
-import { Button } from "@nextui-org/react";
+// import { Button } from "@nextui-org/react";
 import {
     Pagination,
     Spinner,
@@ -30,7 +30,7 @@ import { toast } from "react-toastify";
 import { MdOutlineDelete ,MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import useAdminStore from "@/app/store/admin/useAdminStore"
-import AdminDashboardPage from "../components/adminDashboardPage";
+// import AdminDashboardPage from "../components/adminDashboardPage";
 function AdminHomePage() {
     const [modalType, setModalType] = useState<string>("");
     const [product , setProduct] = useState({
@@ -129,7 +129,7 @@ function AdminHomePage() {
     return ( 
 
     <div className="bg-gray-100 h-full px-8">
-
+      
       <DropDown onOpen={onOpen}  setModalType={setModalType} />
       <Table
        bottomContent={
