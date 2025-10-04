@@ -1,58 +1,66 @@
-import { url } from "inspector";
-import { useSearchParams,useRouter,usePathname } from "next/navigation";
+"use client";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+
 export function useTableSort() {
-  const searchParams = useSearchParams();
-  // const pathname = usePathname();
-  const  router = useRouter();
-  const currentParams = new URLSearchParams(searchParams.toString());
- 
+  const searchParams = useSearchParams(); // read-only
+  const pathname = usePathname();
+  const router = useRouter();
+
   const limit = searchParams.get("limit") || "5";
- 
+  const currentParams = Object.fromEntries(searchParams.entries());
+
+  // helper: update URL with new params
+  function setSearchParams(newParams: Record<string, string>) {
+    const updated = new URLSearchParams({
+      ...currentParams,
+      ...newParams,
+    });
+    router.push(`${pathname}?${updated.toString()}`);
+  }
 
   function handlePriceOrderColumn() {
-    console.log(currentParams);
-    
-    currentParams.set("price",'price')
-    console.log(currentParams);
+    const newSort = currentParams.sort === "price" ? "-price" : "price";
+    setSearchParams({ sort: newSort });
   }
-//   function handleInventoryOrderColumn() {
-//     const newSort =
-//       currentParams.sort === "quantity" ? "-quantity" : "quantity";
-//     setSearchParams({ ...currentParams, sort: newSort });
-//   }
-  function handlePageChange(page: number) {
-   
-    currentParams.set("page",page.toString())
-    
-  }
-  function handleNameOrderColumn() {
-    currentParams.set("sort",'name')
-    router.push(`?${currentParams.toString()}`, { scroll: false });
 
+  function handleInventoryOrderColumn() {
+    const newSort =
+      currentParams.sort === "quantity" ? "-quantity" : "quantity";
+    setSearchParams({ sort: newSort });
   }
+
+  function handlePageChange(page: number) {
+    setSearchParams({ page: page.toString(), limit });
+  }
+
+  function handleNameOrderColumn() {
+    const newSort = currentParams.sort === "name" ? "-name" : "name";
+    setSearchParams({ sort: newSort });
+  }
+
   function handleCategoryOrderColumn() {
-    console.log("before",currentParams.get("sort"));
-    
-      currentParams.set("sort",'category')
-      router.push(`?${currentParams.toString()}`, { scroll: false });
-      console.log("After",currentParams.get("sort"));
+    const newSort =
+      currentParams.sort === "category" ? "-category" : "category";
+    setSearchParams({ sort: newSort });
   }
-//   function handleCreatedAtOrderColumn() {
-//     const newSort =
-//       currentParams.sort === "createdAt" ? "-createdAt" : "createdAt";
-//     setSearchParams({ ...currentParams, sort: newSort });
-//   }
-//   function handleTotalPriceOrderColumn() {
-//     const newSort =
-//       currentParams.sort === "totalPrice" ? "-totalPrice" : "totalPrice";
-//     setSearchParams({ ...currentParams, sort: newSort });
-//   }
+
+  function handleCreatedAtOrderColumn() {
+    const newSort =
+      currentParams.sort === "createdAt" ? "-createdAt" : "createdAt";
+    setSearchParams({ sort: newSort });
+  }
+
+  function handleTotalPriceOrderColumn() {
+    const newSort =
+      currentParams.sort === "totalPrice" ? "-totalPrice" : "totalPrice";
+    setSearchParams({ sort: newSort });
+  }
 
   return {
-    // handleCreatedAtOrderColumn,
+    handleCreatedAtOrderColumn,
     handlePriceOrderColumn,
-    // handleTotalPriceOrderColumn,
-    // handleInventoryOrderColumn,
+    handleTotalPriceOrderColumn,
+    handleInventoryOrderColumn,
     handlePageChange,
     handleNameOrderColumn,
     handleCategoryOrderColumn,
