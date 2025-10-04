@@ -184,8 +184,8 @@ export default function OrdersModal({
                   ) : (
                     <div className="flex justify-center items-center">
                       <Button
-                        className="bg-persian-green text-white w-60"
-                        onClick={() => {
+                        className="bg-blue-400 text-white w-60"
+                        onPress={() => {
                           if (data?.data?.order)
                             handleChangeStatusButton(data?.data?.order);
                         }}
