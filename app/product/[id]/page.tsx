@@ -1,6 +1,6 @@
 "use client";
 import { ProductsEntity } from "@/app/types";
-import { Breadcrumb , Footer ,Header , useGetServices ,getProductsById 
+import { MainBreadcrumb , Footer ,Header , useGetServices ,getProductsById 
   ,ProductInfo,SizeTable ,SpecialOffersSlider ,sampleProducts 
 } from "@/app/product/import" 
 import { GetProductsByIdResponse } from "../type";
@@ -42,7 +42,7 @@ const ProductPage = () => {
     return ( <>
     <Header />
     <section className="[Product Page] py-3 px-5 flex  flex-col  ">
-            <Breadcrumb />
+        <MainBreadcrumb product={product} type="single" />
         <div className=" flex md:flex-row flex-col justify-evenly md:items-start items-center gap-1">
 
           <div className="sm:w-[380px] w-[220px] ">

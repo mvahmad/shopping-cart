@@ -1,4 +1,4 @@
-export {default as Breadcrumb} from "@/app/components/ui/Breadcrumb";
+export {default as MainBreadcrumb} from "@/app/components/ui/Breadcrumb";
 export {default as Footer} from "@/app/components/ui/footer";
 export {default as Header} from "@/app/components/ui/header"
 export {useGetServices}  from "@/app/hooks/useGetServices"
