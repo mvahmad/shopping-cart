@@ -53,7 +53,7 @@ export default function MainBreadcrumb({product , type}:Props){
     default:
       break;
   }
-
+  
     return(
     <div className="my-2">
     <Breadcrumbs >
