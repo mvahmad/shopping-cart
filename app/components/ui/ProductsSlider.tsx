@@ -1,16 +1,24 @@
 "use client";
 import { useRef } from "react";
-import ProductCard, { Product } from "./ProductCard";
-
-export default function PopularProductsSlider({
-    title = "محبوب‌ترین‌ها",
+import ProductCard from "./ProductCard";
+import { ProductsEntity } from "@/app/types";
+import { Spinner } from "@nextui-org/react";
+interface Props {
+    title?: string;
+    products: ProductsEntity[];
+    hideRatings?: boolean;
+    isLoading:boolean
+    bg:string
+    text:string
+}
+export default function ProductsSlider({
+    title,
     products,
     hideRatings = false,
-}: {
-    title?: string;
-    products: Product[];
-    hideRatings?: boolean;
-}) {
+    isLoading,
+    bg,
+    text
+}:Props ) {
     const trackRef = useRef<HTMLDivElement>(null);
     const scrollByAmount = (dir: "next" | "prev") => () => {
         const node = trackRef.current;
@@ -20,10 +28,10 @@ export default function PopularProductsSlider({
     };
 
     return (
-        <div className="w-full py-8 bg-blue-700">
-            <section dir="rtl" className="w-full px-4 md:px-8 max-w-7xl mx-auto py-8 bg-blue-700">
+        <div className="w-full py-8">
+            <section dir="rtl" className={`w-full px-4 md:px-8 max-w-7xl mx-auto py-8 ${bg} `}>
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-xl md:text-2xl font-extrabold text-white">{title}</h2>
+                    <h2 className={`text-xl md:text-2xl font-extrabold text-${text}`}>{title}</h2>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={scrollByAmount("next")}
@@ -44,10 +52,14 @@ export default function PopularProductsSlider({
                 <div
                     ref={trackRef}
                     className="scrollbar-none relative flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 md:px-8"
-                >
-                    {products.map((p) => (
-                        <ProductCard key={p.id} p={p} showRating={!hideRatings} />
+                >{isLoading ? (
+                    <Spinner size="lg" color="current" />
+                ) : <>
+                {products.map((p) => (
+                        <ProductCard key={p._id} p={p} showRating={!hideRatings} />
                     ))}
+                </> }
+                    
                 </div>
             </section>
         </div>
