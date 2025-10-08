@@ -37,6 +37,9 @@ export default async function middleware(request: NextRequest) {
     if (!accessToken && isProtected) {
         return NextResponse.redirect(new URL("/login", request.nextUrl));
     }
+    if(!accessToken && pathname.startsWith('/personal-info') ){
+         return NextResponse.redirect(new URL("/login", request.nextUrl))
+    }
 
     if (accessToken && role !== "ADMIN" && pathname.startsWith('/login')) {
         return NextResponse.redirect(new URL("/", request.nextUrl))
