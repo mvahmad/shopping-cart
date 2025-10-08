@@ -1,4 +1,4 @@
-import { ProductsEntity } from "../types";
+// product types
 
 export interface GetProductsByIdResponse {
   status: string;

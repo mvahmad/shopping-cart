@@ -1,7 +1,7 @@
 "use client";
-import { ProductsEntity } from "@/app/types";
+import { getProductsResponse, ProductsEntity } from "@/app/types";
 import { MainBreadcrumb , Footer ,Header , useGetServices ,getProductsById 
-  ,ProductInfo,SizeTable ,SpecialOffersSlider ,sampleProducts 
+  ,ProductInfo,SizeTable , ProductSlider
 } from "@/app/product/import" 
 import { GetProductsByIdResponse } from "../type";
 import { useParams } from "next/navigation";
@@ -10,8 +10,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination"
+import { getProducts } from "@/app/hooks/queryHooks/products";
 
 const ProductPage = () => {
+  //get product  by id 
   const {id} = useParams()
   const { data } = useGetServices<GetProductsByIdResponse>({
       queryKey: ["GetBookById", id],
@@ -20,23 +22,29 @@ const ProductPage = () => {
         enabled: !!id,
       },
     });
-
-  let endPrice = 0;
-  let totalPrice = 0;
-  let discountPercent = 0;
-  let product!: ProductsEntity;
-  if (data?.data.product) {
-    product = data.data.product;
-    const discount = data?.data.product.discount;
-    endPrice = data?.data?.product?.price;
-    if (discount !== 0) {
-      totalPrice = endPrice + discount;
-      discountPercent = Math.ceil((discount * 100) / endPrice);
+      
+    let endPrice = 0;
+    let totalPrice = 0;
+    let discountPercent = 0;
+    let product!: ProductsEntity;
+    if (data?.data.product) {
+      product = data.data.product;
+      const discount = data?.data.product.discount;
+      endPrice = data?.data?.product?.price;
+      if (discount !== 0) {
+        totalPrice = endPrice + discount;
+        discountPercent = Math.ceil((discount * 100) / endPrice);
+      }
     }
-  }
+      //get product by same category
+      const { data: firstCategoryData, isLoading } =
+            useGetServices<getProductsResponse>({
+            queryKey: ["GetFirstCategoryBooks", product],
+            queryFn: () => getProducts({ limit: "6", category: product?.category._id }),
+        });
  
     const images = product?.images;
-
+    const firstCategoryItems = firstCategoryData?.data?.products || [];
 
 
     return ( <>
@@ -68,9 +76,15 @@ const ProductPage = () => {
           </div>
           <ProductInfo product={product} />
         </div>
-       
+
            <SizeTable />
-            <SpecialOffersSlider products={sampleProducts} />
+           <ProductSlider
+              products={firstCategoryItems}
+              isLoading={isLoading}
+              title={'محصولات مرتبط'}
+              bg={'bg-blue-600'}
+              text={"white"}
+           />
 
            
     </section>
