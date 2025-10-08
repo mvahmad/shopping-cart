@@ -82,8 +82,8 @@ const ProductPage = () => {
               products={firstCategoryItems}
               isLoading={isLoading}
               title={'محصولات مرتبط'}
-              bg={'bg-blue-600'}
-              text={"white"}
+              bg={'bg-white'}
+              text={"text-slate-700"}
            />
 
            
