@@ -31,7 +31,7 @@ export default function Page(){
 
     return(<>
     <Heder />
-    <section className="flex justify-center items-center">
+    <section className="flex justify-center items-center m-1">
             <form
                 action=""
                 className="flex flex-col items-center gap-3 mt-6 bg-white shadow-box
