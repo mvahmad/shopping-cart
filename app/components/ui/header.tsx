@@ -12,7 +12,7 @@ export interface Props {
 }
 
 
-export default function Heder() {
+export default function Header() {
 
 	const accessToken = Cookies.get('accessToken');
 	const [adminHref, setAdminHref] = useState<string>('/login')

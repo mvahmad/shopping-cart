@@ -110,6 +110,5 @@ export default function Home() {
                 <ReviewCarousel items={demo} />
             </main>
             <Footer />
-
         </>)
 }
