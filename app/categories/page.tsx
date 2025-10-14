@@ -1,88 +1,55 @@
+'use client'
 import CategoryCard from "../components/ui/categoryCard";
 import Footer from "../components/ui/footer";
 import Header from "../components/ui/header";
-import PopularProductsSlider from "../components/ui/PopularProductsSlider";
-import { Product } from "../components/ui/ProductCard";
-import SpecialOffersSlider from "../components/ui/SpecialOffersSlider";
+import ProductsSlider from "../components/ui/ProductsSlider";
+import { getCategories } from "../hooks/queryHooks/getCategoris";
+import { getProducts } from "../hooks/queryHooks/products";
+import { useGetServices } from "../hooks/useGetServices";
+import { CategoriesResponse, getProductsResponse } from "../types";
 
-const sampleProducts: Product[] = [
-    {
-        id: 1,
-        title: "کیت اول بارسلونا ۲۳-۲۴ ",
-        image: "/barcelona.png",
-        price: 111200,
-        oldPrice: 139000,
-        rating: 4,
-        reviewsCount: 55,
-        isFavorite: true,
-        discountPercent: 20,
-    },
-    {
-        id: 2,
-        title: "کیت اول آلمان ۲۰۲۴",
-        image: "/barcelona.png",
-        price: 98000,
-        oldPrice: 122000,
-        rating: 5,
-        reviewsCount: 78,
-        isFavorite: false,
-        discountPercent: 15,
-    },
-    {
-        id: 3,
-        title: "کیت دوم بارسلونا ۲۳-۲۴",
-        image: "/barcelona.png",
-        price: 102000,
-        oldPrice: 126000,
-        rating: 3,
-        reviewsCount: 41,
-        isFavorite: false,
-        discountPercent: 10,
-    },
-    {
-        id: 4,
-        title: "کیت اول رئال مادرید ۲۳-۲۴",
-        image: "/barcelona.png",
-        price: 119000,
-        oldPrice: 145000,
-        rating: 5,
-        reviewsCount: 100,
-        isFavorite: true,
-        discountPercent: 18,
-    },
-    {
-        id: 5,
-        title: "کیت اول رئال مادرید ۲۳-۲۴",
-        image: "/barcelona.png",
-        price: 119000,
-        oldPrice: 145000,
-        rating: 5,
-        reviewsCount: 100,
-        isFavorite: true,
-        discountPercent: 18,
-    },
-    {
-        id: 6,
-        title: "کیت اول رئال مادرید ۲۳-۲۴",
-        image: "/barcelona.png",
-        price: 119000,
-        oldPrice: 145000,
-        rating: 5,
-        reviewsCount: 100,
-        isFavorite: true,
-    },
-];
+const Page = () => {
+     //get categoris 
+    const { data } = useGetServices<CategoriesResponse>({
+        queryKey: ["GetCategoriesHomepage"],
+        queryFn: getCategories,
+    });
+    const categories = data?.data.categories;
+    const { data: firstCategoryData, isLoading } =
+        useGetServices<getProductsResponse>({
+        queryKey: ["GetFirstCategoryBooks", categories],
+        queryFn: () => getProducts({ limit: "6", category: categories?.[1]._id }),
+        });
 
-const CategoryPage = () => {
+    const { data: secondCategoryData, isLoading: secondCategoryIsLoading } =
+    useGetServices<getProductsResponse>({
+      queryKey: ["GetSecondCategoryBooks", categories],
+      queryFn: () => getProducts({ limit: "6", category: categories?.[0]._id }),
+    });    
+
+    const firstCategoryItems = firstCategoryData?.data?.products || [];
+    const secondCategoryItems = secondCategoryData?.data?.products || [];
     return (
         <>
             <Header />
             <main className='[Elite-Sport-Home] w-full bg-white'>
                 {/* --Banner's location-- */}
                 <div className="max-w-7xl mx-auto h-52 bg-indigo-400 mt-8 rounded-lg" />
-                <CategoryCard />
-                <SpecialOffersSlider products={sampleProducts} />
-                <PopularProductsSlider products={sampleProducts} />
+                    <CategoryCard />
+                    <ProductsSlider 
+                        bg={"bg-blue-700"}
+                        title ={ "محبوب‌ترین‌ها"}
+                        isLoading={secondCategoryIsLoading} 
+                        products={secondCategoryItems} 
+                        text={"white"}
+                    />
+                    <ProductsSlider 
+                        bg={"bg-white"}
+                        title ={ "پیشنهاد ویژه"}
+                        isLoading={isLoading} 
+                        products={firstCategoryItems} 
+                        text={"slate-700"}
+                     />
             </main>
             <Footer />
 
@@ -90,4 +57,4 @@ const CategoryPage = () => {
     );
 }
 
-export default CategoryPage;
+export default Page;
