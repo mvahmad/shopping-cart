@@ -8,7 +8,7 @@ interface Props {
 export default function MainBreadcrumb({product , type}:Props){
     const categoryLink = `/categories/${product?.category?._id}`;
     const subcategoryLink = product?.subcategory?._id
-        ? `/subcategory/${product?.subcategory?._id}`
+        ? `/subcategoris/${product?.subcategory?._id}`
         : "";
 
   let breadcrumbItems: { to: string; label: string }[] = [];

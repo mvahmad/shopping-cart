@@ -18,4 +18,11 @@ export const getSubcategoriesByCategoryId = async (id: string) => {
       return response.data;
     }
 };
+export const getSubcategoriesBySubCategoryId = async (id: string) => {
+    if (id) {
+      const url = `${ENDPOINTS.SUBCATEGORIES}?subcategory=${id}`;
+      const response = await httpRequest.get(url);
+      return response.data;
+    }
+};
   
