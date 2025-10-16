@@ -6,7 +6,7 @@ interface Props {
   type: "single" | "subcategory" | "category";
 }
 export default function MainBreadcrumb({product , type}:Props){
-    const categoryLink = `/category/${product?.category?._id}`;
+    const categoryLink = `/categories/${product?.category?._id}`;
     const subcategoryLink = product?.subcategory?._id
         ? `/subcategory/${product?.subcategory?._id}`
         : "";
