@@ -37,9 +37,9 @@ function AdminHomePage() {
       id:'0',
       name:'test'
     })
-    const [isDrawerOpen, setIsDrawerOpen] = useState(true)
+    // 
     const setSelectedItem = useAdminStore(state=>state.setSelectedItem)
-    const getSelectedItem = useAdminStore(state=>state.getSelectedItem)
+    // 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const {
       isOpen: isOpenDeleteModal,
