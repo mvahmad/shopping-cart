@@ -23,7 +23,7 @@ body {
 .w-fill {
   width: -webkit-fill-available;
   width: -moz-available;
-  width: fill-available;
+  width:  stretch;
 }
 
 .scrollbar-none {

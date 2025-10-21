@@ -36,7 +36,7 @@ export default function Heder() {
 					hover:underline text-[#1E293B99] font-normal text-base md:text-xl max-sm:text-[0.7rem]">محصولات</Link>
 				<Link href={'/contact-us'} className="hover:font-bold hover:text-blue-600 
 					hover:underline text-[#1E293B99] font-normal text-base md:text-xl max-sm:text-[0.7rem]">تماس با ما</Link>
-				<Link href={'/aboat-us'} className="hover:font-bold hover:text-blue-600 
+				<Link href={'/about-us'} className="hover:font-bold hover:text-blue-600 
 					hover:underline text-[#1E293B99] font-normal text-base md:text-xl max-sm:text-[0.7rem]">درباره ما</Link>
 			</nav>
 			<div className="sm:flex hidden justify-between gap-3 items-center mt-4 md:mt-0">
