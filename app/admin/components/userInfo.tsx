@@ -4,6 +4,11 @@ import { parseJwt } from "@/app/lib/actions/session";
 import { redirect } from "next/navigation";
 import { JWTPayload } from "jose";
 import { cookies } from "next/headers";
+
+interface MyJWTPayload extends JWTPayload {
+  id: string;
+}
+
 export default async function UserInfo(){
     const cookie = (await cookies()).get('accessToken')?.value
 
@@ -12,7 +17,7 @@ export default async function UserInfo(){
         redirect('/login');
     }
 
-    let accessToken: JWTPayload | undefined;
+    let accessToken: MyJWTPayload | undefined;
     try {
         accessToken = await parseJwt(cookie as string);
         
@@ -23,10 +28,10 @@ export default async function UserInfo(){
 
     if (accessToken?.id) {
         return (
-            <>
+            <div>
                 <div>:user id</div>
                 {accessToken.id}
-            </>
+            </div>
         );
     } else {
         redirect('/login');
