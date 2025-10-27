@@ -1,23 +1,12 @@
-"use client"
+"use server"
 import ProductsPageComponent from "../components/products/ProductsPage";
-import { getCategories } from "../hooks/queryHooks/getCategoris";
-import { useGetServices } from "../hooks/useGetServices";
-import { CategoriesResponse } from "../types";
 
 
-const Page = () => {
-        //get categoris 
-        const { data } = useGetServices<CategoriesResponse>({
-            queryKey: ["GetCategories"],
-            queryFn: getCategories,
-        });
-        const categories = data?.data.categories;
-    
 
-
+const Page = async ({ searchParams }:{searchParams: Promise<Record<string, string>>}) => {
+       const resolvedParams = await searchParams;
     return (
-        <ProductsPageComponent 
-categories={categories} />
+        <ProductsPageComponent searchParams={resolvedParams} />
     );
 }
 
