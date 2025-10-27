@@ -4,14 +4,14 @@ import LoginForm from "../components/loginForm/LoginForm"
 import AdminHome from "../admin/page"
 // 
 import { cookies } from "next/headers";
-export default async function AdminLogin() {
+export default async function AdminLogin({ searchParams }:{searchParams: Promise<Record<string, string>>}) {
     const cookie = (await cookies()).get('accessToken')?.value
-    const accessToken = parseJwt(cookie as string)
+    const accessToken = parseJwt(cookie as string);
 
     if (accessToken?.id) {
         return (
             <>
-                <AdminHome />
+                <AdminHome  searchParams={searchParams} />
             </>
 
         )

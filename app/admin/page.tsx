@@ -1,11 +1,7 @@
-'use client'
+"use server"
 import AdminHomePage from "./products/page";
-import { Suspense } from "react";
-function AdminHome() {
-     return (
-    <Suspense fallback={<div>Loading...</div>}>
-        <AdminHomePage />
-    </Suspense>)
-
+type SearchParams = Promise<Record<string, string>>;
+export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
+  const resolvedParams = await searchParams;
+  return <AdminHomePage searchParams={resolvedParams} />;
 }
-export default AdminHome ;
