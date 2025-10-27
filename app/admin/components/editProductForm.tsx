@@ -13,7 +13,7 @@ import { usePatchServices } from "@/app/hooks/usePatchService";
 import { patchProducts } from "@/app/hooks/queryHooks/products";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
-const EditorClient = dynamic(()=>import("../../components/textEditor/page") , {"ssr":false})
+const EditorClient = dynamic(()=>import("../../components/textEditor/textEditor") , {"ssr":false})
 
 interface props{
   onClose:() => void ,

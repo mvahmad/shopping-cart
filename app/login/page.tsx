@@ -1,6 +1,6 @@
 "use server"
 import { parseJwt } from "@/app/lib/actions/session";
-import LoginForm from "../components/loginForm/page"
+import LoginForm from "../components/loginForm/LoginForm"
 import AdminHome from "../admin/page"
 // 
 import { cookies } from "next/headers";

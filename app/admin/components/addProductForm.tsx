@@ -12,7 +12,7 @@ import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import {CategoriesResponse , SubcategoriesResponse} from '@/app/types'
 import { AddProductschema , addProductschema } from "./schema";
 import dynamic from "next/dynamic";
-const EditorClient = dynamic(()=>import("../../components/textEditor/page") , {"ssr":false})
+const EditorClient = dynamic(()=>import("../../components/textEditor/textEditor") , {"ssr":false})
 
 
 interface props{
