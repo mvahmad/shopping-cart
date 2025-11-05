@@ -99,7 +99,7 @@ export default function Header() {
 					{ href: "/", label: "خانه", icon: <GoHome /> },
 					{ href: "/products", label: "محصولات", icon: <MdOutlineProductionQuantityLimits /> },
 					{ href: "/cart", label: "سبد خرید", icon: <BsBasket3 /> },
-					{ href: "/about-us", label: "درباره", icon: <GoSearch /> },
+					{ href: "/personal-info", label: "حساب کاربری", icon: <IoPersonOutline /> },
 				].map(({ href, label, icon }) => {
 					const isActive = pathname === href;
 					return (
