@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://elite-sport.liara.run";
 export const ENDPOINTS = {
   AUTH: {
     SIGNUP: "/api/auth/signup",

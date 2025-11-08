@@ -161,7 +161,7 @@ export default function AdminHomePage({ searchParams }: AdminHomePageProps) {
             <TableRow key={item._id} className="border-b-1">
               <TableCell>
                 <img
-                  src={`http://localhost:8000/images/products/thumbnails/${item?.thumbnail}`}
+                  src={`https://elite-sport.liara.run/images/products/thumbnails/${item?.thumbnail}`}
                   alt={item.name}
                   className="w-16"
                 />
