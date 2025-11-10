@@ -1,4 +1,4 @@
-export const BASE_URL = "https://elite-sport.liara.run";
+export const BASE_URL = "https://elite-sport-backend.vercel.app";
 export const ENDPOINTS = {
   AUTH: {
     SIGNUP: "/api/auth/signup",
