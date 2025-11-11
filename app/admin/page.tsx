@@ -3,5 +3,13 @@ import AdminHomePage from "./products/page";
 type SearchParams = Promise<Record<string, string>>;
 export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
   const resolvedParams = await searchParams;
-  return <AdminHomePage searchParams={resolvedParams} />;
+  const limit = resolvedParams.limit || "5";
+  const sort = resolvedParams.sort || "-createdAt";
+  const page = Number(resolvedParams.page) || 1;
+  
+  return <AdminHomePage
+      limit={limit}
+      sort={sort}
+      page={page}
+    />;
 }
