@@ -29,15 +29,21 @@ import { MdOutlineDelete, MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import useAdminStore from "@/app/store/admin/useAdminStore";
 
+// interface AdminHomePageProps {
+//   searchParams: Record<string, string>;
+// }
+
 interface AdminHomePageProps {
-  searchParams: Record<string, string>;
+  limit: string;
+  sort: string;
+  page: number;
 }
 
-export default function AdminHomePage({ searchParams }: AdminHomePageProps) {
+export default function AdminHomePage({ limit, sort, page }: AdminHomePageProps) {
   const [modalType, setModalType] = useState<string>("");
   const [product, setProduct] = useState({ id: "0", name: "test" });
   const setSelectedItem = useAdminStore((state) => state.setSelectedItem);
-
+  const params = { page, limit, sort };
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const {
     isOpen: isOpenDeleteModal,
@@ -48,12 +54,6 @@ export default function AdminHomePage({ searchParams }: AdminHomePageProps) {
   const { handleNameOrderColumn, handlePageChange, handleCategoryOrderColumn } =
     useTableSort();
 
-  // ✅ Now reading params from props instead of useSearchParams()
-  const limit = searchParams.limit || "5";
-  const sort = searchParams.sort || "-createdAt";
-  const page = Number(searchParams.page) || 1;
-
-  const params = { page, limit, sort };
 
   // Fetch data
   const { data, refetch, isLoading } = useGetServices<getProductsResponse>({
@@ -220,8 +220,8 @@ export default function AdminHomePage({ searchParams }: AdminHomePageProps) {
         onOpenChange={onOpenChangeModal}
         onAction={handleActionModal}
         modalTitle={"Delete Product"}
-        modalBody={"Are you sure you want to delete this product?"}
-        buttonContent={["Cancel", "Delete"]}
+        modalBody={"برای حذف این محصول مطمئن هستید؟"}
+        buttonContent={["لغو", "حذف"]}
       />
     </div>
     
