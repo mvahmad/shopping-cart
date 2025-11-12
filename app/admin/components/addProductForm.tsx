@@ -1,6 +1,6 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Input, Select, SelectItem, Spinner ,Textarea } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Spinner  } from "@nextui-org/react";
 import { ChangeEvent, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";

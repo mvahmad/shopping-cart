@@ -27,11 +27,11 @@ export default function DropDown({ onOpen, setModalType }: props) {
             className=""
             endContent={<GoPlusCircle  />}
           >
-            Add
+            Setting
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          aria-label="Static Actions"
+          aria-label="Static-Actions"
           className=""
           onAction={(key: Key) => handleDropDownItem(key)}
         >
@@ -40,7 +40,7 @@ export default function DropDown({ onOpen, setModalType }: props) {
             endContent={<GoPlusCircle  />}
             className="hover:bg-slate-300 p-2 rounded-md"
           >
-            Product
+           Add Product
           </DropdownItem>
   
           <DropdownItem
@@ -49,14 +49,28 @@ export default function DropDown({ onOpen, setModalType }: props) {
             endContent={<HiOutlineFolderPlus />}
             className="hover:bg-slate-300 p-2 rounded-md"
           >
-            Category
+           Add Category
           </DropdownItem>
           <DropdownItem
             key="sub-category"
             className="hover:bg-slate-300 p-2 rounded-md"
             endContent={<HiOutlineDocumentPlus />}
           >
-            Subcategory
+          Add Subcategory
+          </DropdownItem>
+          <DropdownItem
+            key="delete-sub-category"
+            className="hover:bg-slate-300 p-2 rounded-md"
+            endContent={<HiOutlineDocumentPlus />}
+          >
+           Delete Subcategory
+          </DropdownItem>
+          <DropdownItem
+            key="delete-category"
+            className="hover:bg-slate-300 p-2 rounded-md"
+            endContent={<HiOutlineFolderPlus />}
+          >
+            Delete category
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

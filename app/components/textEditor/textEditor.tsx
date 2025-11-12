@@ -10,7 +10,7 @@ import { Editor } from '@tinymce/tinymce-react';
 export default function EditorClient({value,onChange}:TextEditorProps)  {
   return (
     <Editor
-      apiKey='uk6dpn0k528ryu0snxv3wysx9pcqb3az0u8xsvcfpebbhgzo'
+      apiKey="kxtfss3z9dyd5by4dv4ni5dx3a6b6ke7mmqu1kxbp3j2wp56"
       vlaue={value}
       onEditorChange={(content: string) => onChange(content)}
       

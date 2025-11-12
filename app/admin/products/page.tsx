@@ -54,7 +54,7 @@ export default function AdminHomePage({ limit, sort, page }: AdminHomePageProps)
   const { handleNameOrderColumn, handlePageChange, handleCategoryOrderColumn } =
     useTableSort();
 
-    
+
   // Fetch data
   const { data, refetch, isLoading } = useGetServices<getProductsResponse>({
     queryKey: ["GetProducts", params],
@@ -220,8 +220,8 @@ export default function AdminHomePage({ limit, sort, page }: AdminHomePageProps)
         onOpenChange={onOpenChangeModal}
         onAction={handleActionModal}
         modalTitle={"Delete Product"}
-        modalBody={"Are you sure you want to delete this product?"}
-        buttonContent={["Cancel", "Delete"]}
+        modalBody={"برای حذف این محصول مطمئن هستید؟"}
+        buttonContent={["لغو", "حذف"]}
       />
     </div>
     
