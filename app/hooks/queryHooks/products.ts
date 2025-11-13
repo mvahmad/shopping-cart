@@ -53,6 +53,13 @@ export const getProductsById = async (id: string | string[]) => {
   return response.data;
 };
 
+export const getProductsBySubCategory = async(subcategoryId:string)=>{
+  const url = `${ENDPOINTS.PRODUCTS}?subcategory=${subcategoryId}`
+   const response = await httpRequest.get(url);
+  return response.data;
+
+}
+
 export const patchProducts = async ({
   data,
   id,

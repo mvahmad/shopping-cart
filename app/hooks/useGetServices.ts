@@ -4,6 +4,7 @@ import { AxiosResponse } from "axios";
 interface Params<Response> {
     queryKey: unknown[];
     queryFn: (data: unknown) => Promise<Response>;
+     enabled?: boolean,
     options?: Omit<UseQueryOptions<Response, Error, AxiosResponse>, "queryKey">;
   }
   
