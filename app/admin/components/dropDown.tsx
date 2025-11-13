@@ -52,14 +52,14 @@ export default function DropDown({ onOpen, setModalType }: props) {
            Add Category
           </DropdownItem>
           <DropdownItem
-            key="sub-category"
+            key="subCategory"
             className="hover:bg-slate-300 p-2 rounded-md"
             endContent={<HiOutlineDocumentPlus />}
           >
           Add Subcategory
           </DropdownItem>
           <DropdownItem
-            key="delete-sub-category"
+            key="deleteSubCategory"
             className="hover:bg-slate-300 p-2 rounded-md"
             endContent={<HiOutlineDocumentPlus />}
           >
