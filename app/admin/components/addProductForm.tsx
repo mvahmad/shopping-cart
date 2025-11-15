@@ -12,7 +12,9 @@ import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import {CategoriesResponse , SubcategoriesResponse} from '@/app/types'
 import { AddProductschema , addProductschema } from "./schema";
 import dynamic from "next/dynamic";
-const EditorClient = dynamic(()=>import("../../components/textEditor/textEditor") , {"ssr":false})
+const EditorClient = dynamic(() => import("@/app/components/textEditor/textEditor"), {
+  ssr: false, 
+});
 
 
 interface props{
@@ -440,14 +442,17 @@ const AddProductForm = ({ onClose , refetch }:props) => {
         )}
       </div>
       <div className="w-full">
+       
         <Controller
           control={control}
           name="description"
-          defaultValue=""
-          render={({ field }) =>(
-            <EditorClient value={field.value} onChange={field.onChange} />
-          )}
+          defaultValue={JSON.stringify({
+            type: "doc",
+            content: [{ type: "paragraph", content: [{ type: "text", text: "" }] }],
+          })}
+          render={({ field }) => <EditorClient value={field.value} onChange={field.onChange} />}
         />
+
       </div>
       {errors.description && (
         <p className="text-red-500 text-sm">{errors.description.message}</p>

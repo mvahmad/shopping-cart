@@ -1,9 +1,10 @@
-import { modal, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import AddCategoryForm from "./addCategoryform";
 import AddSubcategoryForm from "./addSubcategoryForm";
 import AddProductForm from "./addProductForm";
 import EditProductForm from "./editProductForm";
 import DeleteSubCategoryForm from "./deleteSubCategoryForm";
+import DeleteCategoryForm from "./deleteCategoryForm";
 interface props{
     isOpen: boolean;
     onOpenChange: () => void;
@@ -30,16 +31,21 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange , refetch ,}:props) => 
                 modalTitle: " Add Category ",
                 modalBody: <AddCategoryForm onClose={onClose} />,
               };
-            case "sub-category":
+            case "subCategory":
               return {
                 modalTitle: " Add Subcategory ",
                 modalBody: <AddSubcategoryForm onClose={onClose} />,
               };
-            case "delete-sub-category"  :
+            case "deleteSubCategory" :
               return {
-                modalTitel: "Delete Subcategory",
+                modalTitle: " Delete Subcategory ",
                 modalBody : <DeleteSubCategoryForm onClose={onClose} />
-             }
+             };
+             case "deleteCategory" :
+              return {
+                modalTitle:" Delete Category ",
+                modalBody : <DeleteCategoryForm onClose={onClose} />
+              }
           }
     }
     return (

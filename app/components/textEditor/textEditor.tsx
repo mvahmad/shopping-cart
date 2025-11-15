@@ -1,24 +1,119 @@
-"use client";//
+"use client";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Heading from "@tiptap/extension-heading";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
+import { Bold, Italic, LinkIcon, List, ListOrdered, Type } from "lucide-react";
+import { Button } from "@nextui-org/react";
 
 interface TextEditorProps {
-  value: string;
+  value?: string;
   onChange: (content: string) => void;
 }
-import React from 'react';
-import { Editor } from '@tinymce/tinymce-react';
 
-export default function EditorClient({value,onChange}:TextEditorProps)  {
+const defaultDoc = {
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: "" }],
+    },
+  ],
+};
+
+export default function EditorClient({ value, onChange }: TextEditorProps) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({
+        openOnClick: false,
+      }),
+      Heading.configure({
+        levels: [1, 2, 3],
+      }),
+      BulletList,
+      OrderedList,
+      ListItem,
+    ],
+    content: value ? JSON.parse(value) : defaultDoc,
+    onUpdate: ({ editor }) => {
+      const json = editor.getJSON();
+      onChange(JSON.stringify(json));
+    },
+    immediatelyRender: false,
+  });
+
+  if (!editor) return null;
+
   return (
-    <Editor
-      apiKey="kxtfss3z9dyd5by4dv4ni5dx3a6b6ke7mmqu1kxbp3j2wp56"
-      vlaue={value}
-      onEditorChange={(content: string) => onChange(content)}
-      
-      init={{
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-      }}
-      initialValue={value}
-    />
+    <div className="border border-gray-300 rounded-md w-full p-3">
+      {/* Toolbar */}
+      <div className="flex flex-wrap gap-1 mb-2 border-b border-gray-200 pb-2">
+        <Button
+          size="sm"
+          variant={editor.isActive("bold") ? "solid" : "bordered"}
+          onPress={() => editor.chain().focus().toggleBold().run()}
+          startContent={<Bold size={16} />}
+        >
+          Bold
+        </Button>
+        <Button
+          size="sm"
+          variant={editor.isActive("italic") ? "solid" : "bordered"}
+          onPress={() => editor.chain().focus().toggleItalic().run()}
+          startContent={<Italic size={16} />}
+        >
+          Italic
+        </Button>
+        <Button
+          size="sm"
+          onPress={() =>
+            editor
+              .chain()
+              .focus()
+              .toggleHeading({ level: 2 })
+              .run()
+          }
+          startContent={<Type size={16} />}
+          variant={editor.isActive("heading", { level: 2 }) ? "solid" : "bordered"}
+        >
+          H2
+        </Button>
+        <Button
+          size="sm"
+          onPress={() => editor.chain().focus().toggleBulletList().run()}
+          startContent={<List size={16} />}
+          variant={editor.isActive("bulletList") ? "solid" : "bordered"}
+        >
+          Bulleted
+        </Button>
+        <Button
+          size="sm"
+          onPress={() => editor.chain().focus().toggleOrderedList().run()}
+          startContent={<ListOrdered size={16} />}
+          variant={editor.isActive("orderedList") ? "solid" : "bordered"}
+        >
+          Numbered
+        </Button>
+        <Button
+          size="sm"
+          startContent={<LinkIcon size={16} />}
+          onPress={() => {
+            const url = prompt("Enter URL:");
+            if (url) {
+              editor.chain().focus().setLink({ href: url }).run();
+            }
+          }}
+        >
+          Link
+        </Button>
+      </div>
+
+      {/* Editor Content */}
+      <EditorContent   editor={editor} className="min-h-[200px] focus:outline-none" />
+    </div>
   );
 }
