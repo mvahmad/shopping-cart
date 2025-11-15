@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../constant";
-import { postRefreshToken , logout } from "@/app/lib/actions/auth";
+import { postRefreshToken  } from "@/app/services/auth";
+import {logout} from "@/utils/logout"
 
 export const httpRequest = axios.create({
     baseURL:BASE_URL

@@ -1,12 +1,6 @@
-import NextAuth from "next-auth"
-import GitHub from "next-auth/providers/github"
-import { ENDPOINTS } from "../../constant";
-import { httpRequest } from "../../services/http-request";
-import Cookies from "js-cookie";
-
-export const {auth ,handlers , signIn ,signOut} = NextAuth({
-    providers:[GitHub]
-})
+"use client"
+import { ENDPOINTS } from "../constant";
+import { httpRequest } from "../services/http-request";
 
 type Token = { refreshToken: string };
 
@@ -27,10 +21,3 @@ export const postRefreshToken = async (token: Token) => {
   const response = await httpRequest.post(url, token);
   return response.data;
 };
-
-export const logout = async ({href}:{href:string})=>{
-  Cookies.remove("accessToken");
-  Cookies.remove("refreshToken");
-  localStorage.clear();
-  location.href = href;
-}
