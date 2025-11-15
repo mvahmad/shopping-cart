@@ -1,5 +1,6 @@
+'use client'
 import {
-  
+
     Dropdown,
     DropdownItem,
     DropdownMenu,
@@ -45,7 +46,7 @@ export default function DropDown({ onOpen, setModalType }: props) {
   
           <DropdownItem
             key="category"
-            textValue="cart"
+            // 
             endContent={<HiOutlineFolderPlus />}
             className="hover:bg-slate-300 p-2 rounded-md"
           >
@@ -66,7 +67,7 @@ export default function DropDown({ onOpen, setModalType }: props) {
            Delete Subcategory
           </DropdownItem>
           <DropdownItem
-            key="delete-category"
+            key="deleteCategory"
             className="hover:bg-slate-300 p-2 rounded-md"
             endContent={<HiOutlineFolderPlus />}
           >
