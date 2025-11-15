@@ -4,7 +4,7 @@ import { RegisterFormData, schema } from "./schema";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePostServices } from "@/app/hooks/usePostServices";
-import { postRegisterData } from "@/app/lib/actions/auth";
+import { postRegisterData } from"@/app/services/auth";
 import { authResponse } from "@/app/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
