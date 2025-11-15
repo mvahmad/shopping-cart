@@ -4,6 +4,7 @@ import AddSubcategoryForm from "./addSubcategoryForm";
 import AddProductForm from "./addProductForm";
 import EditProductForm from "./editProductForm";
 import DeleteSubCategoryForm from "./deleteSubCategoryForm";
+import DeleteCategoryForm from "./deleteCategoryForm";
 interface props{
     isOpen: boolean;
     onOpenChange: () => void;
@@ -39,7 +40,12 @@ const FormModal = ({isOpen ,type, onClose , onOpenChange , refetch ,}:props) => 
               return {
                 modalTitle: " Delete Subcategory ",
                 modalBody : <DeleteSubCategoryForm onClose={onClose} />
-             }
+             };
+             case "deleteCategory" :
+              return {
+                modalTitle:" Delete Category ",
+                modalBody : <DeleteCategoryForm onClose={onClose} />
+              }
           }
     }
     return (

@@ -19,3 +19,9 @@ export const PostCategory = async(data:addCategorySchema)=>{
       },})
     return responce.data
 }
+
+export const DeleteCategory = async(id:string)=>{
+    const url = `${ENDPOINTS.CATEGORIES}/${id}`
+    const responce  = await httpRequest.delete(url)
+    return responce.data
+}
