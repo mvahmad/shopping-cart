@@ -1,3 +1,4 @@
+'use client'
 import { useMutation , useQueryClient , UseMutationOptions } from "@tanstack/react-query";
 interface params<Data , Response>{
     mutationKey: string[];

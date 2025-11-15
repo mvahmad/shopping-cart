@@ -1,5 +1,5 @@
 import { ProductsEntity } from "@/app/types";
-import { Card, Divider, CardBody, Badge, CardFooter, Tooltip } from "@nextui-org/react";
+import { Card, Divider, CardBody, CardFooter } from "@nextui-org/react";
 import Link from "next/link";
 
 export default function PaymentCard ({item}:{item:ProductsEntity}){

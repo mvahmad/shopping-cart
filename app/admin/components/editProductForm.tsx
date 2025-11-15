@@ -1,3 +1,4 @@
+'use client'
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Select, SelectItem, Spinner ,Textarea } from "@nextui-org/react";

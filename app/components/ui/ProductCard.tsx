@@ -7,7 +7,7 @@ import { ProductsEntity } from "@/app/types";
 import Link from "next/link";
 import { useCartStore } from "@/app/store/useCartStore";
 import { toast } from "react-toastify";
-import { useState } from "react";
+// import { useState } from "react";
 
 interface Props{ p: ProductsEntity; showRating?: boolean }
 

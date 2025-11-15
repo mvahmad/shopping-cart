@@ -1,3 +1,4 @@
+'use client'
 import { AddSubCategorySchema ,addSubCategorySchema } from "./schema";
 import {useForm , SubmitHandler } from 'react-hook-form' 
 import { zodResolver } from "@hookform/resolvers/zod";
