@@ -1,5 +1,5 @@
 "use server"
-import { parseJwt } from "@/app/lib/actions/session";
+import { parseJwt } from "@/app/lib/actions/auth-server";
 import LoginForm from "../components/loginForm/LoginForm"
 import AdminHome from "../admin/page"
 // 

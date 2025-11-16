@@ -1,5 +1,5 @@
 "use server"
-import { parseJwt } from "@/app/lib/actions/session";
+import { parseJwt } from "@/app/lib/actions/auth-server";
 // import { auth } from "@/auth"
 import { redirect } from "next/navigation";
 import { JWTPayload } from "jose";
