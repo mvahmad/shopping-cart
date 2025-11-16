@@ -1,5 +1,5 @@
 import { ENDPOINTS } from "@/app/constant";
-import { httpRequest } from "@/app/services/http-request";
+import { httpServer as httpRequest } from "@/utils/http-server";
 import { AddProductschema ,EditProduct } from "@/app/admin/components/schema";
 
 interface ParamsType {

@@ -1,7 +1,7 @@
 "use client";
 import Cookies from "js-cookie";
 
-export const logout =  ({href}:{href:string})=>{
+export const logout =  (href:string)=>{
   Cookies.remove("accessToken");
   Cookies.remove("refreshToken");
   localStorage.clear();

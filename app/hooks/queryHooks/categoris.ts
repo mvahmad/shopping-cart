@@ -1,4 +1,4 @@
-import { httpRequest } from "@/app/services/http-request";
+import { httpServer as httpRequest } from "@/utils/http-server";
 import {ENDPOINTS } from "@/app/constant";
 interface addCategorySchema{
     name:string,

@@ -1,6 +1,6 @@
 "use client"
 import { ENDPOINTS } from "../constant";
-import { httpRequest } from "../services/http-request";
+import {httpClient as httpRequest } from "@/utils/http-client";
 
 type Token = { refreshToken: string };
 
