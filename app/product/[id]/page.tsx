@@ -1,6 +1,6 @@
 "use client";
 import { getProductsResponse, ProductsEntity } from "@/app/types";
-import { MainBreadcrumb , Footer ,Header , useGetServices ,getProductsById 
+import { MainBreadcrumb , Footer ,Header , useGetServices ,getProductById 
   ,ProductInfo,SizeTable , ProductSlider
 } from "@/app/product/import" 
 import { GetProductsByIdResponse } from "../type";
@@ -17,7 +17,7 @@ const ProductPage = () => {
   const {id} = useParams()
   const { data } = useGetServices<GetProductsByIdResponse>({
       queryKey: ["GetBookById", id],
-      queryFn: () => getProductsById(id!),
+      queryFn: () => getProductById(id! as string),
       options: {
         enabled: !!id,
       },

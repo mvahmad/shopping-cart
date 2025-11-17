@@ -5,5 +5,5 @@ export {useGetServices}  from "@/app/hooks/useGetServices"
 export {default as ProductInfo} from "@/app/components/productInfo/ProductInfo"
 export {default as SizeTable} from "@/app/components/sizeTable/sizeTable"
 export {default as ProductSlider} from "@/app/components/ui/ProductsSlider"
-export {getProductsById} from "@/app/hooks/queryHooks/products"
+export {getProductById} from "@/app/hooks/queryHooks/products"
 
