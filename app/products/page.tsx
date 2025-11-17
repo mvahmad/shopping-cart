@@ -1,4 +1,4 @@
-"use server";
+//
 
 import ProductsPageComponent from "../components/products/ProductsPage";
 import { getProducts } from "../hooks/queryHooks/products";
