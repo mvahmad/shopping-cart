@@ -2,13 +2,20 @@ import { ENDPOINTS } from "@/app/constant";
 import { httpServer as httpRequest } from "@/utils/http-server";
 import { AddProductschema ,EditProduct } from "@/app/admin/components/schema";
 
-interface ParamsType {
+export interface ParamsType {
   limit?: string;
   page?: number;
   sort?: string | null;
   category?: string;
   subcategory?: string;
 }
+
+export const getProducts = async (params?: ParamsType) => {
+  const url = ENDPOINTS.PRODUCTS;
+  const response = await httpRequest.get(url, { params });
+  return response.data;
+};
+
 
 export const PostProduct =async (data:AddProductschema) => {
     const url = ENDPOINTS.PRODUCTS;
@@ -42,28 +49,23 @@ export const DeleteProduct = async(id:string)=>{
   return response.data
 }
 
-export const getProducts =async (searchParams ?:ParamsType )=>{
-  const url = ENDPOINTS.PRODUCTS
-  const response = await httpRequest.get(url ,{params:searchParams})
-  return response.data
-}
-export const getProductsById = async (id: string | string[]) => {
+
+export const getProductById = async (id: string) => {
   const url = `${ENDPOINTS.PRODUCTS}/${id}`;
   const response = await httpRequest.get(url);
   return response.data;
 };
 
-export const getProductsBySubCategory = async(subcategoryId:string)=>{
-  const url = `${ENDPOINTS.PRODUCTS}?subcategory=${subcategoryId}`
-   const response = await httpRequest.get(url);
+export const getProductsBySubCategory = async (subcategoryId: string) => {
+  const url = `${ENDPOINTS.PRODUCTS}?subcategory=${subcategoryId}`;
+  const response = await httpRequest.get(url);
   return response.data;
-
-}
-export const getProductsByCategory = async(categoryId:string) =>{
-  const url = `${ENDPOINTS.PRODUCTS}?category=${categoryId}`
-  const response = await httpRequest.get(url)
-  return response.data
-}
+};
+export const getProductsByCategory = async (categoryId: string) => {
+  const url = `${ENDPOINTS.PRODUCTS}?category=${categoryId}`;
+  const response = await httpRequest.get(url);
+  return response.data;
+};
 
 export const patchProducts = async ({
   data,

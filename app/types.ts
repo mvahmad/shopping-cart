@@ -18,7 +18,7 @@ export interface CategoriesResponse {
     per_page: number;
     total: number;
     total_pages: number;
-    data: Data;
+    data: DataCategory;
   }
   export interface SubcategoriesResponse {
     status: string;
@@ -33,7 +33,7 @@ export interface CategoriesResponse {
     subcategories?: SubcategoriesEntity[] | null;
   }
   
-  export interface Data {
+  export interface DataCategory {
     categories?: CategoriesEntity[] | null;
   }
   export interface CategoriesEntity {

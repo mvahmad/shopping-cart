@@ -1,67 +1,96 @@
 "use client";
-import { renderItem } from "@/utils/paginationRenderItem";
-import { useMemo, useState } from "react";
+
+import { useEffect, useMemo, useState } from "react";
 import Header from "../ui/header";
 import Footer from "../ui/footer";
 import ProductCard from "../ui/ProductCard";
 import { Pagination } from "@nextui-org/react";
-// 
-import { getProducts } from "@/app/hooks/queryHooks/products";
+
 import { useGetServices } from "@/app/hooks/useGetServices";
-import { CategoriesResponse, getProductsResponse, ProductsEntity, SubcategoriesResponse } from "@/app/types";
+import { CategoriesResponse, ProductsEntity, SubcategoriesResponse, getProductsResponse } from "@/app/types";
 import { useTableSort } from "@/app/hooks/useTabelSort";
 import EmptyState from "../ui/EmptyState";
-import { getSubcategoriesByCategoryId } from "@/app/hooks/queryHooks/getSubCategoris";
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
+import { getSubcategoriesByCategoryId } from "@/app/hooks/queryHooks/getSubCategoris";
+import { getProducts } from "@/app/hooks/queryHooks/products";
 
 interface Props {
   searchParams: Record<string, string | undefined>;
+  initialProducts: getProductsResponse;
+  initialCategoryId: string;
+  initialSubcategoryId: string;
 }
 
-export default function ProductsPageComponent({ searchParams }: Props) {
-  const [selectedLeagueId, setSelectedLeagueId] = useState("676e9b5f41325d2d8ea64438");
-  const [selectedTeamId, setSelectedTeamId] = useState("68e2c9a2277282b14b86ddbb");
-
+export default function ProductsPageComponent({
+  searchParams,
+  initialProducts,
+  initialCategoryId,
+  initialSubcategoryId,
+}: Props) {
   const { handlePageChange } = useTableSort();
 
+  const [selectedLeagueId, setSelectedLeagueId] = useState<string>(initialCategoryId);
+  const [selectedTeamId, setSelectedTeamId] = useState<string>(initialSubcategoryId);
+
+  // URL params
   const paramsObj = new URLSearchParams(searchParams as Record<string, string>);
 
   const limit = paramsObj.get("limit") || "5";
-  const page = Number(paramsObj.get("page")) || 1;
+  const [page, setPage] = useState<number>(Number(paramsObj.get("page")) || 1);
 
-  const params = {
-    page,
-    limit,
-    subcategory: selectedTeamId,
-    category: selectedLeagueId,
-  };
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [selectedLeagueId, selectedTeamId]);
 
-  //  get categories
+  // Categories
   const { data: categoryData } = useGetServices<CategoriesResponse>({
     queryKey: ["GetCategories"],
     queryFn: getCategories,
   });
   const categories = categoryData?.data.categories;
 
-  //  get subcategories
+  // Subcategories
   const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
     queryKey: ["GetSubCategories", selectedLeagueId],
     queryFn: () => getSubcategoriesByCategoryId(selectedLeagueId),
-  });
-
-  //  get products
-  const { data, isLoading } = useGetServices<getProductsResponse>({
-    queryKey: ["GetProducts", params],
-    queryFn: () => getProducts(params),
+    enabled: !!selectedLeagueId,
   });
 
   const subItems = subCategoryData?.data.subcategories;
-  const items: ProductsEntity[] = data?.data.products || [];
 
-  const rowsPerPage = data?.per_page ?? 5;
+  // Set default subcategory when category changes
+  useEffect(() => {
+    if (subItems?.length) {
+      setSelectedTeamId(subItems[0]._id);
+    }
+  }, [subItems]);
+
+  // Products
+  const productQueryKey = ["GetProducts", page, limit, selectedLeagueId, selectedTeamId];
+  const { data: productData, isLoading } = useGetServices<getProductsResponse>({
+    queryKey: productQueryKey,
+    queryFn: () =>
+      getProducts({
+        page,
+        limit,
+        category: selectedLeagueId,
+        subcategory: selectedTeamId,
+      }),
+    initialData:
+      page === 1 &&
+      selectedLeagueId === initialCategoryId &&
+      selectedTeamId === initialSubcategoryId
+        ? initialProducts
+        : undefined,
+    enabled: !!selectedLeagueId && !!selectedTeamId,
+  });
+
+  const items: ProductsEntity[] = productData?.data.products || [];
+  const rowsPerPage = productData?.per_page ?? 5;
   const pages = useMemo(() => {
-    return data?.total ? Math.ceil(data.total / rowsPerPage) : 0;
-  }, [data?.total, rowsPerPage]);
+    return productData?.total ? Math.ceil(productData.total / rowsPerPage) : 0;
+  }, [productData?.total, rowsPerPage]);
 
   return (
     <main dir="rtl" className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
@@ -75,7 +104,7 @@ export default function ProductsPageComponent({ searchParams }: Props) {
           </p>
         </header>
 
-        {/* League picker */}
+        {/* League Picker */}
         <section className="mb-4">
           <div className="flex flex-wrap gap-2">
             {categories?.map((item) => {
@@ -98,7 +127,7 @@ export default function ProductsPageComponent({ searchParams }: Props) {
           <div className="mt-4 h-px w-full bg-slate-200" />
         </section>
 
-        {/* Team picker */}
+        {/* Subcategory Picker */}
         <section className="mb-6">
           <div className="flex flex-wrap gap-2">
             {subItems?.map((item) => {
@@ -120,7 +149,7 @@ export default function ProductsPageComponent({ searchParams }: Props) {
           </div>
         </section>
 
-        {/* Product grid */}
+        {/* Product Grid */}
         <section>
           {isLoading || items.length === 0 ? (
             <EmptyState message="هیچ محصولی برای این تیم یافت نشد." />
@@ -138,7 +167,7 @@ export default function ProductsPageComponent({ searchParams }: Props) {
           <div className="flex w-full justify-center mt-2">
             <Pagination
               dir="rtl"
-              renderItem={renderItem}
+
               showControls
               size="sm"
               showShadow
@@ -146,7 +175,10 @@ export default function ProductsPageComponent({ searchParams }: Props) {
               color="primary"
               page={page}
               total={pages}
-              onChange={handlePageChange}
+              onChange={(p) => {
+                setPage(p);
+                handlePageChange(p);
+              }}
             />
           </div>
         )}
