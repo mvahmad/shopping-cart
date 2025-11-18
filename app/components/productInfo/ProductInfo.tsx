@@ -4,6 +4,8 @@ import { ProductsEntity } from "@/app/types"
 import { Button } from "@nextui-org/react"
 import { useState } from "react"
 import { useCartStore } from "@/app/store/useCartStore"
+import { generateHTML } from '@tiptap/html'
+import StarterKit from '@tiptap/starter-kit'
 import Cookies from "js-cookie";
 
 export default function ProductInfo({ product }: { product: ProductsEntity }) {
@@ -34,14 +36,28 @@ export default function ProductInfo({ product }: { product: ProductsEntity }) {
     }
   }
 
-  const ProductDescription = ({ description }: { description: string }) => {
-    return <div dangerouslySetInnerHTML={{ __html: description }} />
+ const ProductDescription = ({ description }: { description: string }) => {
+  // Convert string  JSON
+  if (description){ 
+    const json = JSON?.parse(description)
+
+    // Convert JSON HTML
+    const html = generateHTML(json, [StarterKit])
+    return <div dangerouslySetInnerHTML={{ __html: html }} />
+
+  }else{
+    return null
   }
+ 
+
+  
+}
 
   return (
-    <section className="md:w-[400px] w-[300px] min-h-[430px] border-[1.4px] border-gray-500 rounded-md flex flex-col px-[8px] py-[6px] justify-between">
+    <section className="md:w-[400px] w-[300px] min-h-[430px] border-[1px] border-slate-200 
+    rounded-md flex flex-col px-[8px] py-[6px] justify-between shadow-sm">
       <div className="flex flex-col gap-2">
-        <h1 className="font-bold text-[24px] text-slate-700 gap-3 flex">
+        <h1 className="font-bold text-[24px] text-slate-500 gap-3 flex">
           {product?.name} / <span>{product?.brand}</span>
         </h1>
         <div className="flex items-center">

@@ -38,12 +38,11 @@ export default function EditorClient({ value, onChange }: TextEditorProps) {
       OrderedList,
       ListItem,
     ],
-    content: value ? JSON.parse(value) : defaultDoc,
-    onUpdate: ({ editor }) => {
-      const json = editor.getJSON();
-      onChange(JSON.stringify(json));
-    },
-    immediatelyRender: false,
+   content: value ? JSON.parse(value) : defaultDoc,
+  onUpdate: ({ editor }) => {
+    onChange(JSON.stringify(editor.getJSON()));
+  },
+  immediatelyRender: false,
   });
 
   if (!editor) return null;

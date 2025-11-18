@@ -309,7 +309,7 @@ function EditProductForm({ onClose  }:props) {
           <div className="flex border-2 border-[#e0e0e0] rounded-md w-full flex-col justify-center items-center gap-1 py-1">
             <span className="text-[10px]">Image has been uploaded</span>
         <img 
-         src={ `https://elite-sport.liara.run/images/products/thumbnails/${getSelectedItem().items?.thumbnail || ""}`}
+         src={ `https://elite-sport-backend.vercel.app/images/products/thumbnails/${getSelectedItem().items?.thumbnail || ""}`}
          alt="product-thumbnail"
          className="rounded-md w-32" 
         />
