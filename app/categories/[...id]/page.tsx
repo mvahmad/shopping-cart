@@ -1,17 +1,19 @@
 "use client";
 import { renderItem } from "@/utils/paginationRenderItem";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/app/components/ui/header";
 import Footer from "@/app/components/ui/footer";
 import ProductCard from "@/app/components/ui//ProductCard";
 import { Pagination } from "@nextui-org/react";
 import { useParams, useSearchParams } from "next/navigation";
-import { getProducts } from "@/app/hooks/queryHooks/products";
+import { getProducts, getProductsByCategory } from "@/app/hooks/queryHooks/products";
 import { useGetServices } from "@/app/hooks/useGetServices";
-import { CategoriesEntity, getProductsResponse, ProductsEntity, SubcategoriesResponse } from "@/app/types";
+import { CategoriesEntity, CategoriesResponse, getProductsResponse, ProductsEntity, SubcategoriesResponse } from "@/app/types";
 import { useTableSort } from "@/app/hooks/useTabelSort";
 import EmptyState from "@/app/components/ui/EmptyState";
 import { getSubcategoriesByCategoryId } from "@/app/hooks/queryHooks/getSubCategoris";
+import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
+import SkeletonCart from "@/app/components/ui/skeleton";
 
 
 
@@ -23,33 +25,50 @@ export default function Page() {
     const {handlePageChange } = useTableSort();
     
     const limit = searchParams.get("limit") || "5";
+    const page = Number(searchParams.get("page")) || 1
     const params: {
       page: number;
       limit: string;
       category?: string ;
       subcategory?: string;
     } = {
-      page: Number(searchParams.get("page")) || 1,
+      page: page,
       limit,
       subcategory:selectedTeamId,
       category:selectedLeagueId
       
     };
 
-    //get subCategoris
-    const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
-      queryKey: ["GetSubCategories",selectedLeagueId],
-      queryFn:()=> getSubcategoriesByCategoryId(selectedLeagueId),
+    // //get subCategoris
+    // const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
+    //   queryKey: ["GetSubCategories",selectedLeagueId],
+    //   queryFn:()=> getSubcategoriesByCategoryId(id),
+    // });
+    // //subcategory items
+    // let subItems = subCategoryData?.data.subcategories
+
+
+
+    // Categories
+    const { data: categoryData } = useGetServices<CategoriesResponse>({
+        queryKey: ["GetCategories"],
+        queryFn: getCategories,
     });
+    const categories = categoryData?.data.categories;
+    useEffect(() => {
+            if (categories?.length) {
+              setSelectedTeamId(selectedTeamId);
+            }
+          }, [categories]);
 
     //get products
+    const productQueryKey = ["GetProducts",limit,selectedLeagueId,page]
     const {data ,isLoading} = useGetServices<getProductsResponse>({
-      queryKey:["GetProducts",params] ,
-      queryFn:()=>getProducts(params)
+      queryKey: productQueryKey,
+      queryFn:()=>getProductsByCategory(selectedLeagueId)
     })
 
-    //subcategory items
-    let subItems = subCategoryData?.data.subcategories
+
 
 
     //product items
@@ -72,44 +91,49 @@ export default function Page() {
                 {/* Page header */}
                 <header className="mb-6">
                     <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">محصولات</h1>
-                    <p className="mt-1 text-sm text-slate-500">لیگ مورد نظر را انتخاب کنید تا محصولات مرتبط نمایش داده شوند.</p>
+                    <p className="mt-1 text-sm text-slate-500">مجموعه مورد نظر را انتخاب کنید تا محصولات مرتبط نمایش داده شوند.</p>
                 </header>
                 {/* League picker */}
-
-                {/* Team picker (for selected league) */}
-                <section className="mb-6 mt-2">
+                 <section className="mb-4">
                     <div className="flex flex-wrap gap-2">
-                        {subItems?.map((item) => {
-                            const active =item._id === selectedTeamId;
-                            return (
-                                <button
-                                    key={item._id}
-                                    onClick={() => setSelectedTeamId(item._id)}
-                                    className={`rounded-2xl border px-3 py-2 text-sm font-bold transition ${active
-                                        ? "border-blue-300 bg-blue-50 text-blue-700"
-                                        : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                                        }`}
-                                >
-                                    {item.name}
-                                </button>
-                            );
+                        {categories?.map((item) => {
+                        const active = item._id === selectedLeagueId;
+                        return (
+                            <button
+                            key={item._id}
+                            onClick={() => setSelectedLeagueId(item._id)}
+                            className={`rounded-2xl border px-3 py-2 text-sm font-bold transition ${
+                                active
+                                ? "border-blue-300 bg-blue-50 text-blue-700"
+                                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                            }`}
+                            >
+                            {item.name}
+                            </button>
+                        );
                         })}
                     </div>
+                    <div className="mt-4 h-px w-full bg-slate-200" />
                 </section>
 
                 {/* Product grid */}
-                <section>
-                    {isLoading || items.length === 0 ? (
-                        <EmptyState message="هیچ محصولی برای این تیم یافت نشد." />
-                    ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                     <section>
+                        {isLoading ? (
+                            <div className="flex gap-1">
+                                <SkeletonCart />
+                                <SkeletonCart />
+                                 <SkeletonCart />
+                            </div>
+                        ) : items.length === 0 ? (
+                            <EmptyState message="هیچ محصولی برای این تیم یافت نشد." />
+                        ) : (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                             {items.map((p) => (
                                 <ProductCard key={p._id} p={p} />
                             ))}
-                        </div>
-                    )}
-                </section>
-
+                            </div>
+                        )}
+                     </section>
                 {/* Pagination component*/}
                     {
                       pages > 0 ? (

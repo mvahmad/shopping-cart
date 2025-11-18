@@ -1,13 +1,10 @@
 import { ENDPOINTS } from "@/app/constant";
 import { httpServer as httpRequest } from "@/utils/http-server";
-
-interface Props {
-    limit?: number;
-}
+import { ParamsType } from "./products";
   
-export const getSubcategories = async ({ limit }: Props) => {
-    const url = `${ENDPOINTS.SUBCATEGORIES}?&limit=${limit}`;
-    const response = await httpRequest.get(url);
+export const getSubcategories = async (params?: ParamsType) => {
+    const url = ENDPOINTS.SUBCATEGORIES;
+    const response = await httpRequest.get(url, { params });
     return response.data;
 };
   
