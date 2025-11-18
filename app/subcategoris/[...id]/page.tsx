@@ -34,7 +34,7 @@ export default function Page() {
   const subcategoryQueryKey = [ "GetSubCategories",page,limit,selectedTeamId]
   const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
     queryKey: subcategoryQueryKey,
-    queryFn: () => getSubcategories(),
+    queryFn: () => getSubcategories({limit:20}),
   });
 
   // Subcategory list
