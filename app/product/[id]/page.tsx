@@ -65,7 +65,7 @@ const ProductPage = () => {
                 <SwiperSlide key={image}>
                   <div className="flex justify-center items-center">
                     <img
-                      src={`http://${image}`}
+                      src={`https://elite-sport-backend.vercel.app/api/images/products/${image}`}
                       alt={name?.[0]}
                       className="sm:w-[400px] w-[200px] rounded-lg max-h-[400px] object-contain"
                     />

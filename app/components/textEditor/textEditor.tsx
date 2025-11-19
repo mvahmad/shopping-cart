@@ -38,7 +38,7 @@ export default function EditorClient({ value, onChange }: TextEditorProps) {
       OrderedList,
       ListItem,
     ],
-   content: value ? JSON.parse(value) : defaultDoc,
+   content: value ? value : defaultDoc,
   onUpdate: ({ editor }) => {
     onChange(JSON.stringify(editor.getJSON()));
   },
