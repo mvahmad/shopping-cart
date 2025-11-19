@@ -12,6 +12,7 @@ import { getSubcategories } from "@/app/hooks/queryHooks/getSubCategoris";
 import {CategoriesResponse , SubcategoriesResponse} from '@/app/types'
 import { AddProductschema , addProductschema } from "./schema";
 import dynamic from "next/dynamic";
+import { uploadToCloudinary } from "@/utils/uploadToCloudinary ";
 const EditorClient = dynamic(() => import("@/app/components/textEditor/textEditor"), {
   ssr: false, 
 });
@@ -94,9 +95,38 @@ const AddProductForm = ({ onClose , refetch }:props) => {
       }
     })
     
-    const handleSubmitProductForm : SubmitHandler<AddProductschema> = (value:AddProductschema)=>{
-      mutate(value);
-    }
+    const handleSubmitProductForm: SubmitHandler<AddProductschema> = async (value) => {
+      try {
+        // Upload thumbnail first
+        let thumbnailUrl = "";
+        if (value.thumbnail && value.thumbnail instanceof File) {
+          thumbnailUrl = await uploadToCloudinary(value.thumbnail);
+        }
+
+        // Upload images array
+        const imagesUrls: string[] = [];
+        if (value.images && value.images.length > 0) {
+          for (const file of value.images as File[]) {
+            const url = await uploadToCloudinary(file);
+            imagesUrls.push(url);
+          }
+        }
+
+        // Replace files with URLs
+        const payload = {
+          ...value,
+          thumbnail: thumbnailUrl || "",
+          images: imagesUrls,
+        };
+
+        // Call your mutation
+        mutate(payload);
+
+      } catch (err: any) {
+        toast.error(err.message);
+      }
+};
+
 
     const onError = ()=>{
       if (!errors.images?.message) {
@@ -397,9 +427,13 @@ const AddProductForm = ({ onClose , refetch }:props) => {
               variant="bordered"
               {...register("images")}
               onChange={(e) => {
-                register("images").onChange(e);
-                handleFileChange(e);
-              }}
+                const files = e.target.files;
+                if (!files) return;
+                setSelectedImages([]);
+                const fileArray = Array.from(files);
+                setValue("images", fileArray); // store array of File objects
+                handleFileChange(e); // for preview only
+                }}
             />
           <Button
             variant="bordered"
