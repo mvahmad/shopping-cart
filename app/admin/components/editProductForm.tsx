@@ -122,38 +122,72 @@ function EditProductForm({ onClose }: props) {
     throw new Error(data.message || "Cloudinary upload failed");
   };
 
+  // const handleSubmitProductForm: SubmitHandler<EditProduct> = async (data) => {
+  //   try {
+  //     // Handle thumbnail
+  //     let thumbnailUrl = selectedThumbnail;
+  //     const thumbnailFile = watch("thumbnail") as unknown as File;
+  //     if (thumbnailFile instanceof File) {
+  //       thumbnailUrl = await uploadToCloudinary(thumbnailFile);
+  //     }
+
+  //     // Handle images
+  //     const imagesFiles = watch("images") as unknown as File[];
+  //     let imagesUrls = selectedImages;
+  //     if (imagesFiles && imagesFiles.length > 0) {
+  //       imagesUrls = [];
+  //       for (const file of imagesFiles) {
+  //         const url = await uploadToCloudinary(file);
+  //         imagesUrls.push(url);
+  //       }
+  //     }
+
+  //     const payload = {
+  //       ...data,
+  //       thumbnail: thumbnailUrl,
+  //       images: imagesUrls
+  //     };
+
+  //     mutate({ id: getSelectedItem().id, data: payload });
+
+  //   } catch (err: any) {
+  //     toast.error(err.message);
+  //   }
+  // };
   const handleSubmitProductForm: SubmitHandler<EditProduct> = async (data) => {
-    try {
-      // Handle thumbnail
-      let thumbnailUrl = selectedThumbnail;
-      const thumbnailFile = watch("thumbnail") as unknown as File;
-      if (thumbnailFile instanceof File) {
-        thumbnailUrl = await uploadToCloudinary(thumbnailFile);
-      }
-
-      // Handle images
-      const imagesFiles = watch("images") as unknown as File[];
-      let imagesUrls = selectedImages;
-      if (imagesFiles && imagesFiles.length > 0) {
-        imagesUrls = [];
-        for (const file of imagesFiles) {
-          const url = await uploadToCloudinary(file);
-          imagesUrls.push(url);
-        }
-      }
-
-      const payload = {
-        ...data,
-        thumbnail: thumbnailUrl,
-        images: imagesUrls
-      };
-
-      mutate({ id: getSelectedItem().id, data: payload });
-
-    } catch (err: any) {
-      toast.error(err.message);
+  try {
+    // --- Handle Thumbnail ---
+    let thumbnailUrl = selectedThumbnail; // existing preview or URL
+    const thumbnailFile = watch("thumbnail") as unknown as File;
+    if (thumbnailFile instanceof File) {
+      thumbnailUrl = await uploadToCloudinary(thumbnailFile);
     }
-  };
+
+    // --- Handle Images ---
+    const imagesFiles = watch("images") as unknown as File[];
+    let imagesUrls = selectedImages; // existing images
+    if (imagesFiles && imagesFiles.length > 0) {
+      imagesUrls = [];
+      for (const file of imagesFiles) {
+        const url = await uploadToCloudinary(file);
+        imagesUrls.push(url);
+      }
+    }
+
+    // --- Prepare payload ---
+    const payload: EditProduct = {
+      ...data,
+      thumbnail: thumbnailUrl,
+      images: imagesUrls,
+    };
+
+    mutate({ id: getSelectedItem().id, data: payload });
+
+  } catch (err: any) {
+    toast.error(err.message || "Failed to edit product");
+  }
+};
+
 
   return (
     <form className="sm:w-80 mx-auto flex flex-col gap-2 py-8"
