@@ -47,7 +47,7 @@ export default function ProductCard({ p, showRating = true }: Props) {
                                 return (
                                 <img
                                 key={image}
-                                src={`http://${image}`}
+                                src={image}
                                 alt={p.name}
                                 sizes="(max-width: 768px) 10rem, (max-width: 1280px) 11rem, 12rem"
                                 className="object-contain drop-shadow-sm"
