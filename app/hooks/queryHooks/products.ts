@@ -77,45 +77,28 @@ export const patchProducts = async ({
   id: string;
 }) => {
   const url = `${ENDPOINTS.PRODUCTS}/${id}`;
-  const formData = new FormData();
 
-  // Append basic fields
-  formData.append("name", data.name);
-  formData.append("category", data.category);
-  formData.append("subcategory", data.subcategory);
-  formData.append("brand", data.brand);
-  formData.append("quantity", data.quantity.toString());
-  formData.append("price", data.price.toString());
-  formData.append("discount", data.discount.toString());
-  //
-  formData.append("description", data.description);
+  // Since frontend already uploads images, we can just send JSON
+  const payload = {
+    name: data.name,
+    category: data.category,
+    subcategory: data.subcategory,
+    brand: data.brand,
+    quantity: data.quantity,
+    price: data.price,
+    discount: data.discount,
+    description: data.description,
+    thumbnail: data.thumbnail, // string URL
+    images: data.images,       // array of string URLs
+  };
 
-  // Handle thumbnail (can be File or string URL)
-  if (data.thumbnail) {
-    if (data.thumbnail instanceof File) {
-      formData.append("thumbnail", data.thumbnail);
-    } else if (typeof data.thumbnail === "string") {
-      formData.append("thumbnail", data.thumbnail);
-    }
-  }
-
-  // Handle images (array of File or string)
-  if (data.images && data.images.length > 0) {
-    for (const img of data.images) {
-      if (img instanceof File) {
-        formData.append("images", img);
-      } else if (typeof img === "string") {
-        formData.append("images", img);
-      }
-    }
-  }
-
-  const response = await httpRequest.patch(url, formData, {
+  const response = await httpRequest.patch(url, payload, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
 
   return response.data;
 };
+
 
