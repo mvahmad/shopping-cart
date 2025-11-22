@@ -78,20 +78,35 @@ export const patchProducts = async ({
 }) => {
   const url = `${ENDPOINTS.PRODUCTS}/${id}`;
   const formData = new FormData();
+
+  // Append basic fields
   formData.append("name", data.name);
   formData.append("category", data.category);
   formData.append("subcategory", data.subcategory);
-  formData.append("price", data.price.toString());
-  formData.append("quantity", data.quantity.toString());
-  formData.append("discount", data.discount.toString());
   formData.append("brand", data.brand);
+  formData.append("quantity", data.quantity.toString());
+  formData.append("price", data.price.toString());
+  formData.append("discount", data.discount.toString());
+  //
   formData.append("description", data.description);
-  if (data.thumbnail.length !== 0) {
-    formData.append("thumbnail", data.thumbnail[0]);
+
+  // Handle thumbnail (can be File or string URL)
+  if (data.thumbnail) {
+    if (data.thumbnail instanceof File) {
+      formData.append("thumbnail", data.thumbnail);
+    } else if (typeof data.thumbnail === "string") {
+      formData.append("thumbnail", data.thumbnail);
+    }
   }
+
+  // Handle images (array of File or string)
   if (data.images && data.images.length > 0) {
-    for (let i = 0; i < data.images.length; i++) {
-      formData.append("images", data.images[i]);
+    for (const img of data.images) {
+      if (img instanceof File) {
+        formData.append("images", img);
+      } else if (typeof img === "string") {
+        formData.append("images", img);
+      }
     }
   }
 
@@ -100,5 +115,7 @@ export const patchProducts = async ({
       "Content-Type": "multipart/form-data",
     },
   });
+
   return response.data;
 };
+
