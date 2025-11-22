@@ -16,7 +16,7 @@ export default  function CartRow ({it,onQty,onRemove,} : Props){
             {/* Image */}
             <div className="relative h-28 w-full overflow-hidden rounded-2xl ring-1 ring-slate-100 sm:w-40">
                 <img
-                src={`http://${productsEntity?.images?.[0]}`}
+                src={productsEntity?.images?.[0]}
                 alt={it.name}
                 fill-sizes="(min-width: 640px) 10rem, 100vw"
                 className="object-cover" />

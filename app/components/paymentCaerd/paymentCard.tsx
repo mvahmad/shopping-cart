@@ -14,7 +14,7 @@ export default function PaymentCard ({item}:{item:ProductsEntity}){
       <CardBody className="overflow-visible py-2 flex justify-center items-center">
         <Link href={`/product/${item._id}`}>
             <img
-             src={`http://${item?.images?.[0]}`}
+             src={item?.images?.[0]}
               alt={item._id}
               className="w-24 h-24"
             />

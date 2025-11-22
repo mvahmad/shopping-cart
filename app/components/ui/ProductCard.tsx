@@ -43,17 +43,16 @@ export default function ProductCard({ p, showRating = true }: Props) {
                     </div>
                     <div className="grid place-items-center px-6 pt-10 pb-4 border-b-2 border-b-gray-300">
                         <div className="relative h-48 w-40 md:h-52 md:w-44">
-                            {p?.images?.map((image)=>{
-                                return (
+                            {p?.images &&
+                             (
                                 <img
-                                key={image}
-                                src={image}
+                                src={p.images[0]}
                                 alt={p.name}
                                 sizes="(max-width: 768px) 10rem, (max-width: 1280px) 11rem, 12rem"
                                 className="object-contain drop-shadow-sm"
                             />
                                 )
-                            })}
+                            }
                         
                         </div>
                     </div>

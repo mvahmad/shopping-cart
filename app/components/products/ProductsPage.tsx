@@ -152,7 +152,7 @@ export default function ProductsPageComponent({
         {/* Product Grid */}
         <section>
           {isLoading || items.length === 0 ? (
-            <EmptyState message="هیچ محصولی برای این تیم یافت نشد." />
+            <EmptyState message="هیچ محصولی یافت نشد." />
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {items.map((p) => (
