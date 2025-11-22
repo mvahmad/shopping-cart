@@ -28,14 +28,16 @@ export const PostProduct =async (data:AddProductschema) => {
     formData.append("discount", data.discount.toString());
     formData.append("brand", data.brand);
     formData.append("description", data.description);
-    if (data.thumbnail) {
+    if (data.thumbnail instanceof File) {
       formData.append("thumbnail", data.thumbnail);
     }
-    if (data.images && data.images.length > 0) {
-      for (let i = 0; i < data.images.length; i++) {
-        formData.append("images", data.images[i]);
+    if (data.images?.length) {
+      data.images.forEach((img: string | Blob) => {
+          if (img instanceof File) {
+        formData.append("images", img);
       }
-    }
+    });
+  }
     const response = await httpRequest.post(url, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
