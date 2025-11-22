@@ -169,7 +169,7 @@ export default function AdminHomePage({ limit, sort, page }: AdminHomePageProps)
               <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">
                 <Link href={"#"}>{item.name}</Link>
               </TableCell>
-              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">{`${item.category.name} / ${item.subcategory.name}`}</TableCell>
+              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">{`${item.category?.name || 'N/A'} / ${item.subcategory?.name || 'N/A'}`}</TableCell>
               <TableCell>
                 <div className="relative flex items-center gap-4 flex-col sm:flex-row">
                   <Tooltip content="Detail" className="font-yekan cursor-default">

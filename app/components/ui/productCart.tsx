@@ -10,7 +10,7 @@ export default function ProductCard({ p }: { p: ProductsEntity}) {
                     return (
                         <img
                             key={image}
-                            src={`http://${image}`}
+                            src={image}
                             alt={p.name}
                             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw" 
                             className="object-cover transition-transform duration-500 group-hover:scale-105" 
