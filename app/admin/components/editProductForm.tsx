@@ -154,37 +154,39 @@ function EditProductForm({ onClose }: props) {
   //     toast.error(err.message);
   //   }
   // };
-  const handleSubmitProductForm: SubmitHandler<EditProduct> = async (data) => {
+const handleSubmitProductForm: SubmitHandler<EditProduct> = async (data) => {
   try {
-    // --- Handle Thumbnail ---
-    let thumbnailUrl = selectedThumbnail; // existing preview or URL
-    const thumbnailFile = watch("thumbnail") as unknown as File;
-    if (thumbnailFile instanceof File) {
-      thumbnailUrl = await uploadToCloudinary(thumbnailFile);
-    }
+    // Upload thumbnail file if it's a File
+  // Upload thumbnail
+let thumbnailUrl = selectedThumbnail;
+if (fileInputThumbnailRef.current?.files?.[0]) {
+  const file = fileInputThumbnailRef.current.files[0];
+  thumbnailUrl = await uploadToCloudinary(file); // returns real URL
+}
 
-    // --- Handle Images ---
-    const imagesFiles = watch("images") as unknown as File[];
-    let imagesUrls = selectedImages; // existing images
-    if (imagesFiles && imagesFiles.length > 0) {
-      imagesUrls = [];
-      for (const file of imagesFiles) {
-        const url = await uploadToCloudinary(file);
-        imagesUrls.push(url);
-      }
-    }
+// Upload images
+let imagesUrls = selectedImages;
+const imagesFiles = fileInputImagesRef.current?.files;
+if (imagesFiles && imagesFiles.length > 0) {
+  imagesUrls = [];
+  for (const f of imagesFiles) {
+    const url = await uploadToCloudinary(f);
+    imagesUrls.push(url);
+  }
+}
 
-    // --- Prepare payload ---
-    const payload: EditProduct = {
-      ...data,
-      thumbnail: thumbnailUrl,
-      images: imagesUrls,
-    };
-
-    mutate({ id: getSelectedItem().id, data: payload });
+// Send these URLs in PATCH
+mutate({
+  id: getSelectedItem().id,
+  data: {
+    ...data,
+    thumbnail: thumbnailUrl,
+    images: imagesUrls,
+  },
+});
 
   } catch (err: any) {
-    toast.error(err.message || "Failed to edit product");
+    toast.error(err.message);
   }
 };
 
