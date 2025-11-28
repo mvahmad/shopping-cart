@@ -6,7 +6,7 @@ import { EditProduct, editProductSchema } from "./schema";
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import { useGetServices } from "@/app/hooks/useGetServices";
 import { CategoriesResponse, SubcategoriesResponse } from "@/app/types";
-import { ChangeEvent, useState, useEffect, useRef } from "react";
+import {  useState, useEffect, useRef } from "react";
 import useAdminStore from "@/app/store/admin/useAdminStore"
 import { usePatchServices } from "@/app/hooks/usePatchService";
 import { patchProducts } from "@/app/hooks/queryHooks/products";
@@ -122,38 +122,7 @@ function EditProductForm({ onClose }: props) {
     throw new Error(data.message || "Cloudinary upload failed");
   };
 
-  // const handleSubmitProductForm: SubmitHandler<EditProduct> = async (data) => {
-  //   try {
-  //     // Handle thumbnail
-  //     let thumbnailUrl = selectedThumbnail;
-  //     const thumbnailFile = watch("thumbnail") as unknown as File;
-  //     if (thumbnailFile instanceof File) {
-  //       thumbnailUrl = await uploadToCloudinary(thumbnailFile);
-  //     }
 
-  //     // Handle images
-  //     const imagesFiles = watch("images") as unknown as File[];
-  //     let imagesUrls = selectedImages;
-  //     if (imagesFiles && imagesFiles.length > 0) {
-  //       imagesUrls = [];
-  //       for (const file of imagesFiles) {
-  //         const url = await uploadToCloudinary(file);
-  //         imagesUrls.push(url);
-  //       }
-  //     }
-
-  //     const payload = {
-  //       ...data,
-  //       thumbnail: thumbnailUrl,
-  //       images: imagesUrls
-  //     };
-
-  //     mutate({ id: getSelectedItem().id, data: payload });
-
-  //   } catch (err: any) {
-  //     toast.error(err.message);
-  //   }
-  // };
 const handleSubmitProductForm: SubmitHandler<EditProduct> = async (data) => {
   try {
     // Upload thumbnail file if it's a File
