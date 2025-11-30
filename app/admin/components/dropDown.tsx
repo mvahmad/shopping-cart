@@ -21,15 +21,14 @@ export default function DropDown({ onOpen, setModalType }: props) {
       onOpen();
     }
     return (
-      <Dropdown className="">
+      <Dropdown className="" >
         <DropdownTrigger className="flex justify-between ">
-          <Button
-            variant="bordered"
-            className=""
-            endContent={<GoPlusCircle  />}
+          <button
+            className="text-[11px] sm:text-xs bg-blue-500 text-white px-3 sm:px-4 py-2 
+            rounded-xl shadow-sm hover:bg-blue-600 flex items-center justify-center gap-1 m-1"
           >
-            Setting
-          </Button>
+             + افزودن
+          </button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Static-Actions"
