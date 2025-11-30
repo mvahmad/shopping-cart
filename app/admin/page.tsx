@@ -1,15 +1,6 @@
 "use server"
-import AdminHomePage from "./products/page";
+import OverviewSection from "./overview/page";
 type SearchParams = Promise<Record<string, string>>;
 export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
-  const resolvedParams = await searchParams;
-  const limit = resolvedParams.limit || "5";
-  const sort = resolvedParams.sort || "-createdAt";
-  const page = Number(resolvedParams.page) || 1;
-  
-  return <AdminHomePage
-      limit={limit}
-      sort={sort}
-      page={page}
-    />;
+  return <OverviewSection/>;
 }

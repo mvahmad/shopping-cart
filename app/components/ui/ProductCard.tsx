@@ -27,7 +27,7 @@ export default function ProductCard({ p, showRating = true }: Props) {
          : toast.warning("لطفا وارد حساب کاربری خود شوید")
     }
     //set price after discount
-    const newPrice = (Math.round( p.price * (p.discount / 10)))
+    const newPrice = (Math.round(p.price - ( p.price * (p.discount / 100))))
     
     return (
         <div className="snap-start shrink-0 w-[12.5rem] md:w-[14rem] xl:w-[16rem]">

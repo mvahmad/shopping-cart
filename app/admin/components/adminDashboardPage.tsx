@@ -11,7 +11,7 @@ export default async function AdminDashboardPage({ children }:{children:ReactNod
   const cookieStore =await cookies();
   const userInfoCookie = cookieStore.get('userInfo');
    const userInfo = userInfoCookie ? JSON.parse(userInfoCookie.value) : null;
-   let username =await userInfo?.username 
+   let username =await userInfo?.firstname + " " + await userInfo?.lastname 
    let role = await userInfo?.role   
   return (
     <AdminDashboard role={role as string} username={username as string }>
