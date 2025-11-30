@@ -48,7 +48,7 @@ export default function OrdersModal({
   let items: ProductsEntity[] = [];
   if (data?.data.order?.products?.length) {
     items = data?.data.order?.products;
-  }
+  } 
 
   const { mutate, isPending } = usePatchServices({
     mutationKey: ["PatchStatusOrder"],
@@ -77,7 +77,7 @@ export default function OrdersModal({
       products,
     };
     mutate({ id: order._id, data: updatedData });
-  }
+  }  
 
   return (
     <>
@@ -90,6 +90,7 @@ export default function OrdersModal({
         isKeyboardDismissDisabled={true}
         className="font-yekan cursor-default"
         scrollBehavior="inside"
+        
       >
         <ModalContent>
           <>
@@ -140,7 +141,7 @@ export default function OrdersModal({
                     تومان
                   </span>
                 </div>
-                <Table>
+                <Table aria-label="orders-modal">
                   <TableHeader>
                     <TableColumn>محصول</TableColumn>
                     <TableColumn>قیمت</TableColumn>
@@ -148,23 +149,23 @@ export default function OrdersModal({
                   </TableHeader>
                   <TableBody>
                     {items.map((item) => (
-                      <TableRow key={item.product._id} className="border-b-1">
+                      <TableRow key={item?._id} className="border-b-1">
                         <TableCell>
                           <Link
-                            href={`/book/${item.product._id}`}
+                            href={`/product/${item.product?._id}`}
                             className="text-sm"
                           >
-                            {item.product.name}
+                            {item.product?.name}
                           </Link>
                         </TableCell>
                         <TableCell>
                           <span className="text-sm">
-                            {toPersianNumber(item.product.price)}
+                            {toPersianNumber(item?.product?.price)}
                           </span>
                         </TableCell>
                         <TableCell>
                           <span className="text-sm">
-                            {toPersianNumber(item.count)}
+                            {toPersianNumber(item?.count)}
                           </span>
                         </TableCell>
                       </TableRow>
