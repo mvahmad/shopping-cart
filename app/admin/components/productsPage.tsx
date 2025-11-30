@@ -109,8 +109,12 @@ export default function ProductsPage({ limit, sort, page }: AdminHomePageProps) 
   }
 
   return (
-    <div className="bg-gray-100 h-full px-8">
-      <DropDown onOpen={onOpen} setModalType={setModalType} />
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-sm sm:text-base font-semibold">محصولات</h1>
+             <DropDown onOpen={onOpen} setModalType={setModalType} />
+        </div>
+
       <Table
         bottomContent={
           pages > 0 ? (
@@ -130,30 +134,31 @@ export default function ProductsPage({ limit, sort, page }: AdminHomePageProps) 
             </div>
           ) : null
         }
-        className="cursor-default mt-2"
-      >
-        <TableHeader>
-
-          <TableColumn key="thumbnail">Image</TableColumn>
+        aria-label="admin-product"
+        className="w-full text-[11px] sm:text-xs text-slate-600">
+        <TableHeader className="border-b bg-slate-50">
+          <TableColumn key="thumbnail">عکس محصول</TableColumn>
           <TableColumn key="name" onClick={handleNameOrderColumn}>
             <Tooltip
-              content="Sort by Product name"
+              content="مرتب سازی بر اساس نام محصول"
               placement={"top-start"}
               showArrow={true}
             >
-              Product Name
+              نام محصول
             </Tooltip>
           </TableColumn>
           <TableColumn key="category" onClick={handleCategoryOrderColumn}>
             <Tooltip
-              content="Sort by Category name"
+              content="مرتب سازی بر اساس مجموعه / زیرمجموعه"
               placement={"top-start"}
               showArrow={true}
             >
-              Category / SubCategory
+              مجموعه / زیرمجموعه
             </Tooltip>
           </TableColumn>
-          <TableColumn key="action">Actions</TableColumn>
+          <TableColumn key="price">قیمت</TableColumn>
+          <TableColumn key="inventory">موجودی</TableColumn>
+          <TableColumn key="stting">تنظیمات</TableColumn>
         </TableHeader>
 
         <TableBody loadingContent={<Spinner />} loadingState={loadingState}>
@@ -166,37 +171,41 @@ export default function ProductsPage({ limit, sort, page }: AdminHomePageProps) 
                   className="w-16"
                 />
               </TableCell>
-              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">
+              <TableCell className="text-sm px-1 ">
                 <Link href={"#"}>{item.name}</Link>
               </TableCell>
-              <TableCell className="text-[10px] mobile:text-sm px-1 mobile:px-3">{`${item.category?.name || 'N/A'} / ${item.subcategory?.name || 'N/A'}`}</TableCell>
+              <TableCell className="text-sm px-1">
+                {` ${item.subcategory?.name || 'N/A'} / ${item.category?.name || 'N/A'}`}
+              </TableCell>
+              <TableCell>{item.price.toLocaleString()} تومان</TableCell>
+              <TableCell>{item.quantity}</TableCell>
               <TableCell>
                 <div className="relative flex items-center gap-4 flex-col sm:flex-row">
-                  <Tooltip content="Detail" className="font-yekan cursor-default">
-                    <Link href={"#"}>
+                  <Tooltip content="جزئیات" className="font-yekan cursor-default">
+                    <Link href={`/product/${item._id}`}>
                       <span className="text-lg text-default-900 cursor-pointer active:opacity-50">
                         <BiShow />
                       </span>
                     </Link>
                   </Tooltip>
-                  <Tooltip content="Edit" className="font-yekan cursor-default">
+                  <Tooltip content="ویرایش" className="font-yekan cursor-default">
                     <span
                       className="text-lg text-default-900 cursor-pointer active:opacity-50"
                       onClick={() => handleEditButton(item)}
                     >
-                      <MdOutlineEdit />
+                      ✏️
                     </span>
                   </Tooltip>
                   <Tooltip
                     color="danger"
-                    content="Delete"
+                    content="حذف"
                     className="font-yekan cursor-default"
                   >
                     <span
                       className="text-lg text-danger cursor-pointer active:opacity-50"
                       onClick={() => handleDeleteButton(item._id, item.name)}
                     >
-                      <MdOutlineDelete />
+                      🗑️
                     </span>
                   </Tooltip>
                 </div>
