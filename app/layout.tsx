@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 const iranSans = localFont({ src: '../public/fonts/IRANSansXFaNum-Regular.ttf' });
 
 export const metadata: Metadata = {
-  title: "Shoping Cart",
-  description: "Power by Ahmad Movahedei & Ali Attari",
+  title: "Elite-Sport",
+  description: "Sportswear store . powered by Ahmad Movahedi and Ali Attari",
 };
 
 export default function RootLayout({
