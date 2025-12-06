@@ -154,7 +154,7 @@ export default function ProductsPageComponent({
           {isLoading || items.length === 0 ? (
             <EmptyState message="هیچ محصولی یافت نشد." />
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-4 md:gap-6">
               {items.map((p) => (
                 <ProductCard key={p._id} p={p} />
               ))}
