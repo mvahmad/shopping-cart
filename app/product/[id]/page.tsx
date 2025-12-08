@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
 
   try {
     const product = await getProductById(id);
-    console.log("PRODUCT METADATA:", product);
+    
     
 
     if (!product) {
