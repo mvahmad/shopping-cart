@@ -1,21 +1,17 @@
-import ProductPage from "@/app/components/products/productPage";
+import ProductPage from "@/app/components/product/productPage";
 import { Metadata } from "next";
 import { getProductById } from "../import";
 
-type MetadataProps = {
-  params: {
-    id: string;
-  };
-};
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
 
-export async function generateMetadata({ params }: MetadataProps): Promise<Metadata> {
-  const id = params.id;
+  const {id} =await params;
 
   try {
     const product = await getProductById(id);
-    
-    
 
+    
     if (!product) {
       return {
         title: "محصول یافت نشد",
@@ -32,12 +28,7 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
         images: product.data.product.images?.length ? product.data.product.images : [],
         type: "website",
       },
-      twitter: {
-        card: "summary_large_image",
-        title: product.data.product.name,
-        description: product.data.product.description,
-        images: product.data.product.images?.[0],
-      },
+      // 
     };
   } catch (err) {
     return {

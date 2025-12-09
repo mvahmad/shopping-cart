@@ -25,7 +25,7 @@ import { useDeleteServices } from "@/app/hooks/useDeleteService";
 import { renderItem } from "@/utils/paginationRenderItem";
 import { useTableSort } from "@/app/hooks/useTabelSort";
 import { toast } from "react-toastify";
-import { MdOutlineDelete, MdOutlineEdit } from "react-icons/md";
+// import { MdOutlineDelete, MdOutlineEdit } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import useAdminStore from "@/app/store/admin/useAdminStore";
 
@@ -182,7 +182,7 @@ export default function ProductsPage({ limit, sort, page }: AdminHomePageProps) 
               <TableCell>
                 <div className="relative flex items-center gap-4 flex-col sm:flex-row">
                   <Tooltip content="جزئیات" className="font-yekan cursor-default">
-                    <Link href={`/product/${item._id}`}>
+                    <Link href={`/products/${item._id}`}>
                       <span className="text-lg text-default-900 cursor-pointer active:opacity-50">
                         <BiShow />
                       </span>

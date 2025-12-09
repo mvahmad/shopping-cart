@@ -32,7 +32,7 @@ export default function ProductCard({ p, showRating = true }: Props) {
     return (
         <div className="snap-start shrink-0 w-[12.5rem] md:w-[14rem] xl:w-[16rem]">
                 <div className="relative rounded-lg border border-blue-100 bg-white/95 shadow-sm shadow-blue-100/60 hover:shadow-md hover:shadow-blue-200 transition-shadow">
-                <Link href={`/product/${p._id}`} >
+                <Link href={`/products/${p._id}`} >
                     <div className="absolute inset-x-0 top-2 flex items-center justify-between px-3">
                         {typeof p.discount === "number" ? (
                             <div className="rounded-md bg-rose-500/95 px-3 py-1 text-xs font-bold text-white shadow-md">
