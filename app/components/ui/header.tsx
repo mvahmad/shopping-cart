@@ -57,7 +57,7 @@ export default function Header() {
 				{/* icons */}
 				<div className="flex items-center gap-3">
 					{[
-						{ icon: <GoSearch />, href: "#" },
+						{ icon: <GoSearch />, href: "/products" },
 						{ icon: <BsBasket3 />, href: "/cart" },
 						{ icon: <IoPersonOutline />, href: adminHref },
 					].map(({ icon, href }, i) => (
@@ -80,7 +80,7 @@ export default function Header() {
 					className="w-12 h-12 object-contain"
 				/>
 				<Link
-					href="/"
+					href="/products"
 					className="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-600 rounded-md text-xl"
 				>
 					<GoSearch />
