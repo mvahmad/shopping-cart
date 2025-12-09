@@ -13,6 +13,8 @@ import EmptyState from "../ui/EmptyState";
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import { getSubcategoriesByCategoryId } from "@/app/hooks/queryHooks/getSubCategoris";
 import { getProducts } from "@/app/hooks/queryHooks/products";
+import Search from "../search/search";
+
 
 interface Props {
   searchParams: Record<string, string | undefined>;
@@ -28,6 +30,9 @@ export default function ProductsPageComponent({
   initialSubcategoryId,
 }: Props) {
   const { handlePageChange } = useTableSort();
+
+  //for search
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedLeagueId, setSelectedLeagueId] = useState<string>(initialCategoryId);
   const [selectedTeamId, setSelectedTeamId] = useState<string>(initialSubcategoryId);
@@ -92,6 +97,11 @@ export default function ProductsPageComponent({
     return productData?.total ? Math.ceil(productData.total / rowsPerPage) : 0;
   }, [productData?.total, rowsPerPage]);
 
+  // Filtered items based on search term
+  const filteredItems = items.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <main dir="rtl" className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
       <Header />
@@ -100,8 +110,9 @@ export default function ProductsPageComponent({
         <header className="mb-6">
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">محصولات</h1>
           <p className="mt-1 text-sm text-slate-500">
-            لیگ و تیم مورد نظر را انتخاب کنید تا محصولات مرتبط نمایش داده شوند.
+            لیگ و تیم مورد نظر را انتخاب کنید یا جستجوکنید تا محصولات مرتبط نمایش داده شوند.
           </p>
+          <Search onSearch={setSearchTerm} />
         </header>
 
         {/* League Picker */}
@@ -151,15 +162,18 @@ export default function ProductsPageComponent({
 
         {/* Product Grid */}
         <section>
-          {isLoading || items.length === 0 ? (
-            <EmptyState message="هیچ محصولی یافت نشد." />
-          ) : (
-            <div className="flex flex-wrap justify-center sm:justify-start gap-4 md:gap-6">
-              {items.map((p) => (
-                <ProductCard key={p._id} p={p} />
-              ))}
-            </div>
+          {isLoading ? (
+              <EmptyState message="در حال بارگذاری..." />
+            ) : filteredItems.length === 0 ? (
+              <EmptyState message="هیچ محصولی مطابق جستجو پیدا نشد." />
+            ) : (
+              <div className="flex flex-wrap justify-center sm:justify-start gap-4 md:gap-6">
+                {filteredItems.map((p) => (
+                  <ProductCard key={p._id} p={p} />
+                ))}
+              </div>
           )}
+
         </section>
 
         {/* Pagination */}

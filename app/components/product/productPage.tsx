@@ -2,8 +2,8 @@
 import { getProductsResponse, ProductsEntity } from "@/app/types";
 import { MainBreadcrumb , Footer ,Header , useGetServices ,getProductById 
   ,ProductInfo,SizeTable , ProductSlider
-} from "@/app/product/import" 
-import { GetProductsByIdResponse } from "../type";
+} from "@/app/products/import" 
+import { GetProductsByIdResponse } from "@/app/products/type";
 import { useParams } from "next/navigation";
 import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";

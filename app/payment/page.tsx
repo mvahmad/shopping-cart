@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import PeymentForm from "@/app/components/paymentForm/paymentForm";
-import { Footer, Header } from "../product/import";
+import { Footer, Header } from "../products/import";
 import {ShippingCard, SummaryCard, useCartStore } from "../cart/import";
 import { useRouter } from "next/navigation";
 import PaymentCard from "../components/paymentCaerd/paymentCard";

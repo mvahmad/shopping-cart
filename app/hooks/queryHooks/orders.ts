@@ -1,5 +1,5 @@
 import { ENDPOINTS } from "@/app/constant"
-import { Icart } from "@/app/product/type"
+import { Icart } from "@/app/products/type"
 import { httpServer as httpRequest } from "@/utils/http-server";
 
 export const postOrder = async(data:Icart)=>{
