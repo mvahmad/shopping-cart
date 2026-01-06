@@ -3,16 +3,16 @@ import { Metadata } from "next";
 import { getProductById } from "../import";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import {Providers} from "@/app/providers";
-export async function generateMetadata(
-  { params }: { params: Promise<{ id: string }> }
-): Promise<Metadata> {
 
-  const {id} =await params;
+
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
+  const { id } = params;
 
   try {
     const product = await getProductById(id);
 
-    
     if (!product) {
       return {
         title: "محصول یافت نشد",
@@ -22,21 +22,25 @@ export async function generateMetadata(
 
     return {
       title: `${product.data.product.name} | Elite Sport`,
-      description: product.description ?? "مشاهده جزئیات محصول",
+      description:
+        product.data.product.description ?? "مشاهده جزئیات محصول",
       openGraph: {
         title: product.data.product.name,
         description: product.data.product.description,
-        images: product.data.product.images?.length ? product.data.product.images : [],
+        images: product.data.product.images?.length
+          ? product.data.product.images
+          : [],
         type: "website",
       },
-      // 
+
     };
-  } catch (err) {
+  } catch {
     return {
       title: "خطای بارگذاری محصول",
     };
   }
 }
+
 
 
 export default async function  Page ({ params }: { params: { id: string } }) {
