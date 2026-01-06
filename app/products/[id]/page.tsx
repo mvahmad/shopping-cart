@@ -1,7 +1,8 @@
 import ProductPage from "@/app/components/product/productPage";
 import { Metadata } from "next";
 import { getProductById } from "../import";
-
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import {Providers} from "@/app/providers";
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
@@ -38,8 +39,19 @@ export async function generateMetadata(
 }
 
 
-const Page = () => {
-  return <ProductPage />
+export default async function  Page ({ params }: { params: { id: string } }) {
+    const queryClient = new QueryClient();
+    const { id } = await params
+    
+    await queryClient.prefetchQuery({
+    queryKey: ["GetBookById", id],
+    queryFn: () => getProductById(id),
+    }); 
+  return (
+  <Providers dehydratedState={dehydrate(queryClient)}>
+     <ProductPage />
+  </Providers>
+  )
+ 
 } 
 
-export default Page;
