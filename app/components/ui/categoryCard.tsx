@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 const categories = [
-    { id: "national", label: "تیم‌های ملی", image: "/germany.png" },
-    { id: "clubs", label: "باشگاهی", image: "/barcelona.png" },
-    { id: "classic", label: "کلاسیک", image: "/realclassic.webp" },
-    { id: "player", label: "پلیری", image: "/chelsea.png" },
+    { id: "national", label: "تیم‌های ملی", image: "/germany.jpeg" },
+    { id: "clubs", label: "باشگاهی", image: "/barcelona.jpeg" },
+    { id: "classic", label: "کلاسیک", image: "/realclassic.jpeg" },
+    { id: "player", label: "پلیری", image: "/chelsea.jpeg" },
 ];
 
 const CategoryCard = () => {
