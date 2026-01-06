@@ -1,12 +1,27 @@
 'use client'
 import {NextUIProvider} from '@nextui-org/react'
-import { QueryClientProvider } from '@tanstack/react-query'
+import {
+  QueryClient,
+  QueryClientProvider,
+  HydrationBoundary,
+} from "@tanstack/react-query";
 import client from './lib/react-query'
 import { Flip, ToastContainer } from "react-toastify";
-export function Providers({children}: { children: React.ReactNode }) {
+import { ReactNode, useState } from 'react';
+
+
+export function Providers({
+  children,
+  dehydratedState,
+}: {
+  children: ReactNode;
+  dehydratedState?: unknown;
+}) {
+  const [queryClient] = useState(() => new QueryClient());
   return (
-    <QueryClientProvider client={client}>
-       <ToastContainer
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={dehydratedState}>
+         <ToastContainer
           position="top-right"
           autoClose={4000}
           hideProgressBar={false}
@@ -21,6 +36,8 @@ export function Providers({children}: { children: React.ReactNode }) {
       <NextUIProvider>
         {children}
       </NextUIProvider>
+      </HydrationBoundary>
+      
     </QueryClientProvider>
   )
 }
