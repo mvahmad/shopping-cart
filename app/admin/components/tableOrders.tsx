@@ -54,12 +54,14 @@ export default function TableOrders({
   function handleDetailsModal(id: string) {
     onOpen();
     setModalId(id);
+    console.log(id);
+    
   }
 
   return (
     <>
       <Table
-        aria-label="Example static collection table"
+        aria-label="static collection table"
         className="cursor-default"
         bottomContent={
           pages > 0 ? (
@@ -112,16 +114,16 @@ export default function TableOrders({
               : "";
             return (
               <TableRow key={item._id} className="border-b-1">
-                <TableCell className="text-[10px] mobile:text-sm text-center py-3 px-0 mobile:px-3">{`${item.user.firstname} ${item.user.lastname}`}</TableCell>
-                <TableCell className="text-[10px] mobile:text-sm text-center py-3 px-0 mobile:px-3">
+                <TableCell className="text-[10px] sm:text-sm text-center py-3 px-0 sm:px-3">{`${item.user.firstname} ${item.user.lastname}`}</TableCell>
+                <TableCell className="text-[10px] sm:text-sm text-center py-3 px-0 sm:px-3">
                   <span>{toPersianNumber(item.totalPrice)}</span>
                 </TableCell>
-                <TableCell className="text-[10px] mobile:text-sm text-center py-3 px-0 mobile:px-3">
+                <TableCell className="text-[10px] sm:text-sm text-center py-3 px-0 sm:px-3">
                   {faDate}
                 </TableCell>
-                <TableCell className="text-center px-0 mobile:px-3" py-3>
+                <TableCell className="text-center px-0 sm:px-3" py-3>
                   <Link
-                    className="cursor-pointer text-[10px] mobile:text-sm"
+                    className="cursor-pointer text-[10px] sm:text-sm"
                     size="sm"
                     onPress={() => handleDetailsModal(item._id)}
                   >

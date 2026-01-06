@@ -49,6 +49,8 @@ export default function OrdersModal({
   if (data?.data.order?.products?.length) {
     items = data?.data.order?.products;
   } 
+  console.log(items);
+  
 
   const { mutate, isPending } = usePatchServices({
     mutationKey: ["PatchStatusOrder"],
@@ -152,7 +154,7 @@ export default function OrdersModal({
                       <TableRow key={item?._id} className="border-b-1">
                         <TableCell>
                           <Link
-                            href={`/product/${item.product?._id}`}
+                            href={`/products/${item.product?._id}`}
                             className="text-sm"
                           >
                             {item.product?.name}
