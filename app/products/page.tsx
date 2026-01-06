@@ -1,5 +1,5 @@
-//
-
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import {Providers} from "@/app/providers";
 import ProductsPageComponent from "../components/products/ProductsPage";
 import { getProducts } from "../hooks/queryHooks/products";
 import { getCategories } from "../hooks/queryHooks/getCategoris";
@@ -10,20 +10,54 @@ const Page = async ({ searchParams }:{searchParams: Promise<Record<string, strin
   // Fetch initial products
   const products = await getProducts();
 
-  // Fetch categories to determine default category/subcategory
-  const categoriesData = await getCategories();
-  const defaultCategoryId = categoriesData?.data.categories?.[0]?._id || "";
+   const queryClient = new QueryClient();
 
-  const subcategoriesData = await getSubcategoriesByCategoryId(defaultCategoryId);
-  const defaultSubcategoryId = subcategoriesData?.data.subcategories?.[0]?._id || "";
+  // Prefetch categories
+  const categoriesData = await queryClient.fetchQuery({
+    queryKey: ["GetCategories"],
+    queryFn: getCategories,
+  });
+
+  const defaultCategoryId =
+    categoriesData?.data?.categories?.[0]?._id ?? "";
+
+  // Prefetch subcategories by default category
+  const subcategoriesData = defaultCategoryId
+    ? await queryClient.fetchQuery({
+        queryKey: ["GetSubcategories", defaultCategoryId],
+        queryFn: () => getSubcategoriesByCategoryId(defaultCategoryId),
+      })
+    : null;
+
+  const defaultSubcategoryId =
+    subcategoriesData?.data?.subcategories?.[0]?._id ?? "";
+
+  // Prefetch products
+  await queryClient.prefetchQuery({
+    queryKey: [
+      "GetProducts",
+      defaultCategoryId,
+      defaultSubcategoryId,
+      resolvedParams,
+    ],
+    queryFn: () =>
+      getProducts({
+        category: defaultCategoryId,
+        subcategory: defaultSubcategoryId,
+        ...resolvedParams,
+      }),
+  });
 
   return (
-    <ProductsPageComponent
-      initialProducts={products}
-      searchParams={resolvedParams}
-      initialCategoryId={defaultCategoryId}
-      initialSubcategoryId={defaultSubcategoryId}
+     <Providers dehydratedState={dehydrate(queryClient)}>
+      <ProductsPageComponent
+        initialProducts={products}
+        searchParams={resolvedParams}
+        initialCategoryId={defaultCategoryId}
+        initialSubcategoryId={defaultSubcategoryId}
     />
+     </Providers>
+ 
   );
 };
 

@@ -11,10 +11,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination"
 import { getProducts } from "@/app/hooks/queryHooks/products";
+import { useQueryClient } from "@tanstack/react-query";
+import { prefetchRelatedProducts } from "@/app/hooks/prefetch/product";
+import { useEffect } from "react";
 
 const ProductPage = () => {
   //get product  by id 
   const {id} = useParams()
+  const queryClient = useQueryClient();
   const { data } = useGetServices<GetProductsByIdResponse>({
       queryKey: ["GetBookById", id],
       queryFn: () => getProductById(id! as string),
@@ -36,12 +40,26 @@ const ProductPage = () => {
         discountPercent = Math.ceil((discount * 100) / endPrice);
       }
     }
+
+    useEffect(() => {
+      if (product?.category?._id) {
+        prefetchRelatedProducts(queryClient, product.category._id);
+      }
+    }, [product?.category?._id, queryClient]);
+
+    
       //get product by same category
       const { data: firstCategoryData, isLoading } =
-            useGetServices<getProductsResponse>({
-            queryKey: ["GetFirstCategoryBooks", product],
-            queryFn: () => getProducts({ limit: "6", category: product?.category._id }),
-        });
+      useGetServices<getProductsResponse>({
+        queryKey: ["GetFirstCategoryBooks", product?.category?._id],
+        queryFn: () =>
+          getProducts({
+            limit: "6",
+            category: product?.category?._id,
+          }),
+        enabled: !!product?.category?._id,
+      });
+
  
     const images = product?.images;
     const firstCategoryItems = firstCategoryData?.data?.products || [];
@@ -66,7 +84,7 @@ const ProductPage = () => {
                   <div className="flex justify-center items-center">
                     <img
                       src={image}
-                      alt={name?.[0]}
+                      alt={product.name}
                       className="sm:w-[400px] w-[200px] rounded-lg max-h-[400px] object-contain"
                     />
                   </div>
