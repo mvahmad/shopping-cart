@@ -4,10 +4,7 @@ import { getProductById } from "../import";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import {Providers} from "@/app/providers";
 
-
-export async function generateMetadata(
-  { params }: { params: { id: string } }
-): Promise<Metadata> {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { id } = params;
 
   try {
@@ -43,7 +40,7 @@ export async function generateMetadata(
 
 
 
-export default async function  Page ({ params }: { params: { id: string } }) {
+export default async function  Page ({ params }:any) {
     const queryClient = new QueryClient();
     const { id } = await params
     
