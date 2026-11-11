@@ -1,80 +1,27 @@
 "use client";
 import {CartRow,SummaryCard,EmptyState,useCartStore,Header,Footer,CouponCard,} from "./import";
-import { useEffect, useMemo, useState } from "react";
-import { ProductsEntity } from "@/app/types";
-import { useRouter } from "next/navigation";
 
-// Utility to clamp a number between min and max
-const clamp = (n: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, n));
+import { useRouter } from "next/navigation";
+import useFromStore from "@/app/hooks/useFromStore";
+import { summarize } from "@/app/store/cartUtils";
 
 export default function CartPage() {
-  const [coupon, setCoupon] = useState("");
-  const [shipping, setShipping] = useState<"standard" | "express">("standard");
+  
   const router = useRouter();
 
-  // Zustand store
-  const products = useCartStore((state) => state.cart);
+  // Read persisted cart only after mount to avoid an SSR hydration mismatch.
+  const items = useFromStore(useCartStore, (state) => state.cart) ?? [];
+  const coupon = useFromStore(useCartStore, (state) => state.couponCode) ?? "";
   const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const setDiscountedTotal = useCartStore((state) => state.setDiscountedTotal);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const setCouponCode = useCartStore((state) => state.setCouponCode);
+  const clearCart = useCartStore((state) => state.clearCart);
 
-  // Local state for rendering cart items
-  const [items, setItems] = useState<ProductsEntity[]>([]);
+  // Shipping is chosen on the payment page; the cart shows the pre-shipping total.
+  const shippingCost = 0;
+  const { subtotal, discount, total } = summarize(items, coupon);
 
-  // Ensure Zustand data is set to local state only after mount (avoid SSR mismatch)
-  useEffect(() => {
-    setItems(products);
-  }, [products]);
-
-  const subtotal = useMemo(
-    () => items.reduce((sum, it) => sum + it.price * it.quantity, 0),
-    [items]
-  );
-
-  const shippingCost = shipping === "express" ? 45000 : 0;
-  const discount =
-    coupon.trim().toLowerCase() === "fan10"
-      ? Math.round(subtotal * 0.1)
-      : 0;
-  const total = clamp(subtotal - discount + shippingCost, 0, Number.MAX_SAFE_INTEGER);
-  useEffect(()=>{
-    setDiscountedTotal(discount); // Update total in Zustand store
-  },[discount])
-  
-
-  // Handlers
-  const updateQty = (id: string, nextQty: number) => {
-    if (nextQty < 1) return;
-    setItems((prev) =>
-      prev.map((it) => (it._id === id ? { ...it, quantity: nextQty } : it))
-    );
-  };
-
-  const removeItem = (id: string) => {
-    const item = items.find((it) => it._id === id);
-    if (!item) return;
-    removeFromCart(item);
-    setItems((prev) => prev.filter((it) => it._id !== id));
-  };
-
-  const clearCart = () => {
-    items.forEach((it) => removeFromCart(it));
-    setItems([]);
-  };
-
-  const handleSubmitSummaryCard = () => {
-    const summary = [
-      { key: "subtotal", value: subtotal },
-      { key: "discount", value: discount },
-      { key: "shippingCost", value: shippingCost },
-      { key: "total", value: total },
-    ];
-    // Only runs on client
-    if (typeof window !== "undefined") {
-      localStorage.setItem("orderSummary", JSON.stringify(summary));
-    }
-     router.push("/payment");
-  };
+  const removeItem = (id: string) => removeFromCart({ _id: id });
 
   return (
     <>
@@ -113,7 +60,7 @@ export default function CartPage() {
                     <CartRow
                       key={it._id}
                       it={it}
-                      onQty={updateQty}
+                      onQty={updateQuantity}
                       onRemove={removeItem}
                     />
                   ))}
@@ -128,11 +75,11 @@ export default function CartPage() {
                     shippingCost={shippingCost}
                     total={total}
                     linkDiscription={"ادامه"}
-                    handelClick={handleSubmitSummaryCard}
+                    handelClick={() => router.push("/payment")}
                   />
                   <CouponCard
                     value={coupon}
-                    onChange={setCoupon}
+                    onChange={setCouponCode}
                     helper="کد تخفیف نمونه: FAN10"
                   />
                 </div>
@@ -145,6 +92,3 @@ export default function CartPage() {
     </>
   );
 }
-
-
-

@@ -9,7 +9,7 @@ interface Params<Response> {
     mutationKey: string[];
     mutationFn: (id: string) => Promise<Response>;
     invalidate?: string[];
-    options?: Omit<UseMutationOptions<Response, Error, string>, "mutationKey">;
+    options?: Omit<UseMutationOptions<Response, Error, string>, "mutationKey" | "mutationFn">;
 }
 
 export const useDeleteServices = <Response>({
@@ -20,13 +20,13 @@ export const useDeleteServices = <Response>({
 }: Params<Response>) => {
     const queryClient = useQueryClient();
     return useMutation({
+      ...options,
       mutationKey,
       mutationFn,
+      // Spread `options` first so a caller's onSuccess can't skip invalidation.
       onSuccess: (data, variables, context) => {
         if (invalidate) queryClient.invalidateQueries({ queryKey: invalidate });
-        if (options?.onSuccess) options.onSuccess(data, variables, context);
+        return options?.onSuccess?.(data, variables, context);
       },
-      ...options,
     });
 };
-  

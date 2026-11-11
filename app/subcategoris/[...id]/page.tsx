@@ -1,13 +1,13 @@
 "use client";
 
 import { renderItem } from "@/utils/paginationRenderItem";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import Header from "@/app/components/ui/header";
 import Footer from "@/app/components/ui/footer";
 import ProductCard from "@/app/components/ui/ProductCard";
 import { Pagination } from "@nextui-org/react";
 import { useParams, useSearchParams } from "next/navigation";
-import { getProductsBySubCategory } from "@/app/hooks/queryHooks/products";
+import { getProducts } from "@/app/hooks/queryHooks/products";
 import { useGetServices } from "@/app/hooks/useGetServices";
 import {
   getProductsResponse,
@@ -20,8 +20,10 @@ import {getSubcategories} from "@/app/hooks/queryHooks/getSubCategoris";
 import SkeletonCart from "@/app/components/ui/skeleton";
 
 export default function Page() {
-  const { id } = useParams<{ id: string }>();
-  const [selectedTeamId, setSelectedTeamId] = useState(id);
+  // `[...id]` is a catch-all segment, so `id` is an array of segments.
+  const params = useParams<{ id: string | string[] }>();
+  const routeId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const [selectedTeamId, setSelectedTeamId] = useState<string>(routeId ?? "");
 
   const searchParams = useSearchParams();
   const { handlePageChange } = useTableSort();
@@ -29,28 +31,28 @@ export default function Page() {
   const limit = searchParams.get("limit") || "5";
   const page = Number(searchParams.get("page")) || 1;
 
-
   // Fetch subcategories
-  const subcategoryQueryKey = [ "GetSubCategories",page,limit,selectedTeamId]
   const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
-    queryKey: subcategoryQueryKey,
+    queryKey: ["GetSubCategories", "list", 20],
     queryFn: () => getSubcategories({limit:20}),
   });
 
   // Subcategory list
   const subItems = subCategoryData?.data.subcategories || [];
-  useEffect(() => {
-    if (subItems?.length) {
-      setSelectedTeamId(selectedTeamId);
-    }
-  }, [subItems]);
-  // Fetch products — refetch ANY time params change
-  const { data, isLoading } = useGetServices<getProductsResponse>({
-    queryKey: ["GetProducts",selectedTeamId],
-    queryFn: () => getProductsBySubCategory(selectedTeamId),
-  });
 
-  console.log("RESPONSE:", data);
+  const selectTeam = (id: string) => {
+    if (id === selectedTeamId) return;
+    setSelectedTeamId(id);
+    // Go back to the first page of the newly selected subcategory.
+    if (page !== 1) handlePageChange(1);
+  };
+
+  // Fetch products (paginated)
+  const { data, isLoading } = useGetServices<getProductsResponse>({
+    queryKey: ["GetProducts", "subcategory", selectedTeamId, page, limit],
+    queryFn: () => getProducts({ page, limit, subcategory: selectedTeamId }),
+    enabled: !!selectedTeamId,
+  });
 
   // Product list
   const items: ProductsEntity[] = data?.data?.products || [];
@@ -82,7 +84,7 @@ export default function Page() {
               return (
                 <button
                   key={item._id}
-                  onClick={() => setSelectedTeamId(item._id)}
+                  onClick={() => selectTeam(item._id)}
                   className={`rounded-2xl border px-3 py-2 text-sm font-bold transition ${
                     active
                       ? "border-blue-300 bg-blue-50 text-blue-700"

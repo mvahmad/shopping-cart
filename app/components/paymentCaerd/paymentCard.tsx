@@ -12,7 +12,7 @@ export default function PaymentCard ({item}:{item:ProductsEntity}){
             </div>
       <Divider className="bg-blue-400 p-[0.8px]" />
       <CardBody className="overflow-visible py-2 flex justify-center items-center">
-        <Link href={`/product/${item._id}`}>
+        <Link href={`/products/${item._id}`}>
             <img
              src={item?.images?.[0]}
               alt={item._id}
@@ -21,7 +21,7 @@ export default function PaymentCard ({item}:{item:ProductsEntity}){
         </Link>
       </CardBody>
       <CardFooter className="pb-1 pt-2 px-2 flex-col flex items-start gap-1">
-          <Link color="foreground" href={`/product/${item._id}`}>
+          <Link color="foreground" href={`/products/${item._id}`}>
             <h4 className="text-[10px] font-bold text-ellipsis whitespace-nowrap overflow-hidden w-32">
               {item.name}
             </h4>

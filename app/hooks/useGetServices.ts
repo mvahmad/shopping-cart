@@ -1,25 +1,26 @@
 "use client"
 import { useQuery , UseQueryOptions } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
 
 interface Params<Response> {
     queryKey: unknown[];
-    queryFn: (data: unknown) => Promise<Response>;
+    queryFn: () => Promise<Response>;
     enabled?: boolean,
-    options?: Omit<UseQueryOptions<Response, Error, AxiosResponse>, "queryKey">;
+    options?: Omit<UseQueryOptions<Response, Error>, "queryKey" | "queryFn">;
     initialData?:Response
   }
-  
+
 export const useGetServices = <Response>({
     queryKey,
     queryFn,
     initialData,
-    ...options
+    enabled,
+    options,
   }: Params<Response>) => {
     return useQuery({
+      ...options,
       queryKey,
       queryFn,
       initialData,
-      ...options,
+      ...(enabled !== undefined ? { enabled } : {}),
     });
 };

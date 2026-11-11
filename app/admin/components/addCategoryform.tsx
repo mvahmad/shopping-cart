@@ -1,4 +1,5 @@
 "use client"
+import { toast } from "react-toastify";
 import { AddCategorySchema , addCategorySchema } from "./schema";
 import {useForm , SubmitHandler } from 'react-hook-form' 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,18 +15,19 @@ const AddCategoryForm = ({ onClose }: { onClose: () => void }) => {
     reset
   } = useForm<AddCategorySchema>({resolver : zodResolver(addCategorySchema)})
   
-  const {mutate , isPending} = usePostServices<{name:string ; icone?:FileList} , CategoriesResponse >(
+  const {mutate , isPending} = usePostServices<AddCategorySchema , CategoriesResponse >(
     {
       mutationKey: ["PostCategories"],
       mutationFn: PostCategory,
+      invalidate: ["GetCategories"],
       options: {
         onSuccess() {
           onClose();
           reset();
-          // toast.success(`دسته بندی با موفقیت اضافه شد.`);
+          toast.success(`دسته بندی با موفقیت اضافه شد.`);
         },
         onError(error) {
-          console.log((error.message, { rtl: false }));
+          toast.error(error.message, { rtl: false });
          
         },
       },

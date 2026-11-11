@@ -11,43 +11,19 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination"
 import { getProducts } from "@/app/hooks/queryHooks/products";
-import { useQueryClient } from "@tanstack/react-query";
-import { prefetchRelatedProducts } from "@/app/hooks/prefetch/product";
-import { useEffect } from "react";
+import Link from "next/link";
 
 const ProductPage = () => {
   //get product  by id 
   const {id} = useParams()
-  const queryClient = useQueryClient();
-  const { data } = useGetServices<GetProductsByIdResponse>({
+  const { data, isLoading: isProductLoading, isError } = useGetServices<GetProductsByIdResponse>({
       queryKey: ["GetBookById", id],
       queryFn: () => getProductById(id! as string),
-      options: {
-        enabled: !!id,
-      },
+      enabled: !!id,
     });
-      
-    let endPrice = 0;
-    let totalPrice = 0;
-    let discountPercent = 0;
-    let product!: ProductsEntity;
-    if (data?.data.product) {
-      product = data.data.product;
-      const discount = data?.data.product.discount;
-      endPrice = data?.data?.product?.price;
-      if (discount !== 0) {
-        totalPrice = endPrice + discount;
-        discountPercent = Math.ceil((discount * 100) / endPrice);
-      }
-    }
 
-    useEffect(() => {
-      if (product?.category?._id) {
-        prefetchRelatedProducts(queryClient, product.category._id);
-      }
-    }, [product?.category?._id, queryClient]);
+    const product: ProductsEntity | undefined = data?.data?.product;
 
-    
       //get product by same category
       const { data: firstCategoryData, isLoading } =
       useGetServices<getProductsResponse>({
@@ -61,9 +37,31 @@ const ProductPage = () => {
       });
 
  
-    const images = product?.images;
-    const firstCategoryItems = firstCategoryData?.data?.products || [];
+    const images = product?.images?.length ? product.images : product?.thumbnail ? [product.thumbnail] : [];
+    // Related products, excluding the product currently being viewed.
+    const firstCategoryItems = (firstCategoryData?.data?.products || []).filter(
+      (p) => p._id !== product?._id
+    );
 
+
+    if (!product) {
+      return (
+        <>
+          <Header />
+          <section className="py-16 px-5 flex flex-col items-center gap-3 text-slate-600">
+            {isProductLoading ? (
+              <p>در حال بارگذاری...</p>
+            ) : (
+              <>
+                <p>{isError ? "خطا در بارگذاری محصول. لطفا دوباره تلاش کنید." : "محصول مورد نظر یافت نشد."}</p>
+                <Link href="/products" className="text-blue-600 hover:underline">بازگشت به محصولات</Link>
+              </>
+            )}
+          </section>
+          <Footer />
+        </>
+      );
+    }
 
     return ( <>
     <Header />
@@ -84,7 +82,7 @@ const ProductPage = () => {
                   <div className="flex justify-center items-center">
                     <img
                       src={image}
-                      alt={product.name}
+                      alt={product?.name}
                       className="sm:w-[400px] w-[200px] rounded-lg max-h-[400px] object-contain"
                     />
                   </div>

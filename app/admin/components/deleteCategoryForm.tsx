@@ -42,7 +42,7 @@ export default function DeleteCategoryForm({
   const { mutate, isPending } = useDeleteServices({
     mutationKey: ["DeleteCategory"],
     mutationFn:DeleteCategory,
-    invalidate: ["GetCategoris"],
+    invalidate: ["GetCategories"],
     options: {
       onSuccess() {
         toast.success('Category deleted successfully');
@@ -61,7 +61,6 @@ export default function DeleteCategoryForm({
       value: category._id,
     })) || [];
 
-    console.log(categoryData?.data);
     
 
    const handleCategories = (e: ChangeEvent<HTMLSelectElement>)=>{

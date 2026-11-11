@@ -17,7 +17,9 @@ export const schema = z.object({
     .string()
     .min(1, "Enter your mobile number")
     .regex(
-      /((0?9)|(\+?989))\d{2}\W?\d{3}\W?\d{4}/g,
+      // Anchored: the previous unanchored pattern accepted any string that merely
+      // contained a phone number (e.g. "abc09129994567xyz" or 12 digits).
+      /^((0?9)|(\+?989))\d{2}\W?\d{3}\W?\d{4}$/,
       "Mobile number is not valid"
     ),
 });

@@ -5,93 +5,74 @@ import { Footer, Header } from "../products/import";
 import {ShippingCard, SummaryCard, useCartStore } from "../cart/import";
 import { useRouter } from "next/navigation";
 import PaymentCard from "../components/paymentCaerd/paymentCard";
-import { ProductsEntity } from "../types";
 import { usePostServices } from "../hooks/usePostServices";
 import { postOrder } from "../hooks/queryHooks/orders";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import useFromStore from "../hooks/useFromStore";
+import { summarize } from "../store/cartUtils";
+import { getStoredUser } from "../services/session";
+import { AxiosError } from "axios";
+
+const SHIPPING_COST = { standard: 0, express: 45000 } as const;
 
 export default function Peyment() {
   const router = useRouter()
-  const [subtotal, setSubtotal] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [shippingCost, setShippingCost] = useState(0);
-  const [total, setTotal] = useState(0);
-  //store state
-  const products = useCartStore((state)=> state.cart )
-  //store actions
-  const removeFromCart = useCartStore((state)=> state.removeFromCart )
-  //local state
-  const [items, setItems] = useState<ProductsEntity[]>(products);
+  // Read persisted cart only after mount to avoid an SSR hydration mismatch.
+  const products = useFromStore(useCartStore, (state) => state.cart) ?? [];
+  const couponCode = useFromStore(useCartStore, (state) => state.couponCode) ?? "";
+  const clearCart = useCartStore((state) => state.clearCart);
   const [userID, setUserID] = useState<string | null>(null);
+  const [shipping, setShipping] = useState<"standard" | "express">("standard");
 
+  useEffect(() => {
+    setUserID(getStoredUser()?._id ?? null);
+  }, []);
 
-   useEffect(() => {
-    const data = localStorage.getItem("orderSummary");
-    if (data) {
-      try {
-        const summaryArray = JSON.parse(data); 
-        const summary = Object.fromEntries(
-          summaryArray.map((item: { key: string; value: number }) => [
-            item.key,
-            item.value,
-          ])
-        );
-        
-        setSubtotal(summary.subtotal || 0);
-        setDiscount(summary.discount || 0);
-        setShippingCost(summary.shippingCost || 0);
-        setTotal(summary.total || 0);
-      } catch (error) {
-        console.error("Failed to parse order summary:", error);
-      };
+  // Totals are derived from the live cart so they always match what is ordered.
+  const { subtotal, discount } = summarize(products, couponCode);
+  const shippingCost = SHIPPING_COST[shipping];
+  const total = Math.max(subtotal - discount, 0) + shippingCost;
 
-      const userData = localStorage.getItem("user");
-      if (userData) { 
-        try { const parsedUser = JSON.parse(userData); setUserID(parsedUser._id || null)
+  const {mutate, isPending}=usePostServices({
+      mutationKey:["PostOrders"],
+      mutationFn:postOrder,
+      options:{
+        onSuccess: () => {
+          toast.success("سفارش با موفقیت ثبت شد");
+          clearCart();
+          router.push("/payment/result?status=success");
+        },
+        onError: (error) => {
+          const message =
+            (error as AxiosError<{ message?: string }>).response?.data?.message ||
+            error.message ||
+            "خطا در ثبت سفارش";
+          toast.error(message, { rtl: false });
+          router.push("/payment/result?status=failed");
+        },
+      }
+  })
 
-        }catch (error) {
-           console.error("Failed to parse user:", error); 
-        }
-    }
-  }}, []);
-
-    
-
-    //prepare userBasket object
-    const userBasket = products.map((product: ProductsEntity) => ({
-        product: product._id,
-        count: product.quantity, 
-    }));
-
-    const {mutate}=usePostServices({
-        mutationKey:["PostOrders"],
-        mutationFn:postOrder,
-        options:{
-          onSuccess: () => { 
-            toast.success("سفارش با موفقیت ثبت شد"); 
-            items.forEach((it) => removeFromCart(it));
-            setItems([]); localStorage.removeItem("orderSummary");
-            localStorage.removeItem("userBasket");
-            router.push("/payment/result?status=success"); 
-          }, 
-          onError: (error: any) => { 
-            toast.error(error.message || "خطا در ثبت سفارش", { rtl: false });
-            router.push("/payment/result?status=failed"); },
-        }
-    })
-
-  
-  const [shipping, setShipping] = useState<"standard" | "express">("standard");   
-
-  // Handle order 
-  function handleOrderButton() { 
+  // Handle order
+  function handleOrderButton() {
+    if (isPending) return;
     if (!userID) {
-      toast.error("کاربر یافت نشد"); 
+      toast.error("کاربر یافت نشد");
       return ;
     }
-   mutate({ user: userID, products: userBasket });
-   }
+    if (products.length === 0) {
+      toast.error("سبد خرید شما خالی است");
+      return;
+    }
+    mutate({
+      user: userID,
+      products: products.map((product) => ({
+        product: product._id,
+        count: product.quantity,
+      })),
+    });
+  }
 
   return (
     <>
@@ -118,15 +99,20 @@ export default function Peyment() {
                 <h2 className="mb-4 text-lg font-extrabold text-slate-900">
                   سفارشات شما:
                 </h2>
-                <div className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-3">
-                   {products.map((item)=>{
-                   return( 
-                        <PaymentCard item={item} key={item._id} />
-                    )
-                   })
-                   }
-                </div>
-
+                {products.length === 0 ? (
+                  <p className="text-sm text-slate-500">
+                    سبد خرید شما خالی است.{" "}
+                    <Link href="/products" className="text-blue-600 hover:underline">
+                      رفتن به فروشگاه
+                    </Link>
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-3">
+                    {products.map((item) => (
+                      <PaymentCard item={item} key={item._id} />
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
 
@@ -138,6 +124,8 @@ export default function Peyment() {
                 total={total}
                 linkDiscription={'ثبت سفارش'}
                 handelClick={handleOrderButton}
+                isLoading={isPending}
+                isDisabled={products.length === 0}
               />
               <ShippingCard value={shipping} onChange={setShipping} />
               <Link

@@ -6,21 +6,35 @@ import Heder from "../components/ui/header";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { getStoredUser } from "../services/session";
 
 export default function Page(){
     const router = useRouter();
-    const data = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-    const user = data ? JSON.parse(data) : {};
+    const { register, reset } = useForm({
+        defaultValues: {
+            firstname: "",
+            lastname: "",
+            username: "",
+            phoneNumber: "",
+            address: "",
+        },
+    });
 
-    const defaultValues = {
-        firstname: user?.firstname || "",
-        lastname: user?.lastname || "",
-        username: user?.username || "",
-        phoneNumber: user?.phoneNumber || "",
-        address: user?.address || "",
-    };
-
-    const { register } = useForm({ defaultValues });
+    // Browser storage isn't available during SSR; load the user after mount so
+    // server and client markup match.
+    useEffect(() => {
+        const user = getStoredUser();
+        if (user) {
+            reset({
+                firstname: user.firstname || "",
+                lastname: user.lastname || "",
+                username: user.username || "",
+                phoneNumber: user.phoneNumber || "",
+                address: user.address || "",
+            });
+        }
+    }, [reset]);
     const handleLogout = () => {
         Cookies.remove("accessToken");
         Cookies.remove("refreshToken");

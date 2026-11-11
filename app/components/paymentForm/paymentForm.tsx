@@ -1,7 +1,6 @@
 "use client"
-import { useCartStore } from "@/app/store/useCartStore";
-import { Button, Input } from "@nextui-org/react";
-import Cookies from "js-cookie";
+import { getStoredUser } from "@/app/services/session";
+import { Input } from "@nextui-org/react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -13,11 +12,7 @@ const inputItems = [
 ]
 
 const PeymentForm = ()=>{
-    const cart = useCartStore((state)=>state.cart)
-
     const {
-        handleSubmit,
-
         control,
         reset
     } = useForm({
@@ -30,9 +25,8 @@ const PeymentForm = ()=>{
   });
 
    useEffect(() => {
-    const user = Cookies.get("userInfo");
-    if (user) {
-      const parsed = JSON.parse(user);
+    const parsed = getStoredUser();
+    if (parsed) {
       reset({
         firstName: parsed.firstname || "",
         lastName: parsed.lastname || "",
@@ -40,16 +34,7 @@ const PeymentForm = ()=>{
         address: parsed.address || "",
       });
     }
-  }, []);
-
-  function handleSubmitBill(value:{
-          firstName: string,
-          lastName: string,
-          phoneNumber: string,
-          address: string,}
-  ){
-      
-  }
+  }, [reset]);
 
 
     return(

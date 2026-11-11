@@ -108,13 +108,13 @@ export interface getProductsResponse {
   export interface authResponse {
   status: string;
   token: Token;
-  data: Data;
+  data: AuthData;
 }
 export interface Token {
   accessToken: string;
   refreshToken: string;
 }
-export interface Data {
+export interface AuthData {
   user: User;
 }
 export interface User {

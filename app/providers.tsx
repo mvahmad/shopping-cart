@@ -5,7 +5,6 @@ import {
   QueryClientProvider,
   HydrationBoundary,
 } from "@tanstack/react-query";
-import client from './lib/react-query'
 import { Flip, ToastContainer } from "react-toastify";
 import { ReactNode, useState } from 'react';
 

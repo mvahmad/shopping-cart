@@ -14,18 +14,17 @@ import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import { getSubcategoriesByCategoryId } from "@/app/hooks/queryHooks/getSubCategoris";
 import { getProducts } from "@/app/hooks/queryHooks/products";
 import Search from "../search/search";
+import { productsQueryKey } from "./queryKeys";
 
 
 interface Props {
   searchParams: Record<string, string | undefined>;
-  initialProducts: getProductsResponse;
   initialCategoryId: string;
   initialSubcategoryId: string;
 }
 
 export default function ProductsPageComponent({
   searchParams,
-  initialProducts,
   initialCategoryId,
   initialSubcategoryId,
 }: Props) {
@@ -38,15 +37,8 @@ export default function ProductsPageComponent({
   const [selectedTeamId, setSelectedTeamId] = useState<string>(initialSubcategoryId);
 
   // URL params
-  const paramsObj = new URLSearchParams(searchParams as Record<string, string>);
-
-  const limit = paramsObj.get("limit") || "5";
-  const [page, setPage] = useState<number>(Number(paramsObj.get("page")) || 1);
-
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(1);
-  }, [selectedLeagueId, selectedTeamId]);
+  const limit = searchParams.limit || "5";
+  const [page, setPage] = useState<number>(Number(searchParams.page) || 1);
 
   // Categories
   const { data: categoryData } = useGetServices<CategoriesResponse>({
@@ -55,8 +47,15 @@ export default function ProductsPageComponent({
   });
   const categories = categoryData?.data.categories;
 
+  // Fall back to the first category if the server could not provide one.
+  useEffect(() => {
+    if (!selectedLeagueId && categories?.length) {
+      setSelectedLeagueId(categories[0]._id);
+    }
+  }, [categories, selectedLeagueId]);
+
   // Subcategories
-  const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
+  const { data: subCategoryData, isFetching: isSubFetching } = useGetServices<SubcategoriesResponse>({
     queryKey: ["GetSubCategories", selectedLeagueId],
     queryFn: () => getSubcategoriesByCategoryId(selectedLeagueId),
     enabled: !!selectedLeagueId,
@@ -64,31 +63,40 @@ export default function ProductsPageComponent({
 
   const subItems = subCategoryData?.data.subcategories;
 
-  // Set default subcategory when category changes
+  // Select the first subcategory once the subcategories of a new category load
   useEffect(() => {
-    if (subItems?.length) {
+    if (subItems?.length && !subItems.some((s) => s._id === selectedTeamId)) {
       setSelectedTeamId(subItems[0]._id);
     }
-  }, [subItems]);
+  }, [subItems, selectedTeamId]);
 
-  // Products
-  const productQueryKey = ["GetProducts", page, limit, selectedLeagueId, selectedTeamId];
+  const selectLeague = (id: string) => {
+    if (id === selectedLeagueId) return;
+    setSelectedLeagueId(id);
+    // Clear the team so we never query a team that belongs to another league.
+    setSelectedTeamId("");
+    setPage(1);
+  };
+
+  const selectTeam = (id: string) => {
+    if (id === selectedTeamId) return;
+    setSelectedTeamId(id);
+    setPage(1);
+  };
+
+  // Products: wait until the subcategories of the selected category are known
+  // so the (category, subcategory) pair is always consistent.
+  const teamReady = !!selectedTeamId || (!!subCategoryData && !isSubFetching && !subItems?.length);
   const { data: productData, isLoading } = useGetServices<getProductsResponse>({
-    queryKey: productQueryKey,
+    queryKey: [...productsQueryKey(page, limit, selectedLeagueId, selectedTeamId)],
     queryFn: () =>
       getProducts({
         page,
         limit,
         category: selectedLeagueId,
-        subcategory: selectedTeamId,
+        subcategory: selectedTeamId || undefined,
       }),
-    initialData:
-      page === 1 &&
-      selectedLeagueId === initialCategoryId &&
-      selectedTeamId === initialSubcategoryId
-        ? initialProducts
-        : undefined,
-    enabled: !!selectedLeagueId && !!selectedTeamId,
+    enabled: !!selectedLeagueId && teamReady,
   });
 
   const items: ProductsEntity[] = productData?.data.products || [];
@@ -98,9 +106,10 @@ export default function ProductsPageComponent({
   }, [productData?.total, rowsPerPage]);
 
   // Filtered items based on search term
-  const filteredItems = items.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const term = searchTerm.trim().toLowerCase();
+  const filteredItems = term
+    ? items.filter((product) => product.name?.toLowerCase().includes(term))
+    : items;
 
   return (
     <main dir="rtl" className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
@@ -123,7 +132,7 @@ export default function ProductsPageComponent({
               return (
                 <button
                   key={item._id}
-                  onClick={() => setSelectedLeagueId(item._id)}
+                  onClick={() => selectLeague(item._id)}
                   className={`rounded-2xl border px-3 py-2 text-sm font-bold transition ${
                     active
                       ? "border-blue-300 bg-blue-50 text-blue-700"
@@ -146,7 +155,7 @@ export default function ProductsPageComponent({
               return (
                 <button
                   key={item._id}
-                  onClick={() => setSelectedTeamId(item._id)}
+                  onClick={() => selectTeam(item._id)}
                   className={`rounded-2xl border px-3 py-2 text-sm font-bold transition ${
                     active
                       ? "border-blue-300 bg-blue-50 text-blue-700"
@@ -162,7 +171,7 @@ export default function ProductsPageComponent({
 
         {/* Product Grid */}
         <section>
-          {isLoading ? (
+          {isLoading || (!!selectedLeagueId && !teamReady) ? (
               <EmptyState message="در حال بارگذاری..." />
             ) : filteredItems.length === 0 ? (
               <EmptyState message="هیچ محصولی مطابق جستجو پیدا نشد." />

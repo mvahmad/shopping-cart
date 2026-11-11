@@ -42,7 +42,7 @@ export default function Header() {
 						{ href: "/", label: "صفحه اصلی" },
 						{ href: "/products", label: "محصولات" },
 						{ href: "/contact-us", label: "تماس با ما" },
-						{ href: "/aboat-us", label: "درباره ما" },
+						{ href: "/about-us", label: "درباره ما" },
 					].map((link) => (
 						<Link
 							key={link.href}

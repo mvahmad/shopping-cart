@@ -32,7 +32,7 @@ export default function DeleteSubCategoryForm({
 
   //  Fetch subcategories
   const { data: subCategoryData, refetch } = useGetServices<SubcategoriesResponse>({
-    queryKey: ["GetSubCategoris"],
+    queryKey: ["GetSubCategories"],
     queryFn: () => getSubcategories({ limit: 0 }),
   });
 
@@ -51,7 +51,7 @@ export default function DeleteSubCategoryForm({
   const { mutate, isPending } = useDeleteServices({
     mutationKey: ["DeleteSubCategory"],
     mutationFn: DeleteSubCategory,
-    invalidate: ["GetSubCategoris"],
+    invalidate: ["GetSubCategories"],
     options: {
       onSuccess() {
         toast.success(`SubCategory deleted successfully`);

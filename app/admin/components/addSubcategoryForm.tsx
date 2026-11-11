@@ -20,17 +20,16 @@ export default function AddSubcategoryForm ({ onClose }: { onClose: () => void }
     const { mutate, isPending } = usePostServices({
         mutationKey: ["PostSubcategories"],
         mutationFn: PostSubCategory,
+        invalidate: ["GetSubCategories"],
         options: {
           onSuccess() {
             onClose();
             reset();
             toast.success(`successfully add subcategory`);
-            console.log("successfully add subcategory");
 
           },
           onError(error) {
             toast.error(error.message, { rtl: false });
-            console.log(error);
           },
         },
       });

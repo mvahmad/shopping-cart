@@ -17,14 +17,16 @@ const Page = () => {
     const categories = data?.data.categories;
     const { data: firstCategoryData, isLoading } =
         useGetServices<getProductsResponse>({
-        queryKey: ["GetFirstCategoryBooks", categories],
-        queryFn: () => getProducts({ limit: "6", category: categories?.[1]._id }),
+        queryKey: ["GetFirstCategoryBooks", categories?.[1]?._id],
+        queryFn: () => getProducts({ limit: "6", category: categories?.[1]?._id }),
+        enabled: !!categories?.[1]?._id,
         });
 
     const { data: secondCategoryData, isLoading: secondCategoryIsLoading } =
     useGetServices<getProductsResponse>({
-      queryKey: ["GetSecondCategoryBooks", categories],
-      queryFn: () => getProducts({ limit: "6", category: categories?.[0]._id }),
+      queryKey: ["GetSecondCategoryBooks", categories?.[0]?._id],
+      queryFn: () => getProducts({ limit: "6", category: categories?.[0]?._id }),
+      enabled: !!categories?.[0]?._id,
     });    
 
     const firstCategoryItems = firstCategoryData?.data?.products || [];

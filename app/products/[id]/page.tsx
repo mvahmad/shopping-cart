@@ -1,16 +1,18 @@
 import ProductPage from "@/app/components/product/productPage";
 import { Metadata } from "next";
 import { getProductById } from "../import";
-import { QueryClient, dehydrate } from "@tanstack/react-query";
-import {Providers} from "@/app/providers";
+import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-export async function generateMetadata({ params }: any): Promise<Metadata> {
-  const { id } = params;
+type Params = Promise<{ id: string }>;
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  // In Next.js 15 `params` is a Promise and must be awaited.
+  const { id } = await params;
 
   try {
     const product = await getProductById(id);
 
-    if (!product) {
+    if (!product?.data?.product) {
       return {
         title: "محصول یافت نشد",
         description: "این محصول موجود نیست.",
@@ -40,19 +42,19 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
 
 
-export default async function  Page ({ params }:any) {
+export default async function  Page ({ params }: { params: Params }) {
     const queryClient = new QueryClient();
     const { id } = await params
-    
+
+    // prefetchQuery never throws; on failure the client query retries/shows an error state.
     await queryClient.prefetchQuery({
     queryKey: ["GetBookById", id],
     queryFn: () => getProductById(id),
-    }); 
+    });
   return (
-  <Providers dehydratedState={dehydrate(queryClient)}>
+  <HydrationBoundary state={dehydrate(queryClient)}>
      <ProductPage />
-  </Providers>
+  </HydrationBoundary>
   )
- 
-} 
 
+}

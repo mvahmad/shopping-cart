@@ -6,8 +6,8 @@ import Cookies from "js-cookie";
 import { ProductsEntity } from "@/app/types";
 import Link from "next/link";
 import { useCartStore } from "@/app/store/useCartStore";
+import { getUnitPrice, quantityInCart } from "@/app/store/cartUtils";
 import { toast } from "react-toastify";
-// import { useState } from "react";
 
 interface Props{ p: ProductsEntity; showRating?: boolean }
 
@@ -15,19 +15,26 @@ const toIRR = (n: number) =>
     new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 0 }).format(n);
 
 export default function ProductCard({ p, showRating = true }: Props) {
-    const rating = typeof p.rating.rate === "number" ? p.rating.rate : 0;
+    const rating = typeof p.rating?.rate === "number" ? p.rating.rate : 0;
     const clamped = Math.max(0, Math.min(5, rating));
     const fillPercent = (clamped / 5) * 100;
-    const addToCart = useCartStore((state) => state.addToCart) // Access the addToCard action from the store
-    const accessToken = Cookies.get("accessToken")
+    const addToCart = useCartStore((state) => state.addToCart)
 
     const handleAddToBasket = () => {
-        accessToken ? 
-        (addToCart(p,1) , toast.success("محصول به سبد خرید اضافه شد"))
-         : toast.warning("لطفا وارد حساب کاربری خود شوید")
+        if (!Cookies.get("accessToken")) {
+            toast.warning("لطفا وارد حساب کاربری خود شوید")
+            return
+        }
+        const inCart = quantityInCart(useCartStore.getState().cart, p._id)
+        if (typeof p.quantity === "number" && inCart >= p.quantity) {
+            toast.warning(p.quantity === 0 ? "این محصول موجود نیست" : "حداکثر موجودی این محصول در سبد خرید شماست")
+            return
+        }
+        addToCart(p, 1)
+        toast.success("محصول به سبد خرید اضافه شد")
     }
     //set price after discount
-    const newPrice = (Math.round(p.price - ( p.price * (p.discount / 100))))
+    const newPrice = getUnitPrice(p)
     
     return (
         <div className="snap-start shrink-0 w-[12.5rem] md:w-[14rem] xl:w-[16rem]">
@@ -80,7 +87,7 @@ export default function ProductCard({ p, showRating = true }: Props) {
                                         </svg>
                                     </div>
                                     <span className="text-md font-medium text-slate-700">{clamped.toFixed(1)}</span>
-                                    <span className="text-xs text-slate-500 xl:block hidden">{p.brand}({p.rating.rate} امتیاز)</span>
+                                    <span className="text-xs text-slate-500 xl:block hidden">{p.brand}({clamped} امتیاز)</span>
                                 </div>
                             )}
                             <div className="flex items-center">

@@ -191,7 +191,6 @@ export default function AddProductForm({ onClose, refetch }: Props) {
         images: imagesCloudUrls && imagesCloudUrls.length ? imagesCloudUrls : [],
       };
 
-      console.log("Final payload:", payload);
       mutate(payload);
     } catch (err: any) {
       console.error("Submit error:", err);

@@ -43,18 +43,18 @@ export default function OrdersModal({
   const { data } = useGetServices<OrdersByIdResponse>({
     queryKey: ["GetOrdersById", modalId],
     queryFn: () => getOrdersById(modalId),
+    enabled: !!modalId,
   });
 
   let items: ProductsEntity[] = [];
   if (data?.data.order?.products?.length) {
     items = data?.data.order?.products;
   } 
-  console.log(items);
-  
 
   const { mutate, isPending } = usePatchServices({
     mutationKey: ["PatchStatusOrder"],
     mutationFn: patchOrders,
+    invalidate: ["GetOrdersById", modalId],
     options: {
       onSuccess: () => {
         onClose();
@@ -189,6 +189,7 @@ export default function OrdersModal({
                     <div className="flex justify-center items-center">
                       <Button
                         className="bg-blue-400 text-white w-60"
+                        isDisabled={isPending}
                         onPress={() => {
                           if (data?.data?.order)
                             handleChangeStatusButton(data?.data?.order);

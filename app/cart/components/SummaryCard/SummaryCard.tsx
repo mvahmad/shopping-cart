@@ -2,6 +2,7 @@
 import Cookies from "js-cookie";
 import Row from "../Row/Row";
 import { Button } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 interface Props {
   subtotal: number;
@@ -10,6 +11,8 @@ interface Props {
   total: number;
   linkDiscription:string
   handelClick:()=>void
+  isLoading?: boolean
+  isDisabled?: boolean
 }
 
 const toman = (v: number) =>
@@ -21,22 +24,16 @@ export default function SummaryCard({
   shippingCost,
   total,
   linkDiscription,
-  handelClick
+  handelClick,
+  isLoading = false,
+  isDisabled = false,
 }: Props) {
-  const token = Cookies.get("accessToken")
-  // const handleSubmit = () => {
-  //   // Store the values as an array of key-value objects
-  //   const summary = [
-  //     { key: "subtotal", value: subtotal },
-  //     { key: "discount", value: discount },
-  //     { key: "shippingCost", value: shippingCost },
-  //     { key: "total", value: total },
-  //   ];
-
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("orderSummary", JSON.stringify(summary));
-  //   }
-  // };
+  // Cookies are only readable in the browser; read after mount so the server
+  // and client render the same markup.
+  const [token, setToken] = useState<string | undefined>();
+  useEffect(() => {
+    setToken(Cookies.get("accessToken"));
+  }, []);
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -62,9 +59,10 @@ export default function SummaryCard({
       />
         <Button
           onPress={handelClick}
-          className="mt-4 w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm 
+          className="mt-4 w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm
           font-extrabold text-white shadow hover:bg-blue-700"
-          isDisabled={token ? false : true }
+          isDisabled={!token || isDisabled || isLoading}
+          isLoading={isLoading}
         >
           {token ? linkDiscription : "برای ادامه فرآیند خرید وارد شوید"}
         </Button>

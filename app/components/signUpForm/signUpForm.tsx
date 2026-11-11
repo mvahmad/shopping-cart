@@ -9,7 +9,7 @@ import { authResponse } from "@/app/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import Cookies from 'js-cookie';
+import { saveSession } from "@/app/services/session";
 import Link from "next/link";
 interface ResponseMessage {
   status: string;
@@ -33,18 +33,16 @@ export default function SignUpForm() {
   const handleSubmitSignUp: SubmitHandler<RegisterFormData> = (value) => {
     mutate(value, {
       onSuccess: async (response) => {
-        const res = response as authResponse;
-        Cookies.set("accessToken", res.token.accessToken);
-        Cookies.set("refreshToken", res.token.refreshToken);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // Same session shape as login (incl. the userInfo cookie used by the
+        // middleware and the payment form).
+        const user = saveSession(response as authResponse);
         router.replace("/");
-        toast.success(`${res.data.user.firstname} ${res.data.user.lastname} Welcome`);
+        toast.success(`${user.firstname} ${user.lastname} Welcome`);
       },
       onError: (error) => {
            const axiosError = error as AxiosError<ResponseMessage>;
                   if (axiosError.response) {
-                  console.log("Error response data:", axiosError.response.data);
-                  toast.error(axiosError.response.data.message);
+                  toast.error(axiosError.response.data?.message || "An unexpected error occurred");
                 } else {
                   console.error("Error:", axiosError);
                   toast.error("An unexpected error occurred", {
@@ -64,7 +62,7 @@ export default function SignUpForm() {
     { name: "username", type: "text", placeHolder: "بتمن",label:"نام کاربری" },
     { name: "password", type: "password",  placeHolder: "******",label:"رمز عبور" },
     { name: "address", type: "text",  placeHolder: "بندر",label:"آدرس" },
-    { name: "phoneNumber", type: "number", placeHolder: "09129994567",label:"تلفن همراه" },
+    { name: "phoneNumber", type: "tel", placeHolder: "09129994567",label:"تلفن همراه" },
   ] as const;
   
   return (

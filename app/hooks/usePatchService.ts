@@ -4,34 +4,33 @@ import {
     UseMutationOptions,
     useQueryClient,
   } from "@tanstack/react-query";
-  
+
   interface Params<T, Response> {
     mutationKey: string[];
     mutationFn: ({ data, id }: { data: T; id: string }) => Promise<Response>;
     invalidate?: string[];
     options?: Omit<
       UseMutationOptions<Response, Error, { data: T; id: string }>,
-      "mutationKey"
+      "mutationKey" | "mutationFn"
     >;
   }
-  
+
   export const usePatchServices = <T, Response>({
     mutationKey,
     mutationFn,
     invalidate,
-    ...options
+    options,
   }: Params<T, Response>) => {
     const queryClient = useQueryClient();
-  
+
     return useMutation({
+      ...options,
       mutationKey,
       mutationFn,
+      // Always invalidate, then run the caller's onSuccess (onError etc. come from `options`).
       onSuccess: (data, variables, context) => {
         if (invalidate) queryClient.invalidateQueries({ queryKey: invalidate });
-        if (options?.options?.onSuccess)
-          options.options.onSuccess(data, variables, context);
+        return options?.onSuccess?.(data, variables, context);
       },
-      ...options,
     });
   };
-  

@@ -1,52 +1,32 @@
 "use client";
 import { renderItem } from "@/utils/paginationRenderItem";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Header from "@/app/components/ui/header";
 import Footer from "@/app/components/ui/footer";
-import ProductCard from "@/app/components/ui//ProductCard";
+import ProductCard from "@/app/components/ui/ProductCard";
 import { Pagination } from "@nextui-org/react";
 import { useParams, useSearchParams } from "next/navigation";
-import { getProducts, getProductsByCategory } from "@/app/hooks/queryHooks/products";
+import { getProducts } from "@/app/hooks/queryHooks/products";
 import { useGetServices } from "@/app/hooks/useGetServices";
-import { CategoriesEntity, CategoriesResponse, getProductsResponse, ProductsEntity, SubcategoriesResponse } from "@/app/types";
+import { CategoriesResponse, getProductsResponse, ProductsEntity } from "@/app/types";
 import { useTableSort } from "@/app/hooks/useTabelSort";
 import EmptyState from "@/app/components/ui/EmptyState";
-import { getSubcategoriesByCategoryId } from "@/app/hooks/queryHooks/getSubCategoris";
+//
 import { getCategories } from "@/app/hooks/queryHooks/getCategoris";
 import SkeletonCart from "@/app/components/ui/skeleton";
 
 
 
 export default function Page() {
-    const {id} = useParams<{ id: string }>();
-    const[selectedLeagueId , setSelectedLeagueId ] = useState(id);
-    const[selectedTeamId , setSelectedTeamId] = useState("")
+    // `[...id]` is a catch-all segment, so `id` is an array of segments.
+    const params = useParams<{ id: string | string[] }>();
+    const routeId = Array.isArray(params.id) ? params.id[0] : params.id;
+    const[selectedLeagueId , setSelectedLeagueId ] = useState<string>(routeId ?? "");
     const searchParams = useSearchParams();
     const {handlePageChange } = useTableSort();
-    
+
     const limit = searchParams.get("limit") || "5";
     const page = Number(searchParams.get("page")) || 1
-    const params: {
-      page: number;
-      limit: string;
-      category?: string ;
-      subcategory?: string;
-    } = {
-      page: page,
-      limit,
-      subcategory:selectedTeamId,
-      category:selectedLeagueId
-      
-    };
-
-    // //get subCategoris
-    // const { data: subCategoryData } = useGetServices<SubcategoriesResponse>({
-    //   queryKey: ["GetSubCategories",selectedLeagueId],
-    //   queryFn:()=> getSubcategoriesByCategoryId(id),
-    // });
-    // //subcategory items
-    // let subItems = subCategoryData?.data.subcategories
-
 
 
     // Categories
@@ -55,20 +35,22 @@ export default function Page() {
         queryFn: getCategories,
     });
     const categories = categoryData?.data.categories;
-    useEffect(() => {
-            if (categories?.length) {
-              setSelectedTeamId(selectedTeamId);
-            }
-          }, [categories]);
 
-    //get products
-    const productQueryKey = ["GetProducts",limit,selectedLeagueId,page]
+    const selectLeague = (id: string) => {
+      if (id === selectedLeagueId) return;
+      setSelectedLeagueId(id);
+      // Go back to the first page of the newly selected category.
+      if (page !== 1) handlePageChange(1);
+    };
+
+    //get products (paginated)
     const {data ,isLoading} = useGetServices<getProductsResponse>({
-      queryKey: productQueryKey,
-      queryFn:()=>getProductsByCategory(selectedLeagueId)
+      queryKey: ["GetProducts", "category", selectedLeagueId, page, limit],
+      queryFn:()=>getProducts({ page, limit, category: selectedLeagueId }),
+      enabled: !!selectedLeagueId,
     })
 
-
+    //
 
 
     //product items
@@ -101,7 +83,7 @@ export default function Page() {
                         return (
                             <button
                             key={item._id}
-                            onClick={() => setSelectedLeagueId(item._id)}
+                            onClick={() => selectLeague(item._id)}
                             className={`rounded-2xl border px-3 py-2 text-sm font-bold transition ${
                                 active
                                 ? "border-blue-300 bg-blue-50 text-blue-700"
@@ -146,7 +128,7 @@ export default function Page() {
                                 showShadow
                                 radius="md"
                                 color="primary"
-                                page={Number(searchParams.get("page")) || 1}
+                                page={page}
                                 total={pages}
                                 onChange={(page) => handlePageChange(page)}
                             />

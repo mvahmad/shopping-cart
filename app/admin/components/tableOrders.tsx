@@ -54,7 +54,6 @@ export default function TableOrders({
   function handleDetailsModal(id: string) {
     onOpen();
     setModalId(id);
-    console.log(id);
     
   }
 

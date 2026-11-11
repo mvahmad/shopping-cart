@@ -10,7 +10,7 @@ import { postLoginData } from "@/app/services/auth"
 import { authResponse } from "@/app/types"
 import { AxiosError } from "axios"
 import { toast } from "react-toastify"
-import Cookies from 'js-cookie';
+import { saveSession } from "@/app/services/session";
 
 interface ResponseMessage {
   status: string;
@@ -35,25 +35,21 @@ export default function LoginForm (){
   const handleSubmitLogin :SubmitHandler<FormData>=(value)=>{
      mutate(value, {
       onSuccess: async (response) => {
-        const res = response as authResponse;
-        Cookies.set("accessToken", res.token.accessToken);
-        Cookies.set("refreshToken", res.token.refreshToken);
-        Cookies.set("userInfo",JSON.stringify(res.data.user))
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        if (res.data.user.role === "ADMIN") {
+        const user = saveSession(response as authResponse);
+        if (user.role === "ADMIN") {
           router.replace("/admin");
         } else {
-         router.replace("/");;
+         router.replace("/");
         }
         toast.success(
-          `${res.data.user.firstname} ${res.data.user.lastname}  خوش آمدید`
+          `${user.firstname} ${user.lastname}  خوش آمدید`
         );
       },
       onError: (error) => {
         const axiosError = error as AxiosError<ResponseMessage>;
             if (axiosError.response) {
               // 
-          toast.error(axiosError.response.data.message, {
+          toast.error(axiosError.response.data?.message || "An unexpected error occurred", {
             rtl: false,
           });
         } else {

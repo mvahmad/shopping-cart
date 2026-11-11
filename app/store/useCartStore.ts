@@ -1,104 +1,73 @@
 import { create } from "zustand";
 import { ProductsEntity } from "@/app/types";
 import { persist } from "zustand/middleware";
+import {
+  addItem,
+  CartItem,
+  removeItem,
+  setItemQuantity,
+  summarize,
+} from "./cartUtils";
 
-// Define the interface for the cart state
+export type { CartItem } from "./cartUtils";
+
 interface State {
-  totalPrice: number;
+  cart: CartItem[];
+  couponCode: string;
+  // Derived from `cart` + `couponCode` on every change; kept in state so
+  // existing selectors keep working.
   totalItems: number;
-  cart: ProductsEntity[];
-  discount: number; // store discount percentage
+  totalPrice: number; // payable amount after coupon discount (shipping excluded)
+  discount: number; // coupon discount amount
 }
 
-// Define the interface for actions
 interface Actions {
   addToCart: (product: ProductsEntity, quantity?: number) => void;
-  removeFromCart: (product: ProductsEntity) => void;
-  setDiscountedTotal: (discount: number) => void;
+  removeFromCart: (product: Pick<ProductsEntity, "_id">) => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  setCouponCode: (code: string) => void;
+  clearCart: () => void;
 }
 
-// Initial state
 const INITIAL_STATE: State = {
   cart: [],
+  couponCode: "",
   totalItems: 0,
   totalPrice: 0,
   discount: 0,
 };
 
-// Create Zustand store
+const withTotals = (cart: CartItem[], couponCode: string) => {
+  const { totalItems, total, discount } = summarize(cart, couponCode);
+  return { cart, couponCode, totalItems, totalPrice: total, discount };
+};
+
 export const useCartStore = create(
   persist<State & Actions>(
     (set, get) => ({
       ...INITIAL_STATE,
-      addToCart: (product: ProductsEntity, quantity: number = 1) => {
-        const cart = get().cart;
-        const cartItem = cart.find((item) => item._id === product._id);
+      addToCart: (product, quantity = 1) =>
+        set(withTotals(addItem(get().cart, product, quantity), get().couponCode)),
 
-        if (cartItem) {
-          const updatedCart = cart.map((item) =>
-            item._id === product._id 
-              ? { ...item, quantity: (item.quantity as number) + quantity } 
-              : item
-          );
+      removeFromCart: (product) =>
+        set(withTotals(removeItem(get().cart, product._id), get().couponCode)),
 
-          set((state) => {
-            const newTotal = state.totalPrice + product.price * quantity;
-            return {
-              cart: updatedCart,
-              totalItems: state.totalItems + quantity,
-              totalPrice: newTotal,
-            };
-          });
-        } else {
-          
-          const updatedCart = [...cart, { ...product, quantity }];
-          set((state) => {
-            const newTotal = state.totalPrice + product.price * quantity;
-            return {
-              cart: updatedCart,
-              totalItems: state.totalItems + quantity,
-              totalPrice: newTotal,
-            };
-          });
-        }
-      },
+      updateQuantity: (id, quantity) =>
+        set(withTotals(setItemQuantity(get().cart, id, quantity), get().couponCode)),
 
-      removeFromCart: (product: ProductsEntity) => {
-        const cart = get().cart;
-        const cartItem = cart.find((item) => item._id === product._id);
+      setCouponCode: (code) => set(withTotals(get().cart, code)),
 
-        if (!cartItem) return;
-
-        const updatedCart = cart.filter((item) => item._id !== product._id);
-
-        set((state) => {
-          const newTotal = state.totalPrice - product.price * (cartItem.quantity || 1);
-          return {
-            cart: updatedCart,
-            totalItems: state.totalItems - (cartItem.quantity || 1),
-            totalPrice: newTotal,
-          };
-        });
-      },
-
-      //function  apply discount
-      setDiscountedTotal: (discountAmount: number) => {
-        const { cart } = get();
-        const totalBeforeDiscount = cart.reduce(
-          (acc, item) => acc + item.price * (item.quantity || 1),
-          0
-        );
-          const discountedTotal = Math.max(totalBeforeDiscount - discountAmount, 0); // clamp at 0
-
-        set(() => ({
-          totalPrice: discountedTotal,
-          discount: discountAmount,
-        }));
-},
-
+      clearCart: () => set({ ...INITIAL_STATE }),
     }),
     {
       name: "cart-storage", // Key for LocalStorage
+      version: 1,
+      // v0 stored running totals that could drift; recompute them from the cart.
+      migrate: (persisted) => {
+        const old = (persisted ?? {}) as Partial<State>;
+        const cart = Array.isArray(old.cart) ? old.cart : [];
+        return { ...withTotals(cart, "") } as State & Actions;
+      },
     }
   )
 );
